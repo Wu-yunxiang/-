@@ -109,6 +109,17 @@ body {
     gap: 10px;
 }
 
+.user-status {
+    justify-self: end;
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.user-status strong {
+    margin-left: 6px;
+    color: var(--primary);
+}
+
 .tab {
     border: none;
     border-radius: 14px;

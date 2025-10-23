@@ -1,8 +1,10 @@
 const state = {
     host: "127.0.0.1",
-    port: 8080,
+    port: 8081,
     path: "/rpc",
-    demoMode: false
+    demoMode: false,
+    loggedInUser: null,
+    activeTab: "register"
 };
 
 const logPanel = [];
@@ -12,25 +14,91 @@ document.addEventListener("DOMContentLoaded", () => {
     setupForms();
     setupEndpointForm();
     setupDemoToggle();
+    updateAuthUI();
     logMessage("客户端已就绪，等待输入。");
     updateEndpointSummary();
 });
+
+function setActiveTab(target) {
+    const tab = document.querySelector(`.tab[data-target="${target}"]`);
+    if (!tab || tab.hidden) {
+        return;
+    }
+    const tabs = document.querySelectorAll(".tab");
+    tabs.forEach((button) => {
+        const isActive = button === tab;
+        button.classList.toggle("active", isActive);
+        button.setAttribute("aria-selected", isActive ? "true" : "false");
+    });
+    document.querySelectorAll(".view").forEach((view) => {
+        view.classList.toggle("active", view.id === `view-${target}`);
+    });
+    state.activeTab = target;
+}
+
+function updateAuthUI() {
+    const authed = Boolean(state.loggedInUser);
+    document.querySelectorAll("[data-requires-auth]").forEach((element) => {
+        applyVisibility(element, !authed);
+    });
+    document.querySelectorAll("[data-hide-after-login]").forEach((element) => {
+        applyVisibility(element, authed);
+    });
+    updateUserStatus();
+
+    const activeTabButton = document.querySelector(".tab.active");
+    if (!activeTabButton || activeTabButton.hidden) {
+        const fallback = document.querySelector(".tab:not([hidden])");
+        if (fallback) {
+            setActiveTab(fallback.dataset.target);
+        }
+    }
+}
+
+function updateUserStatus() {
+    const status = document.getElementById("userStatus");
+    const name = document.getElementById("currentUserName");
+    const title = document.getElementById("pageTitle");
+    if (title) {
+        title.textContent = state.loggedInUser ? `${state.loggedInUser} 的记账本` : "记账系统";
+    }
+    document.title = state.loggedInUser ? `${state.loggedInUser} 的记账本` : "记账系统";
+    if (!status || !name) {
+        return;
+    }
+    if (state.loggedInUser) {
+        status.hidden = false;
+        name.textContent = state.loggedInUser;
+    } else {
+        status.hidden = true;
+        name.textContent = "";
+    }
+}
+
+function applyVisibility(element, hidden) {
+    element.hidden = hidden;
+    if (element.classList.contains("tab")) {
+        element.disabled = hidden;
+    }
+}
 
 function setupTabs() {
     const tabs = document.querySelectorAll(".tab");
     tabs.forEach((tab) => {
         tab.addEventListener("click", () => {
-            if (tab.classList.contains("active")) {
+            if (tab.hidden || tab.classList.contains("active")) {
                 return;
             }
-            tabs.forEach((t) => t.classList.remove("active"));
-            tab.classList.add("active");
-            const target = tab.dataset.target;
-            document.querySelectorAll(".view").forEach((view) => {
-                view.classList.toggle("active", view.id === `view-${target}`);
-            });
+            setActiveTab(tab.dataset.target);
         });
+        if (!tab.classList.contains("active")) {
+            tab.setAttribute("aria-selected", "false");
+        }
     });
+    const initialActive = document.querySelector(".tab.active");
+    if (initialActive) {
+        state.activeTab = initialActive.dataset.target;
+    }
 }
 
 function setupForms() {
@@ -64,7 +132,7 @@ function setupEndpointForm() {
         const host = form.host.value.trim() || "127.0.0.1";
         let port = Number(form.port.value);
         if (!Number.isFinite(port) || port <= 0 || port > 65535) {
-            port = 8080;
+            port = 8081;
         }
         let path = form.path.value.trim() || "/rpc";
         if (!path.startsWith("/")) {
@@ -96,9 +164,18 @@ function updateEndpointSummary() {
 }
 
 function composePayload(action, formData) {
-    const username = (formData.get("username") || "").trim();
-    if (!username) {
-        throw new Error("用户名不能为空");
+    const requiresFormUsername = action === "register" || action === "login";
+    let username = "";
+    if (requiresFormUsername) {
+        username = (formData.get("username") || "").trim();
+        if (!username) {
+            throw new Error("用户名不能为空");
+        }
+    } else {
+        username = state.loggedInUser || "";
+        if (!username) {
+            throw new Error("请先登录后再执行该操作");
+        }
     }
 
     switch (action) {
@@ -227,6 +304,16 @@ function handlePostAction(parsed, context) {
         renderSearchResult(parsed, context);
     } else {
         clearSearchResult();
+    }
+
+    if (parsed.action === "login" && parsed.success) {
+        const user = context?.username;
+        if (user) {
+            state.loggedInUser = user;
+            logMessage(`已登录账户：${user}`);
+        }
+        updateAuthUI();
+        setActiveTab("add");
     }
     if (parsed.message) {
         logMessage(`服务器消息: ${parsed.message}`);
