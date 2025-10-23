@@ -105,7 +105,7 @@ public class sqloperation {
             boolean withinLower = (start == null) || !rowDate.isBefore(start);
             boolean withinUpper = (end == null) || !rowDate.isAfter(end);
 
-           if (withinLower && withinUpper) {
+            if (withinLower && withinUpper) {
                 results.add(new Entry(
                     rs.getString("username"),
                     rs.getDouble("amount"),
@@ -120,10 +120,15 @@ public class sqloperation {
     }
 
     private LocalDate parseDateOrNull(String date) {
-        if(date == null) {
+        if (date == null) {
             return null;
         }
+
         String[] parts = date.split("/");
+        if (parts.length != 3) {
+            return null;
+        }
+
         int year = Integer.parseInt(parts[0]);
         int month = Integer.parseInt(parts[1]);
         int day = Integer.parseInt(parts[2]);

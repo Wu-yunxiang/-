@@ -7,7 +7,7 @@ public class parser {
         sql = new sqloperation();
     }
     public ParseResult parseRequest(String request) {
-        String[] parts = request.split(",");
+        String[] parts = request.split(",",-1);
         String username = parts[0];
         String action = parts[1];
         if (action.equals("add")) {
