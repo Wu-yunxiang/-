@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accounting TCP 客户端</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <script src="scripts/app.js" defer></script>
+</head>
+<body>
+    <div id="app" aria-live="polite">
+        <header class="app-header">
+            <div class="title-group">
+                <h1>Accounting 控制台</h1>
+                <p class="subtitle">单次 TCP 请求 / 响应 客户端（浏览器版）</p>
+            </div>
+            <form id="endpointForm" class="endpoint-form" autocomplete="off">
+                <label>
+                    主机
+                    <input type="text" id="hostInput" name="host" value="127.0.0.1" required>
+                </label>
+                <label>
+                    端口
+                    <input type="number" id="portInput" name="port" min="1" max="65535" value="8080" required>
+                </label>
+                <label class="path-label">
+                    路径
+                    <input type="text" id="pathInput" name="path" value="/rpc" title="发送 POST 请求的路径">
+                </label>
+                <button type="submit" class="ghost-btn">应用</button>
+                <label class="toggle">
+                    <input type="checkbox" id="demoMode">
+                    <span>脱机演示</span>
+                </label>
+            </form>
+        </header>
+
+        <nav class="tab-bar" role="tablist">
+            <button class="tab active" data-target="register" role="tab" aria-selected="true">注册</button>
+            <button class="tab" data-target="login" role="tab">登录</button>
+            <button class="tab" data-target="add" role="tab">记账</button>
+            <button class="tab" data-target="search" role="tab">查询</button>
+            <button class="tab" data-target="inspector" role="tab">请求/响应</button>
+        </nav>
+
+        <main>
+            <section id="view-register" class="view active" role="tabpanel">
+                <h2>注册用户</h2>
+                <form class="action-form" data-action="register" autocomplete="off">
+                    <div class="field-row">
+                        <label>用户名<input name="username" required></label>
+                        <label>密码<input name="password" type="password" required></label>
+                    </div>
+                    <button type="submit" class="primary-btn">提交注册</button>
+                </form>
+            </section>
+
+            <section id="view-login" class="view" role="tabpanel">
+                <h2>用户登录</h2>
+                <form class="action-form" data-action="login" autocomplete="off">
+                    <div class="field-row">
+                        <label>用户名<input name="username" required></label>
+                        <label>密码<input name="password" type="password" required></label>
+                    </div>
+                    <button type="submit" class="primary-btn">执行登录</button>
+                </form>
+            </section>
+
+            <section id="view-add" class="view" role="tabpanel">
+                <h2>新增账目</h2>
+                <form class="action-form" data-action="add" autocomplete="off">
+                    <div class="field-row">
+                        <label>用户名<input name="username" required></label>
+                        <label>金额<input name="amount" type="number" step="0.01" required></label>
+                        <label>日期<input name="date" type="text" placeholder="2025/10/23" required></label>
+                    </div>
+                    <div class="field-row">
+                        <label>科目<input name="subject" required></label>
+                        <label>备注<input name="note"></label>
+                    </div>
+                    <button type="submit" class="primary-btn">写入账本</button>
+                </form>
+            </section>
+
+            <section id="view-search" class="view" role="tabpanel">
+                <h2>查询账目</h2>
+                <form class="action-form" data-action="search" autocomplete="off">
+                    <div class="field-row">
+                        <label>用户名<input name="username" required></label>
+                        <label>开始日期<input name="startDate" type="text" placeholder="留空为不限"></label>
+                        <label>截止日期<input name="endDate" type="text" placeholder="留空为不限"></label>
+                    </div>
+                    <button type="submit" class="primary-btn">执行查询</button>
+                </form>
+                <div id="searchResult" class="search-result" hidden>
+                    <header>
+                        <h3>查询结果</h3>
+                        <div class="summary" id="searchSummary"></div>
+                    </header>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>用户</th>
+                                <th>金额</th>
+                                <th>日期</th>
+                                <th>科目</th>
+                                <th>备注</th>
+                            </tr>
+                        </thead>
+                        <tbody id="searchTableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="view-inspector" class="view" role="tabpanel">
+                <h2>请求 / 响应检查</h2>
+                <div class="inspector">
+                    <div>
+                        <h3>最近一次请求</h3>
+                        <textarea id="requestPreview" readonly></textarea>
+                    </div>
+                    <div>
+                        <h3>服务器响应</h3>
+                        <textarea id="responsePreview" readonly></textarea>
+                    </div>
+                    <div>
+                        <h3>解析结果</h3>
+                        <pre id="parsedPreview" class="parsed"></pre>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <section class="console" aria-live="polite">
+            <h2>操作日志</h2>
+            <ul id="logPanel"></ul>
+        </section>
+
+        <footer class="app-footer">
+            <p>提示：系统假设输入严格符合协议。每次提交将按“单连接单请求”方式与服务器通信。</p>
+            <p>若后端仍为纯 TCP，请在本页顶部路径输入 HTTP→TCP 代理地址，或参照文档搭建桥接服务。</p>
+        </footer>
+    </div>
+</body>
+</html>
