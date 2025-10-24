@@ -93,7 +93,7 @@ $env:PROXY_TIMEOUT_MS = 12000
 为了在 ngrok 免费版下只暴露一个入口，再开一个 PowerShell 窗口运行：
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File ".\scripts\start_reverse_proxy.ps1"
+powershell -ExecutionPolicy Bypass -NoExit -Command ".\scripts\start_reverse_proxy.ps1 -ListenPort 8083 -StaticPort 8082 -ApiPort 8081"
 
 ```
 
@@ -118,34 +118,15 @@ $env:API_SERVICE_PORT = 8181
 ./scripts/start_reverse_proxy.ps1
 ```
 
-## 步骤 5：在浏览器中访问客户端
+## 步骤 5：通过 ngrok 暴露（对外访问）
 
-打开浏览器，访问 `http://127.0.0.1:8080/` （或自定义端口）。
+ngrok http 8083
 
-在页面顶部将“主机/端口/路径”配置为：
+## 步骤 6： 
 
-- 主机：`127.0.0.1`
-- 端口：`8080`
-- 路径：`/api`
+浏览器输入步骤5的公网url
 
-取消勾选“脱机演示”，即可通过统一入口与真实后端交互。页面已经内置请求/响应监视器与日志面板，方便调试。
-
-## 可选：一键启动所有进程
-
-如果希望自动打开四个独立的 PowerShell 窗口并分别运行上述命令，可执行：
-
-```powershell
-powershell -ExecutionPolicy Bypass -File ".\scripts\start_all.ps1"
-```
-
-脚本会先编译 Java 后端，然后依次启动：
-
-- `mvn exec:java`
-- `.\scripts\serve_static.ps1`
-- `.\scripts\start_proxy.ps1`
-- `.\scripts\start_reverse_proxy.ps1`
-
-每个进程均在独立窗口运行，停止时请在对应窗口按 `Ctrl+C`。若环境路径特殊，可使用 `-MavenPath` 或 `-PowerShellExe` 参数覆盖默认值。
+## 待实现：一键启动所有进程
 
 ## 快速验证代理是否工作
 
