@@ -20,7 +20,7 @@ try {
     # Invoke Python using Start-Process to avoid quoting/parse issues when launched via -File
     $args = @("-m", "http.server", [string]$Port, "--bind", $BindAddress)
     Write-Host "Starting Python: $Python $($args -join ' ')" -ForegroundColor Yellow
-    Start-Process -FilePath $Python -ArgumentList $args -NoNewWindow -Wait
+    & $Python @args
 } finally {
     Pop-Location
 }

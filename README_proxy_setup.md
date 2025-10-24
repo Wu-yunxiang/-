@@ -7,8 +7,10 @@
 ```
 /resource/              # 静态网页客户端资源（HTML / CSS / JS）
 /proxy/http_to_tcp_proxy.js  # HTTP→TCP 代理脚本（Node.js）
+/proxy/reverse_proxy.js      # 统一入口反向代理脚本（Node.js）
 /scripts/serve_static.ps1    # 启动静态资源 HTTP 服务（PowerShell，调用 python -m http.server）
-/scripts/start_proxy.ps1     # 启动代理（PowerShell，调用 node proxy/http_to_tcp_proxy.js）
+/scripts/start_proxy.ps1     # 启动 HTTP→TCP 代理（PowerShell，调用 node proxy/http_to_tcp_proxy.js）
+/scripts/start_reverse_proxy.ps1 # 启动统一入口反向代理（PowerShell，调用 node proxy/reverse_proxy.js）
 ```
 
 > 若你已经有其他方式提供静态文件或运行 Node，可直接跳过对应脚本，使用自己熟悉的工具即可。
@@ -20,7 +22,7 @@
 | Java 17 | 与项目 `pom.xml` 一致 | 编译并运行 TCP 后端
 | Maven 3.8+ | `mvn compile` / `mvn exec:java` | 构建/运行后端
 | Python 3.8+ | 用于启动静态资源 HTTP 服务 (`python -m http.server`) |
-| Node.js 18+ | 运行 HTTP→TCP 代理脚本 |
+| Node.js 18+ | 运行 HTTP→TCP 代理与统一入口反向代理 |
 | PowerShell 5.1+ | 运行提供的脚本（Windows 默认） |
 
 确保上述工具加入了系统 `PATH`。
@@ -34,7 +36,7 @@ Set-Location -Path "C:\Users\Lenovo\Desktop\server"
 # 根据需要先编译
 mvn -q compile
 # 启动 TCP 服务（保持窗口打开）
-mvn -q exec:java -Dexec.mainClass=acounting_system.Main
+mvn exec:java 
 ```
 
 默认监听在 `127.0.0.1:8080`。
@@ -44,8 +46,7 @@ mvn -q exec:java -Dexec.mainClass=acounting_system.Main
 在新的 PowerShell 窗口中运行脚本（自动调用 `python -m http.server` 并锁定端口 8082）：
 
 ```powershell
-Set-Location -Path "C:\Users\Lenovo\Desktop\server"
-./scripts/serve_static.ps1
+powershell -ExecutionPolicy Bypass -File ".\scripts\serve_static.ps1"
 ```
 
 脚本默认会：
@@ -66,8 +67,7 @@ Set-Location -Path "C:\Users\Lenovo\Desktop\server"
 再开一个 PowerShell 窗口，运行：
 
 ```powershell
-Set-Location -Path "C:\Users\Lenovo\Desktop\server"
-./scripts/start_proxy.ps1
+powershell -ExecutionPolicy Bypass -File ".\scripts\start_proxy.ps1"
 ```
 
 脚本默认相当于执行：
@@ -88,17 +88,64 @@ $env:PROXY_TIMEOUT_MS = 12000
 ./scripts/start_proxy.ps1
 ```
 
-## 步骤 4：在浏览器中访问客户端
+## 步骤 4：启动统一入口反向代理（整合静态资源 + API）
 
-打开浏览器，访问 `http://127.0.0.1:8082/index.html`。
+为了在 ngrok 免费版下只暴露一个入口，再开一个 PowerShell 窗口运行：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ".\scripts\start_reverse_proxy.ps1"
+
+```
+
+脚本默认相当于执行：
+
+```powershell
+node .\proxy\reverse_proxy.js
+```
+
+反向代理监听 `http://127.0.0.1:8080/`，路由规则如下：
+
+- `/`、`/index.html`、`/scripts/...`、`/styles/...` 会转发到 `127.0.0.1:8082` 的静态资源服务器。
+- `/static/...` 会去掉 `/static` 前缀后转发到静态资源服务器。
+- `/api`、`/api/...` 会去掉 `/api` 前缀后转发到 `127.0.0.1:8081` 的 HTTP→TCP 代理。
+
+同样可以通过环境变量或脚本参数覆盖默认端口/主机，例如：
+
+```powershell
+$env:REVERSE_PROXY_PORT = 9000
+$env:STATIC_SERVICE_PORT = 8182
+$env:API_SERVICE_PORT = 8181
+./scripts/start_reverse_proxy.ps1
+```
+
+## 步骤 5：在浏览器中访问客户端
+
+打开浏览器，访问 `http://127.0.0.1:8080/` （或自定义端口）。
 
 在页面顶部将“主机/端口/路径”配置为：
 
 - 主机：`127.0.0.1`
-- 端口：`8081`（或你在环境变量里指定的值）
-- 路径：`/` 或 `/rpc`
+- 端口：`8080`
+- 路径：`/api`
 
-取消勾选“脱机演示”，即可通过代理与真实后端交互。页面已经内置请求/响应监视器与日志面板，方便调试。
+取消勾选“脱机演示”，即可通过统一入口与真实后端交互。页面已经内置请求/响应监视器与日志面板，方便调试。
+
+## 可选：一键启动所有进程
+
+如果希望自动打开四个独立的 PowerShell 窗口并分别运行上述命令，可执行：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File ".\scripts\start_all.ps1"
+```
+
+脚本会先编译 Java 后端，然后依次启动：
+
+- `mvn exec:java`
+- `.\scripts\serve_static.ps1`
+- `.\scripts\start_proxy.ps1`
+- `.\scripts\start_reverse_proxy.ps1`
+
+每个进程均在独立窗口运行，停止时请在对应窗口按 `Ctrl+C`。若环境路径特殊，可使用 `-MavenPath` 或 `-PowerShellExe` 参数覆盖默认值。
 
 ## 快速验证代理是否工作
 
@@ -106,7 +153,7 @@ $env:PROXY_TIMEOUT_MS = 12000
 
 ```powershell
 $body = "alice,search,2025/10/01,2025/10/31`n"
-Invoke-RestMethod -Uri "http://127.0.0.1:8081/" -Method POST -Body $body -ContentType "text/plain"
+Invoke-RestMethod -Uri "http://127.0.0.1:8080/api" -Method POST -Body $body -ContentType "text/plain"
 ```
 
 预期返回类似：
@@ -118,7 +165,7 @@ search~null~null~alice,150.75,2025/10/23,meal,lunch with team
 也可以调用代理提供的健康检查：
 
 ```powershell
-Invoke-RestMethod -Uri "http://127.0.0.1:8081/health" -Method GET
+Invoke-RestMethod -Uri "http://127.0.0.1:8080/api/health" -Method GET
 ```
 
 返回示例：
@@ -135,11 +182,12 @@ Invoke-RestMethod -Uri "http://127.0.0.1:8081/health" -Method GET
 ## 常见问题与排查
 
 1. **端口占用**：
-   - 若 8082 或 8081 被占用，可改用其它端口（修改脚本中的常量或通过环境变量覆盖）。
+   - 若 8082、8081 或 8080 被占用，可改用其它端口（修改脚本中的常量或通过环境变量覆盖）。
    - 使用 `Get-NetTCPConnection -LocalPort <port>` 查看占用进程。
 
 2. **浏览器仍访问不到代理**：
-   - 检查代理终端是否输出 "HTTP→TCP proxy started"；
+   - 检查 `start_proxy.ps1` 终端是否输出 "HTTP→TCP proxy started"；
+   - 检查 `start_reverse_proxy.ps1` 终端是否输出 "Reverse proxy started"；
    - 查看 Node 日志是否有错误（例如 TCP 连接失败、超时）。
 
 3. **CORS 阻止请求**：
@@ -149,8 +197,34 @@ Invoke-RestMethod -Uri "http://127.0.0.1:8081/health" -Method GET
    - 确保 Java 服务正在运行并监听正确端口；
    - 使用 PowerShell 的原始 TCP 测试命令（详见之前的测试文档）直接连后端确认。
 
-5. **静态服务器 与 代理 仍需同时运行**：
+5. **多个进程需同时运行**：
+   - 当前方案需同时启动 Java 后端、静态资源服务、HTTP→TCP 代理、反向代理四个进程；
    - 可以使用 VS Code 的任务编排或额外脚本（例如 PowerShell `Start-Process`) 一键启动多个进程，这里提供的是最小可行方案。
+
+## 使用 ngrok 暴露统一入口
+
+1. 确保前面四个进程已经全部启动，且反向代理监听在本地 `8080`（或你配置的端口）。
+2. 在新的 PowerShell 窗口中执行：
+
+   ```powershell
+   Set-Location -Path "C:\Users\Lenovo\Desktop\server"
+   ngrok http 8080
+   ```
+
+   登陆 ngrok 后会显示一个形如 `https://<随机子域>.ngrok-free.app` 的公网地址。
+
+3. 把该地址发给外部用户，访问时无需额外端口号，直接使用：
+
+   - 静态资源：`https://<随机子域>.ngrok-free.app/`
+   - API：前端内部已经指向 `/api`，无需另外配置。
+
+4. 若需从命令行验证隧道是否可用，可在任意可以访问公网的终端执行：
+
+   ```powershell
+   Invoke-RestMethod -Uri "https://<随机子域>.ngrok-free.app/api/health" -Method GET
+   ```
+
+   返回正常即表示 ngrok 隧道与本地服务均工作正常。
 
 ## 进一步扩展
 

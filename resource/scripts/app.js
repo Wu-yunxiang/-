@@ -231,7 +231,13 @@ async function sendPayload(request) {
         return createDemoResponse(request);
     }
 
-    const endpoint = new URL(state.path, `http://${state.host}:${state.port}`);
+    // Build an origin-aware URL so the client uses the same scheme as the page
+    // (important when the page is served via HTTPS through ngrok). Do not
+    // hardcode `http://` here.
+    const scheme = window.location.protocol; // includes trailing ':' e.g. 'https:'
+    const hostPort = state.port ? `${state.host}:${state.port}` : state.host;
+    const base = `${scheme}//${hostPort}`;
+    const endpoint = new URL(state.path, base);
     const controller = new AbortController();
     const payload = `${request}\n`;
 
