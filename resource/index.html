@@ -5,9 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>记账系统</title>
     <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/dynamic-bg.css">
     <script src="scripts/app.js" defer></script>
+    <script src="scripts/dynamic-effects.js" defer></script>
 </head>
 <body>
+    <canvas id="dynamicBackground"></canvas>
+    <div id="clickEffects"></div>
     <div id="app" aria-live="polite">
         <header class="app-header">
             <div class="title-group">
@@ -22,9 +26,7 @@
             <button class="tab" data-target="search" role="tab" data-requires-auth="true">查询</button>
             <button class="tab" data-target="inspector" role="tab" data-requires-auth="true">请求/响应</button>
         </nav>
-        <div id="userStatus" class="user-status" hidden aria-live="polite">
-            <span>当前用户：</span><strong id="currentUserName"></strong>
-        </div>
+        <!-- 用户状态显示已移除，页面标题仍会反映登录用户 -->
 
         <main>
             <section id="view-register" class="view active" role="tabpanel" data-hide-after-login="true">

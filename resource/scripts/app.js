@@ -38,7 +38,12 @@ function updateAuthUI() {
     document.querySelectorAll("[data-hide-after-login]").forEach((element) => {
         applyVisibility(element, authed);
     });
-    updateUserStatus();
+    // 保留页面标题随登录用户变化的逻辑（移除了单独的 DOM 状态面板）
+    const title = document.getElementById("pageTitle");
+    if (title) {
+        title.textContent = state.loggedInUser ? `${state.loggedInUser} 的记账本` : "记账系统";
+    }
+    document.title = state.loggedInUser ? `${state.loggedInUser} 的记账本` : "记账系统";
 
     const activeTabButton = document.querySelector(".tab.active");
     if (!activeTabButton || activeTabButton.hidden) {
@@ -49,25 +54,8 @@ function updateAuthUI() {
     }
 }
 
-function updateUserStatus() {
-    const status = document.getElementById("userStatus");
-    const name = document.getElementById("currentUserName");
-    const title = document.getElementById("pageTitle");
-    if (title) {
-        title.textContent = state.loggedInUser ? `${state.loggedInUser} 的记账本` : "记账系统";
-    }
-    document.title = state.loggedInUser ? `${state.loggedInUser} 的记账本` : "记账系统";
-    if (!status || !name) {
-        return;
-    }
-    if (state.loggedInUser) {
-        status.hidden = false;
-        name.textContent = state.loggedInUser;
-    } else {
-        status.hidden = true;
-        name.textContent = "";
-    }
-}
+// 已移除：页面中不再显示单独的用户状态面板（#userStatus）。
+// 页面标题仍由 `updateAuthUI` 中的逻辑更新以反映登录用户。
 
 function applyVisibility(element, hidden) {
     element.hidden = hidden;
