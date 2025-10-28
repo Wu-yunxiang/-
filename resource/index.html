@@ -13,25 +13,6 @@
             <div class="title-group">
                 <h1 id="pageTitle">记账系统</h1>
             </div>
-            <form id="endpointForm" class="endpoint-form" autocomplete="off">
-                <label>
-                    主机
-                    <input type="text" id="hostInput" name="host" value="127.0.0.1" required>
-                </label>
-                <label>
-                    端口
-                    <input type="number" id="portInput" name="port" min="1" max="65535" value="8081" required>
-                </label>
-                <label class="path-label">
-                    路径
-                    <input type="text" id="pathInput" name="path" value="/rpc" title="发送 POST 请求的路径">
-                </label>
-                <button type="submit" class="ghost-btn">应用</button>
-                <label class="toggle">
-                    <input type="checkbox" id="demoMode">
-                    <span>脱机演示</span>
-                </label>
-            </form>
         </header>
 
         <nav class="tab-bar" role="tablist">
@@ -136,10 +117,7 @@
             <ul id="logPanel"></ul>
         </section>
 
-        <footer class="app-footer">
-            <p>提示：系统假设输入严格符合协议。每次提交将按“单连接单请求”方式与服务器通信。</p>
-            <p>若后端仍为纯 TCP，请在本页顶部路径输入 HTTP→TCP 代理地址，或参照文档搭建桥接服务。</p>
-        </footer>
+        <!-- Footer removed per request: no prompts shown to users -->
     </div>
 </body>
 </html>

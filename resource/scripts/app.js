@@ -1,22 +1,16 @@
 const state = {
-    host: "127.0.0.1",
-    port: 8081,
-    path: "/rpc",
-    demoMode: false,
+    host: "",
+    port: 80,
+    path: "/api",
     loggedInUser: null,
     activeTab: "register"
 };
-
-const logPanel = [];
-
 document.addEventListener("DOMContentLoaded", () => {
+    initializeEndpointDefaults();
     setupTabs();
     setupForms();
-    setupEndpointForm();
-    setupDemoToggle();
     updateAuthUI();
-    logMessage("客户端已就绪，等待输入。");
-    updateEndpointSummary();
+    logMessage("客户端已就绪，等待输入。", "info");
 });
 
 function setActiveTab(target) {
@@ -125,42 +119,21 @@ function setupForms() {
     });
 }
 
-function setupEndpointForm() {
-    const form = document.getElementById("endpointForm");
-    form.addEventListener("submit", (event) => {
-        event.preventDefault();
-        const host = form.host.value.trim() || "127.0.0.1";
-        let port = Number(form.port.value);
-        if (!Number.isFinite(port) || port <= 0 || port > 65535) {
-            port = 8081;
-        }
-        let path = form.path.value.trim() || "/rpc";
-        if (!path.startsWith("/")) {
-            path = `/${path}`;
-        }
-        state.host = host;
-        state.port = port;
-        state.path = path;
-        updateEndpointSummary();
-        logMessage(`已更新后端地址：${host}:${port}${path}`);
-    });
-}
+function initializeEndpointDefaults() {
+    const { protocol, hostname, port } = window.location;
+    state.host = hostname || "127.0.0.1";
 
-function setupDemoToggle() {
-    const demoToggle = document.getElementById("demoMode");
-    demoToggle.addEventListener("change", () => {
-        state.demoMode = demoToggle.checked;
-        logMessage(state.demoMode ? "已进入脱机演示模式，将生成模拟响应" : "恢复真实网络模式。", state.demoMode ? "warning" : "info");
-    });
-}
+    const numericPort = Number.parseInt(port, 10);
+    if (!Number.isNaN(numericPort) && numericPort > 0) {
+        state.port = numericPort;
+    } else {
+        state.port = protocol === "https:" ? 443 : 80;
+    }
 
-function updateEndpointSummary() {
-    const hostInput = document.getElementById("hostInput");
-    const portInput = document.getElementById("portInput");
-    const pathInput = document.getElementById("pathInput");
-    hostInput.value = state.host;
-    portInput.value = state.port;
-    pathInput.value = state.path;
+    const metaApiPath = document.querySelector('meta[name="backend-path"]')?.content?.trim();
+    state.path = metaApiPath || "/api";
+
+    logMessage(`后端地址已设置为 ${state.host}:${state.port}${state.path}`, "info");
 }
 
 function composePayload(action, formData) {
@@ -226,11 +199,6 @@ function composePayload(action, formData) {
 }
 
 async function sendPayload(request) {
-    if (state.demoMode) {
-        await delay(280);
-        return createDemoResponse(request);
-    }
-
     // Build an origin-aware URL so the client uses the same scheme as the page
     // (important when the page is served via HTTPS through ngrok). Do not
     // hardcode `http://` here.
@@ -403,25 +371,3 @@ function escapeHtml(str) {
         .replaceAll("'", "&#39;");
 }
 
-function delay(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-function createDemoResponse(request) {
-    const [username, action] = request.split(",");
-    switch (action) {
-        case "register":
-            return "register~1~模拟注册成功~null";
-        case "login":
-            return "login~1~模拟登录成功~null";
-        case "add":
-            return "add~1~模拟写入成功~null";
-        case "search":
-            return "search~null~模拟数据~" + [
-                `${username},120.50,2025/10/20,office,rent`,
-                `${username},45.00,2025/10/21,meal,lunch`
-            ].join("|");
-        default:
-            return `${action ?? "unknown"}~0~模拟失败~null`;
-    }
-}
