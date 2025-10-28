@@ -1,5 +1,7 @@
 package RequestManagement;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -7,7 +9,8 @@ import java.util.List;
 import sharedmodel.*;
 
 public class sqloperation {
-    public static String JDBC_URL = "jdbc:h2:~/accounting_db";
+    private static final Path DB_PATH = Paths.get(System.getProperty("user.dir"), "accounting_db").toAbsolutePath();
+    public static final String JDBC_URL = "jdbc:h2:file:" + DB_PATH.toString().replace("\\", "/");
     public static String JDBC_USER = "sa";
     public static String JDBC_PASSWORD = "";
     public Connection conn;

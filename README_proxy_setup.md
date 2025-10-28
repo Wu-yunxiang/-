@@ -1,6 +1,7 @@
 # Web 客户端 + TCP 服务器桥接快速指南
 
 # 一键启动：项目根目录里输入powershell -ExecutionPolicy Bypass -File .\scripts\start_all_and_get_ngrok.ps1
+# 重置数据库：项目根目录里输入powershell -ExecutionPolicy Bypass -File .\scripts\clear_db.ps1
 
 本项目的后端仍然是原始 TCP 协议服务器（`Main.java` + `ReceiveService`），浏览器端无法直接与其通信。按照下面步骤，可以在**不改动后端代码**的前提下，通过一个轻量的 HTTP→TCP 代理，把网页端 (`resource/` 下的 HTML/JS/CSS) 接到现有逻辑。
 

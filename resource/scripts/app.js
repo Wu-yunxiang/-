@@ -136,6 +136,61 @@ function initializeEndpointDefaults() {
     logMessage(`后端地址已设置为 ${state.host}:${state.port}${state.path}`, "info");
 }
 
+function validateAmountInput(rawAmount) {
+    const value = (rawAmount ?? "").trim();
+    if (!value) {
+        throw new Error("金额不能为空");
+    }
+    if (!/^\d+(?:\.\d{1,2})?$/.test(value)) {
+        throw new Error("金额格式必须为正数，最多保留两位小数");
+    }
+    const numeric = Number(value);
+    if (!Number.isFinite(numeric)) {
+        throw new Error("金额必须为有效数字");
+    }
+    if (numeric <= 0) {
+        throw new Error("金额必须大于 0");
+    }
+    if (numeric > 1_000_000_000) {
+        throw new Error("金额过大，请检查输入");
+    }
+    return numeric.toFixed(2);
+}
+
+function validateDateInput(rawDate, { required }) {
+    const value = (rawDate ?? "").trim();
+    if (!value) {
+        if (required) {
+            throw new Error("日期不能为空");
+        }
+        return "";
+    }
+    if (!/^\d{4}\/\d{1,2}\/\d{1,2}$/.test(value)) {
+        throw new Error("日期格式必须为 YYYY/MM/DD");
+    }
+    const [yearStr, monthStr, dayStr] = value.split("/");
+    const year = Number(yearStr);
+    const month = Number(monthStr);
+    const day = Number(dayStr);
+    if (!Number.isInteger(year) || !Number.isInteger(month) || !Number.isInteger(day)) {
+        throw new Error("日期必须包含有效的年、月、日");
+    }
+    if (year < 1900 || year > 2100) {
+        throw new Error("年份超出允许范围 (1900-2100)");
+    }
+    if (month < 1 || month > 12) {
+        throw new Error("月份必须在 1-12 之间");
+    }
+    if (day < 1 || day > 31) {
+        throw new Error("日期必须在 1-31 之间");
+    }
+    const jsDate = new Date(year, month - 1, day);
+    if (jsDate.getFullYear() !== year || jsDate.getMonth() !== month - 1 || jsDate.getDate() !== day) {
+        throw new Error("日期不存在，请检查输入");
+    }
+    return `${year.toString().padStart(4, "0")}/${month.toString().padStart(2, "0")}/${day.toString().padStart(2, "0")}`;
+}
+
 function composePayload(action, formData) {
     const requiresFormUsername = action === "register" || action === "login";
     let username = "";
@@ -173,21 +228,33 @@ function composePayload(action, formData) {
             };
         }
         case "add": {
-            const amount = (formData.get("amount") || "").trim();
-            const date = (formData.get("date") || "").trim();
+            const normalizedAmount = validateAmountInput(formData.get("amount"));
+            const normalizedDate = validateDateInput(formData.get("date"), { required: true });
             const subject = (formData.get("subject") || "").trim();
             const note = (formData.get("note") || "").trim();
-            if (!amount || !date || !subject) {
-                throw new Error("金额、日期、科目均不能为空");
-            }
             return {
-                request: `${username},add,${amount},${date},${subject},${note}`,
-                displayValues: { username, amount, date, subject }
+                request: `${username},add,${normalizedAmount},${normalizedDate},${subject},${note}`,
+                displayValues: {
+                    username,
+                    amount: normalizedAmount,
+                    date: normalizedDate,
+                    subject: subject || "(未填写)",
+                    note
+                }
             };
         }
         case "search": {
-            const startDate = (formData.get("startDate") || "").trim() || "";
-            const endDate = (formData.get("endDate") || "").trim() || "";
+            const startDate = validateDateInput(formData.get("startDate"), { required: false });
+            const endDate = validateDateInput(formData.get("endDate"), { required: false });
+            if (startDate && endDate) {
+                const [sy, sm, sd] = startDate.split("/").map(Number);
+                const [ey, em, ed] = endDate.split("/").map(Number);
+                const startTime = new Date(sy, sm - 1, sd).getTime();
+                const endTime = new Date(ey, em - 1, ed).getTime();
+                if (startTime > endTime) {
+                    throw new Error("开始日期不能晚于结束日期");
+                }
+            }
             return {
                 request: `${username},search,${startDate},${endDate}`,
                 displayValues: { username, startDate, endDate }

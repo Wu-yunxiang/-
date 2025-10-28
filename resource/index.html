@@ -53,12 +53,12 @@
                 <h2>新增账目</h2>
                 <form class="action-form" data-action="add" autocomplete="off">
                     <div class="field-row">
-                        <label>金额<input name="amount" type="number" step="0.01" required></label>
+                        <label>金额<input name="amount" type="number" step="0.01" min="0.01" required></label>
                         <label>日期<input name="date" type="text" placeholder="2025/10/23" required></label>
                     </div>
                     <div class="field-row">
-                        <label>用途<input name="subject" required></label>
-                        <label>备注<input name="note"></label>
+                        <label>用途<input name="subject" placeholder="可留空"></label>
+                        <label>备注<input name="note" placeholder="可留空"></label>
                     </div>
                     <button type="submit" class="primary-btn">写入账本</button>
                 </form>
