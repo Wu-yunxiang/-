@@ -112,7 +112,7 @@ body {
 .user-status {
     justify-self: end;
     color: var(--muted);
-    font-size: 0.9rem;
+        font-size: 1.05rem; /* 提高“共返回 x 条记录”的字号，与统计行一致 */
 }
 
 .user-status strong {
@@ -190,6 +190,70 @@ main {
     font-size: 1rem;
 }
 
+/* 使 input 的 placeholder 与 select 未选中（占位）显示保持一致的外观 */
+.field-row input::placeholder,
+.field-row textarea::placeholder {
+    color: var(--muted);
+    font-size: 1rem;
+    font-family: inherit;
+    opacity: 1; /* 在某些浏览器下 placeholder 默认较淡，强制可见度一致 */
+}
+
+/* 当 select 没有选中有效值（通常由 value="" 的占位 option 与 required 一起使用）
+   时，浏览器会把 select 视为 :invalid，我们在此状态下将可见文本颜色设为与 placeholder 相同 */
+.field-row select:invalid {
+    color: var(--muted);
+}
+
+/* 确保 select 与 option 使用相同的字体大小和家族，尽可能在不同浏览器中保持一致 */
+.field-row select,
+.field-row select option {
+    font-size: 1rem;
+    font-family: inherit;
+}
+
+/* 移除最低/最高金额输入框的上下微调箭头（spinner），确保不能用箭头调整数值 */
+/* 禁止使用上下微调箭头（spinner）来调整金额类输入，所有金额输入仅可通过手动输入获得数值 */
+input[type="number"][name="amount"],
+input[type="number"][name="minAmount"],
+input[type="number"][name="maxAmount"] {
+    -webkit-appearance: none !important; /* Chrome, Edge, Safari */
+    -moz-appearance: textfield !important; /* Firefox */
+    appearance: textfield !important; /* 标准 */
+    overflow: visible;
+}
+
+/* 移除 WebKit 的箭头伪元素 */
+input[type="number"][name="amount"]::-webkit-outer-spin-button,
+input[type="number"][name="amount"]::-webkit-inner-spin-button,
+input[type="number"][name="minAmount"]::-webkit-outer-spin-button,
+input[type="number"][name="minAmount"]::-webkit-inner-spin-button,
+input[type="number"][name="maxAmount"]::-webkit-outer-spin-button,
+input[type="number"][name="maxAmount"]::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0 !important;
+}
+
+/* 备用类：如果未来想批量应用，可在元素上加 class="no-spinner" */
+input.no-spinner {
+    -webkit-appearance: none !important;
+    -moz-appearance: textfield !important;
+    appearance: textfield !important;
+}
+
+.field-row select {
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: #fdfdff;
+    font-size: 1rem;
+}
+
+/* 当 select 当前值为空（占位）时，使可见文本样式与 input 的 placeholder 一致 */
+.field-row select.placeholder {
+    color: var(--muted);
+}
+
 .primary-btn {
     justify-self: start;
     padding: 12px 20px;
@@ -218,6 +282,27 @@ main {
 
 .search-result h3 {
     margin: 0;
+    font-size: 1.37rem; /* 略微增加“查询结果”标题的大小 */
+}
+
+/* 查询结果上方的统计展示，居中显示；降低粗度以减少视觉权重 */
+.search-totals-display {
+    text-align: center;
+    margin: 8px 0 6px;
+    font-weight: 600; /* 适度加粗以便统计数字更醒目 */
+    color: var(--text);
+    font-size: 1.15rem; /* 增大统计字号以提高可读性 */
+}
+
+/* 仅将交易记录的上方统计字号与查询统计字号保持一致（只改大小，不改其他样式） */
+#searchTotalsDisplay {
+    /* 已由 .search-totals-display 定义字体与粗细，此处仅保留显式大小以防样式覆盖 */
+    font-size: 1.15rem;
+}
+
+#recordsTotalsDisplay {
+    /* 只修改字号，保留其它继承或已有样式不变 */
+    font-size: 1.15rem;
 }
 
 .search-result table {
@@ -248,7 +333,7 @@ main {
 
 .summary {
     color: var(--muted);
-    font-size: 0.9rem;
+    font-size: 1.15rem; /* 将“共返回 xx 条记录”字号增大，便于阅读 */
 }
 
 .records-header {
@@ -310,25 +395,44 @@ main {
     transform: none;
 }
 
-.sort-toggle {
+.sort-select {
+    /* 与表单内其他 select 保持一致的填充与字体 */
     border: none;
-    background: linear-gradient(135deg, rgba(58, 162, 224, 0.9), rgba(41, 133, 206, 0.92));
+    background: linear-gradient(135deg, rgba(58, 162, 224, 0.92), rgba(41, 133, 206, 0.94));
     color: #ffffff;
-    font-size: 0.9rem;
+    /* 与 .field-row select 保持同样的 font-size */
+    font-size: 1rem;
     font-weight: 600;
-    padding: 8px 16px;
+    min-width: 160px; /* 确保查询与记录的排序控件外观宽度一致 */
+    /* 使用同样的内边距，保留右侧用于箭头的额外空间 */
+    padding: 10px 12px;
+    padding-right: 40px;
     border-radius: 12px;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 6px 16px rgba(19, 90, 150, 0.35);
     cursor: pointer;
     transition: transform 0.15s ease, box-shadow 0.15s ease;
+    appearance: none;
+    background-image: linear-gradient(45deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 60%), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='10'%3E%3Cpath d='M2 2l5 5 5-5' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 14px 10px, auto;
 }
 
-.sort-toggle:hover {
+/* 尽量让原生下拉项在可控范围内与关闭状态的字体/填充一致（不同浏览器对 option 的支持不完全一致） */
+.sort-select option {
+    font-family: inherit;
+    font-size: 1rem;
+    padding: 10px 12px;
+    color: var(--text);
+    background: #fdfdff;
+}
+
+.sort-select:hover {
     transform: translateY(-1px);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 8px 20px rgba(19, 90, 150, 0.45);
 }
 
-.sort-toggle:focus-visible {
+.sort-select:focus-visible {
     outline: 2px solid rgba(225, 245, 255, 0.9);
     outline-offset: 3px;
 }
@@ -366,6 +470,19 @@ main {
 
 .records-board tbody tr:last-child td {
     border-bottom: none;
+}
+
+.records-board tfoot td,
+.search-result tfoot td {
+    border-top: 1px solid var(--border);
+    padding: 12px;
+    text-align: right;
+    font-weight: 600;
+    color: var(--muted);
+}
+
+.totals-row {
+    font-size: 0.95rem;
 }
 
 .records-empty {

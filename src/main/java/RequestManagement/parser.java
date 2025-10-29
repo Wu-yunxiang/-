@@ -13,9 +13,22 @@ public class parser {
         if (action.equals("add")) {
             double amount = Double.parseDouble(parts[2]);
             String date = parts[3];
-            String subject = parts[4];
-            String note = parts[5];
-            addrequest Add = new addrequest(username, amount, date, subject, note);
+            String type = "expense";
+            String subject = "";
+            String note = "";
+            if (parts.length >= 7) {
+                type = parts[4];
+                subject = parts[5];
+                note = parts[6];
+            } else {
+                if (parts.length >= 5) {
+                    subject = parts[4];
+                }
+                if (parts.length >= 6) {
+                    note = parts[5];
+                }
+            }
+            addrequest Add = new addrequest(username, amount, type, date, subject, note);
             try {
                 return new ParseResult("add", sql.solveAdd(Add), null, null);
             } catch (SQLException e) {
@@ -41,9 +54,12 @@ public class parser {
             }
         }
         else if(action.equals("search")) {
-            String startDate = parts[2];
-            String endDate = parts[3];
-            searchrequest Search = new searchrequest(username, startDate, endDate);
+            String startDate = parts.length > 2 ? parts[2] : "";
+            String endDate = parts.length > 3 ? parts[3] : "";
+            String typeFilter = parts.length > 4 ? parts[4] : "";
+            Double minAmount = parseNullableDouble(parts.length > 5 ? parts[5] : "");
+            Double maxAmount = parseNullableDouble(parts.length > 6 ? parts[6] : "");
+            searchrequest Search = new searchrequest(username, startDate, endDate, typeFilter, minAmount, maxAmount);
             try {
                 return new ParseResult("search", null, null, sql.solveSearch(Search));
             } catch (SQLException e) {
@@ -82,6 +98,17 @@ public class parser {
             }
         }
         else {
+            return null;
+        }
+    }
+
+    private Double parseNullableDouble(String raw) {
+        if (raw == null || raw.isEmpty()) {
+            return null;
+        }
+        try {
+            return Double.valueOf(raw);
+        } catch (NumberFormatException ex) {
             return null;
         }
     }

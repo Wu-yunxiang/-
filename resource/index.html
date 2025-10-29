@@ -55,8 +55,16 @@
                 <h2>新增账目</h2>
                 <form class="action-form" data-action="add" autocomplete="off">
                     <div class="field-row">
-                        <label>金额<input name="amount" type="number" step="0.01" min="0.01" placeholder="必填" required></label>
+                        <label>金额（￥）<input name="amount" type="number" step="0.01" min="0.01" placeholder="必填" required></label>
                         <label>日期（格式：2025/1/1）<input name="date" type="text" placeholder="必填" required aria-required="true"></label>
+                        <label>类型（收入/支出）
+                            <select name="type" required aria-required="true">
+                                <!-- 隐藏占位项（关闭时显示文本；打开下拉时大多数浏览器会将其隐藏） -->
+                                <option value="" disabled selected hidden>请选择</option>
+                                <option value="income">收入</option>
+                                <option value="expense">支出</option>
+                            </select>
+                        </label>
                     </div>
                     <div class="field-row">
                         <label>用途<input name="subject" placeholder="可留空"></label>
@@ -70,22 +78,45 @@
                 <h2>查询账目</h2>
                 <form class="action-form" data-action="search" autocomplete="off">
                     <div class="field-row">
-                        <label>开始日期<input name="startDate" type="text" placeholder="留空为不限"></label>
-                        <label>截止日期<input name="endDate" type="text" placeholder="留空为不限"></label>
+                        <label>开始日期（格式：2025/1/1）<input name="startDate" type="text" placeholder="留空为不限"></label>
+                        <label>截止日期（格式：2025/1/1）<input name="endDate" type="text" placeholder="留空为不限"></label>
+                        <label>类型（不限/收入/支出）
+                            <select name="type">
+                                <!-- 与记账页相同的占位表现：关闭时显示占位，打开下拉时占位不在列表中 -->
+                                <option value="" disabled selected hidden>请选择</option>
+                                <option value="">不限</option>
+                                <option value="income">收入</option>
+                                <option value="expense">支出</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div class="field-row">
+                        <label>最低金额（￥）<input name="minAmount" type="number" step="0.01" min="0" placeholder="留空为不限"></label>
+                        <label>最高金额（￥）<input name="maxAmount" type="number" step="0.01" min="0" placeholder="留空为不限"></label>
                     </div>
                     <button type="submit" class="primary-btn">执行查询</button>
                 </form>
                 <div id="searchResult" class="search-result" hidden>
                     <header class="search-header">
                         <h3>查询结果</h3>
-                        <button type="button" id="searchSortToggle" class="sort-toggle" data-order="desc">日期降序</button>
+                        <select id="searchSortSelect" class="sort-select" aria-label="查询排序方式">
+                            <option value="date-desc" selected>日期降序</option>
+                            <option value="date-asc">日期升序</option>
+                            <option value="amount-desc">金额降序</option>
+                            <option value="amount-asc">金额升序</option>
+                            <option value="type-income">收入在前</option>
+                            <option value="type-expense">支出在前</option>
+                        </select>
                     </header>
+                    <!-- 新增：在查询结果上方居中显示统计 -->
+                    <div id="searchTotalsDisplay" class="totals-row search-totals-display" aria-live="polite"></div>
                     <div class="summary" id="searchSummary"></div>
                     <table>
                         <thead>
                             <tr>
                                 <th>用户</th>
-                                <th>金额</th>
+                                <th>类型</th>
+                                <th>金额（￥）</th>
                                 <th>日期</th>
                                 <th>用途</th>
                                 <th>备注</th>
@@ -93,6 +124,11 @@
                             </tr>
                         </thead>
                         <tbody id="searchTableBody"></tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="7" id="searchTotals" class="totals-row"></td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </section>
@@ -103,9 +139,18 @@
                         <h2>交易记录</h2>
                         <span id="recordsCount" class="records-count">共 0 条记录</span>
                     </div>
+                    <!-- 新增：在记录上方显示统计 -->
+                    <div id="recordsTotalsDisplay" class="totals-row" aria-live="polite"></div>
                     <div class="records-actions">
+                        <select id="recordsSortSelect" class="sort-select" aria-label="交易记录排序方式">
+                            <option value="date-desc" selected>日期降序</option>
+                            <option value="date-asc">日期升序</option>
+                            <option value="amount-desc">金额降序</option>
+                            <option value="amount-asc">金额升序</option>
+                            <option value="type-income">收入在前</option>
+                            <option value="type-expense">支出在前</option>
+                        </select>
                         <button type="button" class="records-clear-btn" id="clearRecordsBtn" data-requires-auth="true">删除全部</button>
-                        <button type="button" id="recordsSortToggle" class="sort-toggle" data-order="desc">日期降序</button>
                         <button type="button" class="ghost-btn" id="refreshRecordsBtn">刷新</button>
                     </div>
                 </div>
@@ -114,7 +159,8 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>金额</th>
+                                <th>类型</th>
+                                <th>金额（￥）</th>
                                 <th>日期</th>
                                 <th>用途</th>
                                 <th>备注</th>
@@ -122,6 +168,11 @@
                             </tr>
                         </thead>
                         <tbody id="recordsTableBody"></tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="6" id="recordsTotals" class="totals-row"></td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </section>

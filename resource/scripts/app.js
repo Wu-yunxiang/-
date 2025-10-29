@@ -6,11 +6,13 @@ const state = {
     activeTab: "register",
     records: [],
     recordsLoaded: false,
-    recordsSortOrder: "desc",
-    searchSortOrder: "desc",
+    recordsSortKey: "date-desc",
+    searchSortKey: "date-desc",
     lastSearchEntries: [],
-    lastSearchContext: null
+    lastSearchFilters: null
 };
+const DEFAULT_SORT_KEY = "date-desc";
+const SUPPORTED_SORT_KEYS = new Set(["date-desc", "date-asc", "amount-desc", "amount-asc", "type-income", "type-expense"]);
 let defaultRecordsEmptyMessage = "暂无记录。提交账目后即可在此查看并删除。";
 const confirmState = {
     overlay: null,
@@ -33,6 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initializeEndpointDefaults();
     setupTabs();
     setupForms();
+    setupSelectPlaceholders();
     setupConfirmModal();
     setupRecordsUI();
     setupSearchSortControl();
@@ -87,7 +90,7 @@ function updateAuthUI() {
         state.records = [];
         state.recordsLoaded = false;
         state.lastSearchEntries = [];
-        state.lastSearchContext = null;
+        state.lastSearchFilters = null;
         resetRecordsView();
         clearSearchResult();
     }
@@ -154,6 +157,33 @@ function setupForms() {
                 showParsed(null);
             }
         });
+    });
+}
+
+/**
+ * 在页面加载和 select 变化时，为值为空的 select 添加 .placeholder 类，
+ * 以便 CSS 能将其显示为与 input 的 placeholder 一致的样式（颜色/大小/字体）。
+ */
+function setupSelectPlaceholders() {
+    const selects = document.querySelectorAll('.field-row select');
+    if (!selects || selects.length === 0) return;
+
+    const update = (select) => {
+        try {
+            if (!select.value) {
+                select.classList.add('placeholder');
+            } else {
+                select.classList.remove('placeholder');
+            }
+        } catch (e) {
+            // 忽略只读或其它异常
+        }
+    };
+
+    selects.forEach((s) => {
+        update(s);
+        s.addEventListener('change', () => update(s));
+        s.addEventListener('input', () => update(s));
     });
 }
 
@@ -231,6 +261,47 @@ function validateDateInput(rawDate, { required }) {
     return `${year.toString().padStart(4, "0")}/${month.toString().padStart(2, "0")}/${day.toString().padStart(2, "0")}`;
 }
 
+function validateEntryType(rawType) {
+    const value = (rawType ?? "").trim().toLowerCase();
+    if (value === "income" || value === "expense") {
+        return value;
+    }
+    throw new Error("请选择收入或支出类型");
+}
+
+function normalizeTypeFilter(rawType) {
+    const value = (rawType ?? "").trim();
+    if (!value) {
+        return "";
+    }
+    const normalized = value.toLowerCase();
+    if (normalized === "income" || normalized === "expense") {
+        return normalized;
+    }
+    throw new Error("类型筛选无效");
+}
+
+function normalizeAmountFilter(rawAmount, { label }) {
+    const value = (rawAmount ?? "").trim();
+    if (!value) {
+        return "";
+    }
+    if (!/^\d+(?:\.\d{1,2})?$/.test(value)) {
+        throw new Error(`${label}需为非负数，最多保留两位小数`);
+    }
+    const numeric = Number(value);
+    if (!Number.isFinite(numeric)) {
+        throw new Error(`${label}无效`);
+    }
+    if (numeric < 0) {
+        throw new Error(`${label}不能小于 0`);
+    }
+    if (numeric > 1_000_000_000) {
+        throw new Error(`${label}过大`);
+    }
+    return numeric.toFixed(2);
+}
+
 function composePayload(action, formData) {
     const requiresFormUsername = action === "register" || action === "login";
     let username = "";
@@ -270,14 +341,16 @@ function composePayload(action, formData) {
         case "add": {
             const normalizedAmount = validateAmountInput(formData.get("amount"));
             const normalizedDate = validateDateInput(formData.get("date"), { required: true });
+            const entryType = validateEntryType(formData.get("type"));
             const subject = (formData.get("subject") || "").trim();
             const note = (formData.get("note") || "").trim();
             return {
-                request: `${username},add,${normalizedAmount},${normalizedDate},${subject},${note}`,
+                request: `${username},add,${normalizedAmount},${normalizedDate},${entryType},${subject},${note}`,
                 displayValues: {
                     username,
                     amount: normalizedAmount,
                     date: normalizedDate,
+                    entryType,
                     subject: subject || "(未填写)",
                     note
                 }
@@ -286,6 +359,9 @@ function composePayload(action, formData) {
         case "search": {
             const startDate = validateDateInput(formData.get("startDate"), { required: false });
             const endDate = validateDateInput(formData.get("endDate"), { required: false });
+            const typeFilter = normalizeTypeFilter(formData.get("type"));
+            const minAmount = normalizeAmountFilter(formData.get("minAmount"), { label: "最低金额" });
+            const maxAmount = normalizeAmountFilter(formData.get("maxAmount"), { label: "最高金额" });
             if (startDate && endDate) {
                 const [sy, sm, sd] = startDate.split("/").map(Number);
                 const [ey, em, ed] = endDate.split("/").map(Number);
@@ -295,9 +371,19 @@ function composePayload(action, formData) {
                     throw new Error("开始日期不能晚于结束日期");
                 }
             }
+            if (minAmount && maxAmount && Number(minAmount) > Number(maxAmount)) {
+                throw new Error("最低金额不能大于最高金额");
+            }
             return {
-                request: `${username},search,${startDate},${endDate}`,
-                displayValues: { username, startDate, endDate }
+                request: `${username},search,${startDate},${endDate},${typeFilter},${minAmount},${maxAmount}`,
+                displayValues: {
+                    username,
+                    startDate,
+                    endDate,
+                    typeFilter,
+                    minAmount,
+                    maxAmount
+                }
             };
         }
         default:
@@ -367,6 +453,20 @@ function parseEntry(entryString) {
             raw: entryString
         };
     }
+    if (cols.length >= 7) {
+        const [idStr, username, amountStr, typeRaw, date, subject, note] = cols;
+        const id = idStr && idStr !== "null" ? Number(idStr) : null;
+        const amount = Number(amountStr);
+        return {
+            id: Number.isFinite(id) ? id : null,
+            username,
+            amount: Number.isFinite(amount) ? amount : null,
+            type: normalizeEntryType(typeRaw),
+            date: normalizeField(date),
+            subject: normalizeField(subject),
+            note: normalizeField(note)
+        };
+    }
     if (cols.length >= 6) {
         const [idStr, username, amountStr, date, subject, note] = cols;
         const id = idStr && idStr !== "null" ? Number(idStr) : null;
@@ -375,6 +475,7 @@ function parseEntry(entryString) {
             id: Number.isFinite(id) ? id : null,
             username,
             amount: Number.isFinite(amount) ? amount : null,
+            type: "expense",
             date: normalizeField(date),
             subject: normalizeField(subject),
             note: normalizeField(note)
@@ -386,6 +487,7 @@ function parseEntry(entryString) {
         id: null,
         username,
         amount: Number.isFinite(amount) ? amount : null,
+        type: "expense",
         date: normalizeField(date),
         subject: normalizeField(subject),
         note: normalizeField(note)
@@ -463,7 +565,7 @@ function renderSearchResult(parsed, context) {
     }
 
     state.lastSearchEntries = Array.isArray(parsed?.entries) ? parsed.entries.slice() : [];
-    state.lastSearchContext = context || null;
+    state.lastSearchFilters = context || null;
 
     container.hidden = false;
     renderSearchEntries();
@@ -473,18 +575,28 @@ function renderSearchEntries() {
     const container = document.getElementById("searchResult");
     const summary = document.getElementById("searchSummary");
     const tbody = document.getElementById("searchTableBody");
-    const sortToggle = document.getElementById("searchSortToggle");
+    const sortSelect = document.getElementById("searchSortSelect");
+    const totalsCell = document.getElementById("searchTotals");
     if (!container || !summary || !tbody) {
         return;
     }
 
     tbody.innerHTML = "";
-    const entries = sortEntriesByDate(state.lastSearchEntries || [], state.searchSortOrder);
-    if (sortToggle) {
-        applySortToggleLabel(sortToggle, state.searchSortOrder);
+    const normalizedSortKey = normalizeSortKey(state.searchSortKey) || DEFAULT_SORT_KEY;
+    if (normalizedSortKey !== state.searchSortKey) {
+        state.searchSortKey = normalizedSortKey;
+    }
+    const entries = sortEntries(state.lastSearchEntries || [], state.searchSortKey);
+    if (sortSelect) {
+        sortSelect.value = state.searchSortKey;
     }
 
-    const filtersLabel = formatSearchFilters(state.lastSearchContext);
+    const filtersLabel = formatSearchFilters(state.lastSearchFilters);
+    const totals = calculateTotals(entries);
+    // 将统计显示在查询结果上方的新展示区，并清空表格尾部的统计单元格以避免重复
+    updateTotalsCell(document.getElementById("searchTotalsDisplay"), totals);
+    updateTotalsCell(totalsCell, null);
+
     if (!entries.length) {
         summary.textContent = filtersLabel ? `没有符合条件的记录${filtersLabel}` : "没有符合条件的记录。";
         return;
@@ -497,6 +609,9 @@ function renderSearchEntries() {
 
         const userCell = document.createElement("td");
         userCell.textContent = entry.username || "";
+
+        const typeCell = document.createElement("td");
+        typeCell.textContent = formatEntryType(entry.type);
 
         const amountCell = document.createElement("td");
         amountCell.textContent = formatAmount(entry.amount);
@@ -514,6 +629,7 @@ function renderSearchEntries() {
         actionCell.appendChild(createDeleteButton(entry, { enforceOwnership: true }));
 
         row.appendChild(userCell);
+    row.appendChild(typeCell);
         row.appendChild(amountCell);
         row.appendChild(dateCell);
         row.appendChild(subjectCell);
@@ -528,6 +644,7 @@ function clearSearchResult() {
     const container = document.getElementById("searchResult");
     const summary = document.getElementById("searchSummary");
     const tbody = document.getElementById("searchTableBody");
+    const totalsCell = document.getElementById("searchTotals");
     if (!container || !summary || !tbody) {
         return;
     }
@@ -535,7 +652,10 @@ function clearSearchResult() {
     summary.textContent = "";
     tbody.innerHTML = "";
     state.lastSearchEntries = [];
-    state.lastSearchContext = null;
+    state.lastSearchFilters = null;
+    // 更新上方展示区并清空表格尾部统计
+    updateTotalsCell(document.getElementById("searchTotalsDisplay"), { incomeTotal: 0, expenseTotal: 0 });
+    updateTotalsCell(totalsCell, null);
 }
 
 function showRequest(raw) {
@@ -718,15 +838,23 @@ function closeConfirmDialog(result) {
 }
 
 function setupRecordsUI() {
-    const recordsSortToggle = document.getElementById("recordsSortToggle");
-    if (recordsSortToggle) {
-        applySortToggleLabel(recordsSortToggle, state.recordsSortOrder);
-        recordsSortToggle.addEventListener("click", () => {
-            state.recordsSortOrder = state.recordsSortOrder === "desc" ? "asc" : "desc";
-            applySortToggleLabel(recordsSortToggle, state.recordsSortOrder);
-            logMessage(`交易记录列表已切换为${describeSortOrder(state.recordsSortOrder)}显示。`);
+    const recordsSortSelect = document.getElementById("recordsSortSelect");
+    if (recordsSortSelect) {
+        recordsSortSelect.value = state.recordsSortKey;
+        recordsSortSelect.addEventListener("change", () => {
+            const nextKey = normalizeSortKey(recordsSortSelect.value);
+            if (!nextKey) {
+                recordsSortSelect.value = state.recordsSortKey;
+                return;
+            }
+            state.recordsSortKey = nextKey;
+            logMessage(`交易记录列表已切换为${describeSortKey(nextKey)}。`);
             renderRecords(state.records);
         });
+        // 与查询排序控件保持一致的提示（鼠标悬停显示当前排序方式）
+        try {
+            recordsSortSelect.setAttribute('title', describeSortKey(state.recordsSortKey));
+        } catch (e) {}
     }
 
     const clearBtn = document.getElementById("clearRecordsBtn");
@@ -759,20 +887,31 @@ function setupRecordsUI() {
     registerDeleteHandler("recordsTableBody");
     registerDeleteHandler("searchTableBody");
     updateRecordsCount(0);
+    // 初始化：在记录上方显示初始统计（0）并清空表脚显示
+    updateTotalsCell(document.getElementById("recordsTotalsDisplay"), { incomeTotal: 0, expenseTotal: 0 });
+    updateTotalsCell(document.getElementById("recordsTotals"), null);
 }
 
 function setupSearchSortControl() {
-    const searchSortToggle = document.getElementById("searchSortToggle");
-    if (!searchSortToggle) {
+    const searchSortSelect = document.getElementById("searchSortSelect");
+    if (!searchSortSelect) {
         return;
     }
-    applySortToggleLabel(searchSortToggle, state.searchSortOrder);
-    searchSortToggle.addEventListener("click", () => {
-        state.searchSortOrder = state.searchSortOrder === "desc" ? "asc" : "desc";
-        applySortToggleLabel(searchSortToggle, state.searchSortOrder);
-        logMessage(`查询结果现以${describeSortOrder(state.searchSortOrder)}显示。`);
+    searchSortSelect.value = state.searchSortKey;
+    searchSortSelect.addEventListener("change", () => {
+        const nextKey = normalizeSortKey(searchSortSelect.value);
+        if (!nextKey) {
+            searchSortSelect.value = state.searchSortKey;
+            return;
+        }
+        state.searchSortKey = nextKey;
+        logMessage(`查询结果现以${describeSortKey(nextKey)}显示。`);
         renderSearchEntries();
     });
+    // 与交易记录排序控件保持一致的提示（鼠标悬停显示当前排序方式）
+    try {
+        searchSortSelect.setAttribute('title', describeSortKey(state.searchSortKey));
+    } catch (e) {}
 }
 
 function registerDeleteHandler(target) {
@@ -860,24 +999,24 @@ async function deleteRecord(entryId) {
 
 async function clearAllRecords() {
     if (!state.loggedInUser) {
-        logMessage("请先登录后再清空记录。", "warning");
+        logMessage("请先登录后再删除全部记录。", "warning");
         return;
     }
     const request = `${state.loggedInUser},clear`;
     try {
-        logMessage("正在清空全部交易记录...");
+        logMessage("正在删除全部交易记录...");
         showRequest(request);
         const responseText = await sendPayload(request);
         showResponse(responseText);
         const parsed = parseResponse(responseText);
         showParsed(parsed);
         if (!parsed || parsed.action !== "clear") {
-            logMessage("清空操作失败：服务器响应格式不正确。", "error");
+            logMessage("删除全部操作失败：服务器响应格式不正确。", "error");
             return;
         }
         handlePostAction(parsed, null);
     } catch (error) {
-        logMessage(`清空操作失败：${summarizeError(error)}`, "error");
+        logMessage(`删除全部操作失败：${summarizeError(error)}`, "error");
     }
 }
 
@@ -885,19 +1024,28 @@ function renderRecords(entries) {
     const board = document.getElementById("recordsBoard");
     const emptyNotice = document.getElementById("recordsEmptyNotice");
     const tbody = document.getElementById("recordsTableBody");
-    const sortToggle = document.getElementById("recordsSortToggle");
+    const sortSelect = document.getElementById("recordsSortSelect");
+    const totalsCell = document.getElementById("recordsTotals");
     if (!board || !emptyNotice || !tbody) {
         return;
     }
     const normalizedEntries = Array.isArray(entries) ? entries : [];
-    state.records = sortEntriesByDate(normalizedEntries, state.recordsSortOrder);
+    const normalizedSortKey = normalizeSortKey(state.recordsSortKey) || DEFAULT_SORT_KEY;
+    if (normalizedSortKey !== state.recordsSortKey) {
+        state.recordsSortKey = normalizedSortKey;
+    }
+    state.records = sortEntries(normalizedEntries, state.recordsSortKey);
     state.recordsLoaded = true;
     tbody.innerHTML = "";
 
     updateRecordsCount(state.records.length);
+    const totals = calculateTotals(state.records);
+    // 将统计显示在记录上方的新展示区，并清空表格尾部的统计单元格以避免重复
+    updateTotalsCell(document.getElementById("recordsTotalsDisplay"), totals);
+    updateTotalsCell(totalsCell, null);
 
-    if (sortToggle) {
-        applySortToggleLabel(sortToggle, state.recordsSortOrder);
+    if (sortSelect) {
+        sortSelect.value = state.recordsSortKey;
     }
 
     if (!state.records.length) {
@@ -912,6 +1060,9 @@ function renderRecords(entries) {
 
     state.records.forEach((entry) => {
         const row = document.createElement("tr");
+
+        const typeCell = document.createElement("td");
+        typeCell.textContent = formatEntryType(entry.type);
 
         const amountCell = document.createElement("td");
         amountCell.textContent = formatAmount(entry.amount);
@@ -928,6 +1079,7 @@ function renderRecords(entries) {
         const actionCell = document.createElement("td");
         actionCell.appendChild(createDeleteButton(entry));
 
+    row.appendChild(typeCell);
         row.appendChild(amountCell);
         row.appendChild(dateCell);
         row.appendChild(subjectCell);
@@ -967,12 +1119,16 @@ function resetRecordsView() {
     const board = document.getElementById("recordsBoard");
     const emptyNotice = document.getElementById("recordsEmptyNotice");
     const tbody = document.getElementById("recordsTableBody");
+    const totalsCell = document.getElementById("recordsTotals");
     if (!board || !emptyNotice || !tbody) {
         return;
     }
     tbody.innerHTML = "";
     board.hidden = true;
     updateRecordsCount(0);
+    // 在记录上方的展示区显示初始统计并清空表格尾部
+    updateTotalsCell(document.getElementById("recordsTotalsDisplay"), { incomeTotal: 0, expenseTotal: 0 });
+    updateTotalsCell(totalsCell, null);
     if (!state.loggedInUser) {
         emptyNotice.textContent = "请先登录后查看交易记录。";
         emptyNotice.hidden = false;
@@ -1000,23 +1156,90 @@ function normalizeField(value) {
     return value;
 }
 
-function sortEntriesByDate(entries, order) {
-    const normalizedOrder = order === "asc" ? "asc" : "desc";
-    return entries.slice().sort((a, b) => {
-        const timeA = getEntryDateValue(a);
-        const timeB = getEntryDateValue(b);
-        const fallback = normalizedOrder === "asc" ? Number.POSITIVE_INFINITY : Number.NEGATIVE_INFINITY;
-        const safeA = Number.isFinite(timeA) ? timeA : fallback;
-        const safeB = Number.isFinite(timeB) ? timeB : fallback;
+function sortEntries(entries, key) {
+    const normalized = normalizeSortKey(key) || DEFAULT_SORT_KEY;
+    return entries.slice().sort((a, b) => compareEntries(a, b, normalized));
+}
 
-        if (safeA === safeB) {
-            const idA = Number.isFinite(a?.id) ? a.id : 0;
-            const idB = Number.isFinite(b?.id) ? b.id : 0;
-            return normalizedOrder === "asc" ? idA - idB : idB - idA;
+function compareEntries(a, b, key) {
+    switch (key) {
+        case "date-asc":
+            return compareByDate(a, b, true);
+        case "date-desc":
+            return compareByDate(a, b, false);
+        case "amount-asc":
+            return compareByAmount(a, b, true);
+        case "amount-desc":
+            return compareByAmount(a, b, false);
+        case "type-income":
+        case "type-expense": {
+            const typeResult = compareByType(a, b, key);
+            if (typeResult !== 0) {
+                return typeResult;
+            }
+            const dateResult = compareByDate(a, b, false);
+            if (dateResult !== 0) {
+                return dateResult;
+            }
+            return compareById(a, b, false);
         }
+        default:
+            return compareByDate(a, b, false);
+    }
+}
 
-        return normalizedOrder === "asc" ? safeA - safeB : safeB - safeA;
-    });
+function compareByDate(a, b, asc) {
+    const timeA = getEntryDateValue(a);
+    const timeB = getEntryDateValue(b);
+    const fallback = asc ? Number.POSITIVE_INFINITY : Number.NEGATIVE_INFINITY;
+    const safeA = Number.isFinite(timeA) ? timeA : fallback;
+    const safeB = Number.isFinite(timeB) ? timeB : fallback;
+    if (safeA !== safeB) {
+        return asc ? safeA - safeB : safeB - safeA;
+    }
+    return compareById(a, b, asc);
+}
+
+function compareByAmount(a, b, asc) {
+    const amountA = getEntryAmountValue(a);
+    const amountB = getEntryAmountValue(b);
+    const fallback = asc ? Number.POSITIVE_INFINITY : Number.NEGATIVE_INFINITY;
+    const safeA = Number.isFinite(amountA) ? amountA : fallback;
+    const safeB = Number.isFinite(amountB) ? amountB : fallback;
+    if (safeA !== safeB) {
+        return asc ? safeA - safeB : safeB - safeA;
+    }
+    const dateResult = compareByDate(a, b, false);
+    if (dateResult !== 0) {
+        return dateResult;
+    }
+    return compareById(a, b, false);
+}
+
+function compareByType(a, b, key) {
+    const weightA = getTypeSortWeight(a, key);
+    const weightB = getTypeSortWeight(b, key);
+    if (weightA !== weightB) {
+        return weightA - weightB;
+    }
+    return 0;
+}
+
+function compareById(a, b, asc) {
+    const idA = Number.isFinite(a?.id) ? a.id : 0;
+    const idB = Number.isFinite(b?.id) ? b.id : 0;
+    return asc ? idA - idB : idB - idA;
+}
+
+function getTypeSortWeight(entry, key) {
+    const type = normalizeEntryType(entry?.type);
+    if (key === "type-income") {
+        return type === "income" ? 0 : 1;
+    }
+    if (key === "type-expense") {
+        return type === "expense" ? 0 : 1;
+    }
+    return 0;
 }
 
 function getEntryDateValue(entry) {
@@ -1041,14 +1264,96 @@ function getEntryDateValue(entry) {
     return jsDate.getTime();
 }
 
-function applySortToggleLabel(button, order) {
-    const normalized = order === "asc" ? "asc" : "desc";
-    button.dataset.order = normalized;
-    button.textContent = normalized === "asc" ? "日期升序" : "日期降序";
+function getEntryAmountValue(entry) {
+    const numeric = Number(entry?.amount);
+    return Number.isFinite(numeric) ? numeric : Number.NaN;
 }
 
-function describeSortOrder(order) {
-    return order === "asc" ? "日期升序" : "日期降序";
+function normalizeEntryType(rawType) {
+    const value = (rawType ?? "").toString().trim().toLowerCase();
+    if (value === "income") {
+        return "income";
+    }
+    if (value === "expense") {
+        return "expense";
+    }
+    return "expense";
+}
+
+function formatEntryType(type) {
+    return normalizeEntryType(type) === "income" ? "收入" : "支出";
+}
+
+function normalizeSortKey(key) {
+    if (typeof key !== "string") {
+        return null;
+    }
+    const trimmed = key.trim();
+    return SUPPORTED_SORT_KEYS.has(trimmed) ? trimmed : null;
+}
+
+function describeSortKey(key) {
+    const normalized = normalizeSortKey(key) || DEFAULT_SORT_KEY;
+    switch (normalized) {
+        case "date-asc":
+            return "日期升序";
+        case "date-desc":
+            return "日期降序";
+        case "amount-asc":
+            return "金额升序";
+        case "amount-desc":
+            return "金额降序";
+        case "type-income":
+            return "收入在前";
+        case "type-expense":
+            return "支出在前";
+        default:
+            return "日期降序";
+    }
+}
+
+function calculateTotals(entries) {
+    let incomeTotal = 0;
+    let expenseTotal = 0;
+    entries.forEach((entry) => {
+        const amount = getEntryAmountValue(entry);
+        if (!Number.isFinite(amount)) {
+            return;
+        }
+        const type = normalizeEntryType(entry?.type);
+        if (type === "income") {
+            incomeTotal += amount;
+        } else {
+            expenseTotal += amount;
+        }
+    });
+    return { incomeTotal, expenseTotal };
+}
+
+function formatSignedAmount(value, sign) {
+    const numeric = Number(value);
+    if (!Number.isFinite(numeric)) {
+        return `${sign}0.00`;
+    }
+    return `${sign}${Math.abs(numeric).toFixed(2)}`;
+}
+
+function updateTotalsCell(cell, totals) {
+    if (!cell) {
+        return;
+    }
+    if (!totals) {
+        cell.textContent = "";
+        return;
+    }
+    const incomeText = formatSignedAmount(totals.incomeTotal, "+");
+    const expenseText = formatSignedAmount(totals.expenseTotal, "-");
+    const net = (Number(totals.incomeTotal) || 0) - (Number(totals.expenseTotal) || 0);
+    const netSign = net >= 0 ? "+" : "-";
+    const netText = formatSignedAmount(net, netSign);
+    // 格式：总计：+xxx / -xxx = +或- xxx
+    // 在尾部加上货币符号 ￥
+    cell.textContent = `总计：${incomeText} / ${expenseText} = ${netText} ￥`;
 }
 
 function describeAction(action) {
@@ -1094,24 +1399,36 @@ function formatSearchFilters(context, { withBrackets = true } = {}) {
     if (!context) {
         return "";
     }
-    const { startDate, endDate } = context;
-    if (!startDate && !endDate) {
+    const parts = [];
+    const { startDate, endDate, typeFilter, minAmount, maxAmount } = context;
+    if (startDate || endDate) {
+        if (startDate && endDate) {
+            parts.push(`范围：${startDate} 至 ${endDate}`);
+        } else if (startDate) {
+            parts.push(`自 ${startDate} 起`);
+        } else if (endDate) {
+            parts.push(`截至 ${endDate}`);
+        }
+    }
+    if (typeFilter) {
+        parts.push(`类型：${formatEntryType(typeFilter)}`);
+    }
+    if (minAmount) {
+        parts.push(`金额≥${minAmount}`);
+    }
+    if (maxAmount) {
+        parts.push(`金额≤${maxAmount}`);
+    }
+    if (!parts.length) {
         return "";
     }
-    let text;
-    if (startDate && endDate) {
-        text = `范围：${startDate} 至 ${endDate}`;
-    } else if (startDate) {
-        text = `自 ${startDate} 起`;
-    } else {
-        text = `截至 ${endDate}`;
-    }
+    const text = parts.join("，");
     return withBrackets ? `（${text}）` : text;
 }
 
 function logRecordsLoaded() {
-    const orderLabel = describeSortOrder(state.recordsSortOrder);
-    logMessage(`已加载 ${state.records.length} 条交易记录，当前为${orderLabel}。`);
+    const sortLabel = describeSortKey(state.recordsSortKey);
+    logMessage(`已加载 ${state.records.length} 条交易记录，当前按${sortLabel}排序。`);
 }
 
 function logClearOutcome(parsed) {
@@ -1136,11 +1453,10 @@ function logClearOutcome(parsed) {
 function logSearchOutcome(parsed, context) {
     const count = Array.isArray(parsed?.entries) ? parsed.entries.length : 0;
     const filtersText = formatSearchFilters(context, { withBrackets: false });
-    const orderLabel = describeSortOrder(state.searchSortOrder);
+    const sortLabel = describeSortKey(state.searchSortKey);
     if (count > 0) {
         const filterSegment = filtersText ? `，${filtersText}` : "";
-        // 按用户要求使用“当前按日期x序显示”的描述
-        logMessage(`本次查询得到 ${count} 条记录，当前按${orderLabel}显示${filterSegment}。`);
+        logMessage(`本次查询得到 ${count} 条记录，当前按${sortLabel}显示${filterSegment}。`);
     } else {
         const filterSegment = filtersText ? `，${filtersText}` : "";
         logMessage(`本次查询没有找到匹配记录${filterSegment}。`, "warning");
@@ -1155,7 +1471,9 @@ function logAddOutcome(parsed, context) {
         const subjectSegment = subject ? `，用途 ${subject}` : "";
         const note = context?.note ? String(context.note).trim() : "";
         const noteSegment = note ? `，备注：${note}` : "";
-        logMessage(`新增账目成功：日期 ${date}，金额 ${amountDisplay}${subjectSegment}${noteSegment}。`);
+        const typeLabel = formatEntryType(context?.entryType);
+        const typeSegment = typeLabel ? `，类型 ${typeLabel}` : "";
+        logMessage(`新增账目成功：日期 ${date}，金额 ${amountDisplay}${typeSegment}${subjectSegment}${noteSegment}。`);
     } else {
         const reason = parsed.message || "服务器未返回原因";
         logMessage(`新增账目未成功：${reason}`, "warning");

@@ -34,12 +34,15 @@ public class sqloperation {
                 id BIGINT AUTO_INCREMENT PRIMARY KEY,
                 username VARCHAR(255) NOT NULL,
                 amount DOUBLE NOT NULL,
+                type VARCHAR(32),
                 date VARCHAR(64),
                 subject VARCHAR(255),
                 note VARCHAR(1024)
             )
             """);
             stmt.execute("ALTER TABLE entries ADD COLUMN IF NOT EXISTS id BIGINT AUTO_INCREMENT");
+            stmt.execute("ALTER TABLE entries ADD COLUMN IF NOT EXISTS type VARCHAR(32)");
+            stmt.execute("UPDATE entries SET type = 'expense' WHERE type IS NULL");
             stmt.execute("CREATE INDEX IF NOT EXISTS idx_entries_username ON entries(username)");
         }
     }
@@ -49,16 +52,18 @@ public class sqloperation {
         String username = entry.username;
         double amount = entry.amount;
         String date = entry.date;
+    String type = normalizeType(entry.type);
         String subject = entry.subject;
         String note = entry.note;
         try (Connection c = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
              PreparedStatement insert = c.prepareStatement(
-                     "INSERT INTO entries (username, amount, date, subject, note) VALUES (?, ?, ?, ?, ?)") ) {
+                     "INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?)") ) {
             insert.setString(1, username);
             insert.setDouble(2, amount);
-            insert.setString(3, date);
-            insert.setString(4, subject);
-            insert.setString(5, note);
+            insert.setString(3, type);
+            insert.setString(4, date);
+            insert.setString(5, subject);
+            insert.setString(6, note);
             insert.executeUpdate();
         }
         return Boolean.valueOf(true);
@@ -104,13 +109,30 @@ public class sqloperation {
         List<Entry> results = new ArrayList<>();
         try (Connection c = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
              PreparedStatement query = c.prepareStatement(
-                     "SELECT id, username, amount, date, subject, note FROM entries WHERE username = ? ORDER BY id") ) {
+                     "SELECT id, username, amount, type, date, subject, note FROM entries WHERE username = ? ORDER BY id") ) {
             query.setString(1, username);
             try (ResultSet rs = query.executeQuery()) {
                 while (rs.next()) {
                     String rowDateStr = rs.getString("date");
                     LocalDate rowDate = parseDateOrNull(rowDateStr);
                     if ((rowDate == null) && (start != null || end != null)) {
+                        continue;
+                    }
+
+                    String rowType = normalizeType(rs.getString("type"));
+                    if (Search.typeFilter != null && !Search.typeFilter.isBlank()) {
+                        if (!rowType.equalsIgnoreCase(Search.typeFilter)) {
+                            continue;
+                        }
+                    }
+
+                    Double minAmount = Search.minAmount;
+                    Double maxAmount = Search.maxAmount;
+                    double amount = rs.getDouble("amount");
+                    if (minAmount != null && amount < minAmount) {
+                        continue;
+                    }
+                    if (maxAmount != null && amount > maxAmount) {
                         continue;
                     }
 
@@ -130,7 +152,7 @@ public class sqloperation {
         List<Entry> results = new ArrayList<>();
         try (Connection c = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
              PreparedStatement query = c.prepareStatement(
-                     "SELECT id, username, amount, date, subject, note FROM entries WHERE username = ? ORDER BY id") ) {
+                     "SELECT id, username, amount, type, date, subject, note FROM entries WHERE username = ? ORDER BY id") ) {
             query.setString(1, username);
             try (ResultSet rs = query.executeQuery()) {
                 while (rs.next()) {
@@ -183,8 +205,20 @@ public class sqloperation {
                 id,
                 rs.getString("username"),
                 rs.getDouble("amount"),
+                normalizeType(rs.getString("type")),
                 rs.getString("date"),
                 rs.getString("subject"),
                 rs.getString("note"));
+    }
+
+    private String normalizeType(String raw) {
+        if (raw == null || raw.isBlank()) {
+            return "expense";
+        }
+        String normalized = raw.trim().toLowerCase();
+        if (!normalized.equals("income") && !normalized.equals("expense")) {
+            return "expense";
+        }
+        return normalized;
     }
 }
