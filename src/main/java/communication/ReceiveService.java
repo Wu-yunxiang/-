@@ -6,6 +6,9 @@ import java.io.Writer;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 
 public final class ReceiveService {
@@ -13,6 +16,7 @@ public final class ReceiveService {
     private final BiFunction<Socket, String, String> handler;
     private ServerSocket serverSocket;
     private volatile boolean running;
+    private ExecutorService executor;
 
     public ReceiveService(int port, BiFunction<Socket, String, String> handler) {
         if (port <= 0 || port > 65535) {
@@ -31,26 +35,36 @@ public final class ReceiveService {
         }
         serverSocket = new ServerSocket(port);
         running = true;
+        // 使用缓存线程池为每个连接提供并发处理能力（轻量级、适合短连接）
+        executor = Executors.newCachedThreadPool();
         while (running) {
-            Socket client = serverSocket.accept();
-            BufferedReader reader = new BufferedReader(
-                    new java.io.InputStreamReader(client.getInputStream(), StandardCharsets.UTF_8));
-            Writer writer = new OutputStreamWriter(client.getOutputStream(), StandardCharsets.UTF_8);
+            final Socket client = serverSocket.accept();
+            // 提交到线程池处理，避免阻塞 accept() 从而支持并发客户端
+            executor.submit(() -> {
+                try (BufferedReader reader = new BufferedReader(
+                        new java.io.InputStreamReader(client.getInputStream(), StandardCharsets.UTF_8));
+                     Writer writer = new OutputStreamWriter(client.getOutputStream(), StandardCharsets.UTF_8)) {
 
-            String line = reader.readLine();
-            while (line != null) {
-                String reply = handler.apply(client, line);
-                if (reply != null) {
-                    writer.write(reply);
-                    writer.write('\n');
-                    writer.flush();
+                    String line = reader.readLine();
+                    while (line != null) {
+                        String reply = handler.apply(client, line);
+                        if (reply != null) {
+                            writer.write(reply);
+                            writer.write('\n');
+                            writer.flush();
+                        }
+                        line = reader.readLine();
+                    }
+                } catch (Throwable t) {
+                    // 日志打印（如果需要）或静默失败以防单个连接影响其它连接
+                    // t.printStackTrace();
+                } finally {
+                    try {
+                        client.close();
+                    } catch (Throwable ignored) {
+                    }
                 }
-                line = reader.readLine();
-            }
-
-            writer.close();
-            reader.close();
-            client.close();
+            });
         }
     }
 
@@ -59,6 +73,18 @@ public final class ReceiveService {
         if (serverSocket != null) {
             serverSocket.close();
             serverSocket = null;
+        }
+        if (executor != null) {
+            executor.shutdown();
+            try {
+                if (!executor.awaitTermination(2, TimeUnit.SECONDS)) {
+                    executor.shutdownNow();
+                }
+            } catch (InterruptedException e) {
+                executor.shutdownNow();
+                Thread.currentThread().interrupt();
+            }
+            executor = null;
         }
     }
 }

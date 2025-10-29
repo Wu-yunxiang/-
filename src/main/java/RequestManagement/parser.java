@@ -50,6 +50,37 @@ public class parser {
                 return null;
             }
         }
+        else if(action.equals("list")) {
+            try {
+                return new ParseResult("list", null, null, sql.solveList(username));
+            } catch (SQLException e) {
+                return null;
+            }
+        }
+        else if(action.equals("clear")) {
+            try {
+                int removed = sql.solveClear(username);
+                return new ParseResult("clear", Boolean.TRUE, Integer.toString(removed), null);
+            } catch (SQLException e) {
+                return null;
+            }
+        }
+        else if(action.equals("delete")) {
+            if (parts.length < 3) {
+                return new ParseResult("delete", Boolean.FALSE, "缺少要删除的记录ID", null);
+            }
+            try {
+                long entryId = Long.parseLong(parts[2]);
+                deleterequest Delete = new deleterequest(username, entryId);
+                Boolean success = sql.solveDelete(Delete);
+                String message = (success != null && success) ? "删除成功" : "未找到要删除的记录";
+                return new ParseResult("delete", success, message, null);
+            } catch (NumberFormatException ex) {
+                return new ParseResult("delete", Boolean.FALSE, "记录ID无效", null);
+            } catch (SQLException e) {
+                return null;
+            }
+        }
         else {
             return null;
         }

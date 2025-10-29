@@ -24,7 +24,7 @@
             <button class="tab" data-target="login" role="tab" data-hide-after-login="true">登录</button>
             <button class="tab" data-target="add" role="tab" data-requires-auth="true">记账</button>
             <button class="tab" data-target="search" role="tab" data-requires-auth="true">查询</button>
-            <button class="tab" data-target="inspector" role="tab" data-requires-auth="true">请求/响应</button>
+            <button class="tab" data-target="records" role="tab" data-requires-auth="true">交易记录</button>
         </nav>
         <!-- 用户状态显示已移除，页面标题仍会反映登录用户 -->
 
@@ -76,10 +76,11 @@
                     <button type="submit" class="primary-btn">执行查询</button>
                 </form>
                 <div id="searchResult" class="search-result" hidden>
-                    <header>
+                    <header class="search-header">
                         <h3>查询结果</h3>
-                        <div class="summary" id="searchSummary"></div>
+                        <button type="button" id="searchSortToggle" class="sort-toggle" data-order="desc">日期降序</button>
                     </header>
+                    <div class="summary" id="searchSummary"></div>
                     <table>
                         <thead>
                             <tr>
@@ -88,6 +89,7 @@
                                 <th>日期</th>
                                 <th>用途</th>
                                 <th>备注</th>
+                                <th>操作</th>
                             </tr>
                         </thead>
                         <tbody id="searchTableBody"></tbody>
@@ -95,24 +97,46 @@
                 </div>
             </section>
 
-            <section id="view-inspector" class="view" role="tabpanel" data-requires-auth="true">
-                <h2>请求 / 响应检查</h2>
-                <div class="inspector">
-                    <div>
-                        <h3>最近一次请求</h3>
-                        <textarea id="requestPreview" readonly></textarea>
+            <section id="view-records" class="view" role="tabpanel" data-requires-auth="true">
+                <div class="records-header">
+                    <div class="records-title-group">
+                        <h2>交易记录</h2>
+                        <span id="recordsCount" class="records-count">共 0 条记录</span>
                     </div>
-                    <div>
-                        <h3>服务器响应</h3>
-                        <textarea id="responsePreview" readonly></textarea>
+                    <div class="records-actions">
+                        <button type="button" class="records-clear-btn" id="clearRecordsBtn" data-requires-auth="true">删除全部</button>
+                        <button type="button" id="recordsSortToggle" class="sort-toggle" data-order="desc">日期降序</button>
+                        <button type="button" class="ghost-btn" id="refreshRecordsBtn">刷新</button>
                     </div>
-                    <div>
-                        <h3>解析结果</h3>
-                        <pre id="parsedPreview" class="parsed"></pre>
-                    </div>
+                </div>
+                <p id="recordsEmptyNotice" class="records-empty" hidden>暂无记录。提交账目后即可在此查看并删除。</p>
+                <div id="recordsBoard" class="records-board" hidden>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>金额</th>
+                                <th>日期</th>
+                                <th>用途</th>
+                                <th>备注</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recordsTableBody"></tbody>
+                    </table>
                 </div>
             </section>
         </main>
+
+        <div id="confirmOverlay" class="confirm-overlay" hidden aria-hidden="true">
+            <div class="confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+                <h3 id="confirmTitle">确认操作</h3>
+                <p id="confirmMessage">确定要执行此操作吗？</p>
+                <div class="confirm-actions">
+                    <button type="button" class="primary-btn" data-confirm-ok>确认</button>
+                    <button type="button" class="ghost-btn dialog-cancel" data-confirm-cancel>取消</button>
+                </div>
+            </div>
+        </div>
 
         <section class="console" aria-live="polite">
             <h2>操作日志</h2>

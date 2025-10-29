@@ -239,10 +239,16 @@ select {
     font-weight: 600; /* 列名稍微加粗以便识别 */
 }
 
-/* 代码/文本区域的浅色变体（如 inspector 的白底 textarea/pre） */
-.inspector textarea,
-.inspector pre {
+/* 交易记录面板（白色背景文本色） */
+.records-board,
+.records-board table,
+.records-board th,
+.records-board td {
     color: #0b1226;
+}
+
+.records-empty {
+    color: rgba(10, 18, 38, 0.65);
 }
 
 /* 小提示（例如日期格式） */

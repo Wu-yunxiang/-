@@ -32,4 +32,12 @@ class searchrequest {
         this.startDate = startDate;
         this.endDate = endDate;
     }
+}
+class deleterequest {
+    String username;
+    long entryId;
+    public deleterequest(String username, long entryId) {
+        this.username = username;
+        this.entryId = entryId;
+    }
 }   

@@ -20,16 +20,18 @@ public class sqloperation {
 
     public void initialize() throws ClassNotFoundException, SQLException{
         Class.forName("org.h2.Driver");
-        conn = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
-        Statement stmt = conn.createStatement();
-        stmt.execute("""
+        // 使用临时连接来创建表（初始化）。后续操作每次请求都会创建独立连接以保证并发安全
+        try (Connection initConn = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
+             Statement stmt = initConn.createStatement()) {
+            stmt.execute("""
             CREATE TABLE IF NOT EXISTS users (
                 username VARCHAR(255) PRIMARY KEY,
                 password VARCHAR(255) NOT NULL
             )
             """);
-        stmt.execute("""
+            stmt.execute("""
             CREATE TABLE IF NOT EXISTS entries (
+                id BIGINT AUTO_INCREMENT PRIMARY KEY,
                 username VARCHAR(255) NOT NULL,
                 amount DOUBLE NOT NULL,
                 date VARCHAR(64),
@@ -37,7 +39,9 @@ public class sqloperation {
                 note VARCHAR(1024)
             )
             """);
-        stmt.close();
+            stmt.execute("ALTER TABLE entries ADD COLUMN IF NOT EXISTS id BIGINT AUTO_INCREMENT");
+            stmt.execute("CREATE INDEX IF NOT EXISTS idx_entries_username ON entries(username)");
+        }
     }
     
     public Boolean solveAdd(addrequest Add) throws SQLException {
@@ -47,44 +51,46 @@ public class sqloperation {
         String date = entry.date;
         String subject = entry.subject;
         String note = entry.note;
-        PreparedStatement insert = conn.prepareStatement(
-            "INSERT INTO entries (username, amount, date, subject, note) VALUES (?, ?, ?, ?, ?)");
-        insert.setString(1, username);
-        insert.setDouble(2, amount);
-        insert.setString(3, date);
-        insert.setString(4, subject);
-        insert.setString(5, note);
-        insert.executeUpdate();
-        insert.close();
+        try (Connection c = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
+             PreparedStatement insert = c.prepareStatement(
+                     "INSERT INTO entries (username, amount, date, subject, note) VALUES (?, ?, ?, ?, ?)") ) {
+            insert.setString(1, username);
+            insert.setDouble(2, amount);
+            insert.setString(3, date);
+            insert.setString(4, subject);
+            insert.setString(5, note);
+            insert.executeUpdate();
+        }
         return Boolean.valueOf(true);
     }
 
     public Boolean solveRegister(registerrequest Register) throws SQLException {
         String username= Register.username;
         String password= Register.password;
-        PreparedStatement insert = conn.prepareStatement(
-            "INSERT INTO users (username, password) VALUES (?, ?)");
-        insert.setString(1, username);
-        insert.setString(2, password);
-        insert.executeUpdate();
-        insert.close();
+        try (Connection c = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
+             PreparedStatement insert = c.prepareStatement(
+                     "INSERT INTO users (username, password) VALUES (?, ?)") ) {
+            insert.setString(1, username);
+            insert.setString(2, password);
+            insert.executeUpdate();
+        }
         return Boolean.valueOf(true);
     }
 
     public Boolean solveLogin(loginrequest Login) throws SQLException {
         String username= Login.username;
         String password= Login.password;
-        PreparedStatement query = conn.prepareStatement(
-                "SELECT password FROM users WHERE username = ?");
-        query.setString(1, username);
-        ResultSet rs = query.executeQuery();
         boolean success = false;
-        if (rs.next()) {
-            String storedPassword = rs.getString(1);
-            success = storedPassword != null && storedPassword.equals(password);
+        try (Connection c = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
+             PreparedStatement query = c.prepareStatement("SELECT password FROM users WHERE username = ?") ) {
+            query.setString(1, username);
+            try (ResultSet rs = query.executeQuery()) {
+                if (rs.next()) {
+                    String storedPassword = rs.getString(1);
+                    success = storedPassword != null && storedPassword.equals(password);
+                }
+            }
         }
-        rs.close();
-        query.close();
         return Boolean.valueOf(success);
     }
 
@@ -95,35 +101,68 @@ public class sqloperation {
         LocalDate start = parseDateOrNull(startDate);
         LocalDate end = parseDateOrNull(endDate);
 
-        PreparedStatement query = conn.prepareStatement(
-                "SELECT username, amount, date, subject, note FROM entries WHERE username = ?");
-        query.setString(1, username);
-        ResultSet rs = query.executeQuery();
-
         List<Entry> results = new ArrayList<>();
-        while (rs.next()) {
-            String rowDateStr = rs.getString("date");
-            LocalDate rowDate = parseDateOrNull(rowDateStr);
+        try (Connection c = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
+             PreparedStatement query = c.prepareStatement(
+                     "SELECT id, username, amount, date, subject, note FROM entries WHERE username = ? ORDER BY id") ) {
+            query.setString(1, username);
+            try (ResultSet rs = query.executeQuery()) {
+                while (rs.next()) {
+                    String rowDateStr = rs.getString("date");
+                    LocalDate rowDate = parseDateOrNull(rowDateStr);
+                    if ((rowDate == null) && (start != null || end != null)) {
+                        continue;
+                    }
 
-            boolean withinLower = (start == null) || !rowDate.isBefore(start);
-            boolean withinUpper = (end == null) || !rowDate.isAfter(end);
+                    boolean withinLower = (start == null) || (rowDate != null && !rowDate.isBefore(start));
+                    boolean withinUpper = (end == null) || (rowDate != null && !rowDate.isAfter(end));
 
-            if (withinLower && withinUpper) {
-                results.add(new Entry(
-                    rs.getString("username"),
-                    rs.getDouble("amount"),
-                    rowDateStr,
-                    rs.getString("subject"),
-                    rs.getString("note")));
+                    if (withinLower && withinUpper) {
+                        results.add(mapEntry(rs));
+                    }
+                }
             }
         }
-        rs.close();
-        query.close();
         return results;
     }
 
+    public List<Entry> solveList(String username) throws SQLException {
+        List<Entry> results = new ArrayList<>();
+        try (Connection c = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
+             PreparedStatement query = c.prepareStatement(
+                     "SELECT id, username, amount, date, subject, note FROM entries WHERE username = ? ORDER BY id") ) {
+            query.setString(1, username);
+            try (ResultSet rs = query.executeQuery()) {
+                while (rs.next()) {
+                    results.add(mapEntry(rs));
+                }
+            }
+        }
+        return results;
+    }
+
+    public Boolean solveDelete(deleterequest Delete) throws SQLException {
+        try (Connection c = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
+             PreparedStatement delete = c.prepareStatement(
+                     "DELETE FROM entries WHERE id = ? AND username = ?") ) {
+            delete.setLong(1, Delete.entryId);
+            delete.setString(2, Delete.username);
+            int affected = delete.executeUpdate();
+            return affected > 0;
+        }
+    }
+
+    public int solveClear(String username) throws SQLException {
+        try (Connection c = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
+             PreparedStatement clear = c.prepareStatement(
+                     "DELETE FROM entries WHERE username = ?") ) {
+            clear.setString(1, username);
+            return clear.executeUpdate();
+        }
+    }
+
     private LocalDate parseDateOrNull(String date) {
-        if (date == null) {
+        if (date == null || date.isEmpty()) {
             return null;
         }
 
@@ -136,5 +175,16 @@ public class sqloperation {
         int month = Integer.parseInt(parts[1]);
         int day = Integer.parseInt(parts[2]);
         return LocalDate.of(year, month, day);
+    }
+
+    private Entry mapEntry(ResultSet rs) throws SQLException {
+        Long id = rs.getObject("id", Long.class);
+        return new Entry(
+                id,
+                rs.getString("username"),
+                rs.getDouble("amount"),
+                rs.getString("date"),
+                rs.getString("subject"),
+                rs.getString("note"));
     }
 }

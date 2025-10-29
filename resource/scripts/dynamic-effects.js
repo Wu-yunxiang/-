@@ -11,6 +11,11 @@
         let resizeRaf = null;
         let running = false;
         let particles = [];
+        const spatialPartition = {
+            grid: new Map(),
+            cellX: [],
+            cellY: []
+        };
 
         const pointer = {
             x: 0,
@@ -168,34 +173,46 @@
             pointer.prevX = pointer.x;
             pointer.prevY = pointer.y;
 
-            particles.forEach((particle) => {
+            const maxSpeedSq = maxSpeed * maxSpeed;
+            const pointerRadius = CONFIG.pointerRadius;
+            const pointerRadiusSq = pointerRadius * pointerRadius;
+            const pointerFarRadius = pointerRadius * 0.6;
+            const pointerFarRadiusSq = pointerFarRadius * pointerFarRadius;
+            const pointerMidRadiusSq = (pointerRadius * 0.35) * (pointerRadius * 0.35);
+            const pointerSnapRadius = Math.max(2, pointerRadius * 0.06);
+            const pointerSnapRadiusSq = pointerSnapRadius * pointerSnapRadius;
+
+            for (let i = 0; i < particles.length; i++) {
+                const particle = particles[i];
                 // 标记该粒子是否正在受到指针的直接影响（在 CONFIG.pointerRadius 内）
                 let underInfluence = false;
-                    // 根据与指针距离分区处理，以抑制靠近时的高频震荡：
-                    // - 远区（>= 0.6 * radius）：允许漂移与轻量脉冲
-                    // - 中区 (0.35-0.6 * radius): 使用速度 lerp 与小脉冲，减少随机漂移
-                    // - 近区 (< 0.35 * radius): 禁用脉冲和随机漂移，强力位置 lerp + 速度匹配 + 阻尼
+                // 根据与指针距离分区处理，以抑制靠近时的高频震荡：
+                // - 远区（>= 0.6 * radius）：允许漂移与轻量脉冲
+                // - 中区 (0.35-0.6 * radius): 使用速度 lerp 与小脉冲，减少随机漂移
+                // - 近区 (< 0.35 * radius): 禁用脉冲和随机漂移，强力位置 lerp + 速度匹配 + 阻尼
                 if (pointer.active) {
                     const dx = pointer.x - particle.x;
                     const dy = pointer.y - particle.y;
-                    const distance = Math.hypot(dx, dy) || 0.0001;
+                    const distanceSq = dx * dx + dy * dy;
 
                     // 允许随机漂移仅在较远区域，避免靠近时的高频震荡
-                    if (distance >= CONFIG.pointerRadius * 0.6) {
+                    if (distanceSq >= pointerFarRadiusSq) {
                         particle.vx += (Math.random() - 0.5) * CONFIG.drift * particle.jitter * delta;
                         particle.vy += (Math.random() - 0.5) * CONFIG.drift * particle.jitter * delta;
                     }
 
-            if (distance > 0 && distance < CONFIG.pointerRadius) {
-                underInfluence = true;
-                        const influence = (CONFIG.pointerRadius - distance) / CONFIG.pointerRadius;
-                        const dirX = dx / distance;
-                        const dirY = dy / distance;
+                    if (distanceSq > 0 && distanceSq < pointerRadiusSq) {
+                        underInfluence = true;
+                        const distance = Math.sqrt(distanceSq);
+                        const influence = (pointerRadius - distance) / pointerRadius;
+                        const invDistance = 1 / distance;
+                        const dirX = dx * invDistance;
+                        const dirY = dy * invDistance;
 
-                        const desiredSpeed = Math.max(CONFIG.speedLimit * 0.5, CONFIG.speedLimit * 0.9);
+                        const desiredSpeed = Math.max(maxSpeed * 0.5, maxSpeed * 0.9);
 
                         // 中远区：仍可施加较小脉冲并做速度 lerp，但强度降低以避免震荡
-                        if (distance >= CONFIG.pointerRadius * 0.35) {
+                        if (distanceSq >= pointerMidRadiusSq) {
                             // 增强中区的即时响应：适度放大脉冲并提高速度对齐比重
                             const impulse = CONFIG.pointerStrength * Math.pow(influence, 2.2) * 0.002; // 提高脉冲系数以减少感知延迟
                             particle.vx += dirX * impulse;
@@ -226,7 +243,7 @@
                             particle.vy *= 0.35;
 
                             // 当非常非常靠近（几像素以内），直接置零速度以让粒子“停住”
-                            if (distance < Math.max(2, CONFIG.pointerRadius * 0.06)) {
+                            if (distanceSq < pointerSnapRadiusSq) {
                                 particle.vx = 0;
                                 particle.vy = 0;
                                 particle.x = pointer.x;
@@ -242,16 +259,16 @@
                 // 如果粒子处于自由状态（未被指针影响），强制其速度大小为 baseSpeed，
                 // 以保持速度幅值随时间恒定（符号与方向可变化，但大小固定）。
                 if (!underInfluence) {
-                    const currentV = Math.hypot(particle.vx, particle.vy) || 0.0001;
+                    const currentV = Math.sqrt(particle.vx * particle.vx + particle.vy * particle.vy) || 0.0001;
                     const targetSpeed = particle.baseSpeed || (CONFIG.speedLimit * 0.6);
                     const scale = targetSpeed / currentV;
                     particle.vx *= scale;
                     particle.vy *= scale;
                 }
 
-                const velocity = Math.hypot(particle.vx, particle.vy);
-                if (velocity > maxSpeed) {
-                    const scale = maxSpeed / velocity;
+                const velocitySq = particle.vx * particle.vx + particle.vy * particle.vy;
+                if (velocitySq > maxSpeedSq) {
+                    const scale = maxSpeed / Math.sqrt(velocitySq);
                     particle.vx *= scale;
                     particle.vy *= scale;
                 }
@@ -271,7 +288,7 @@
                 if (particle.x > width + margin) particle.x = -margin;
                 if (particle.y < -margin) particle.y = height + margin;
                 if (particle.y > height + margin) particle.y = -margin;
-            });
+            }
         }
 
         function render() {
@@ -280,28 +297,67 @@
             ctx.lineWidth = CONFIG.connectionWidth;
             ctx.lineCap = "round";
             ctx.lineJoin = "round";
+            const connectionDistance = CONFIG.connectionDistance;
+            const connectionDistanceSq = connectionDistance * connectionDistance;
+            const cellSize = connectionDistance || 1;
+            const grid = spatialPartition.grid;
+            const cellXCache = spatialPartition.cellX;
+            const cellYCache = spatialPartition.cellY;
+
+            grid.clear();
+
+            for (let i = 0; i < particles.length; i++) {
+                const particle = particles[i];
+                const cellX = Math.floor(particle.x / cellSize);
+                const cellY = Math.floor(particle.y / cellSize);
+                cellXCache[i] = cellX;
+                cellYCache[i] = cellY;
+                const key = `${cellX},${cellY}`;
+                let bucket = grid.get(key);
+                if (!bucket) {
+                    bucket = [];
+                    grid.set(key, bucket);
+                }
+                bucket.push(i);
+            }
 
             for (let i = 0; i < particles.length; i++) {
                 const a = particles[i];
-                for (let j = i + 1; j < particles.length; j++) {
-                    const b = particles[j];
-                    const dx = a.x - b.x;
-                    const dy = a.y - b.y;
-                    const distance = Math.hypot(dx, dy);
-                    if (distance < CONFIG.connectionDistance) {
-                        const connectionAlpha = CONFIG.connectionOpacity * (1 - distance / CONFIG.connectionDistance);
-                        if (connectionAlpha <= 0) {
+                const baseCellX = cellXCache[i];
+                const baseCellY = cellYCache[i];
+                for (let offsetY = -1; offsetY <= 1; offsetY++) {
+                    for (let offsetX = -1; offsetX <= 1; offsetX++) {
+                        const neighborKey = `${baseCellX + offsetX},${baseCellY + offsetY}`;
+                        const bucket = grid.get(neighborKey);
+                        if (!bucket) {
                             continue;
                         }
-                        // 增加连线亮度 20% 基础（不再基于鼠标靠近放大线宽）
-                        let brightness = 0.6 + 0.4 * Math.min(a.alpha, b.alpha);
-                        brightness = Math.min(1, brightness * 1.2);
-                        ctx.strokeStyle = `rgba(180, 220, 255, ${Math.min(1, connectionAlpha * brightness)})`;
-                        ctx.lineWidth = CONFIG.connectionWidth;
-                        ctx.beginPath();
-                        ctx.moveTo(a.x, a.y);
-                        ctx.lineTo(b.x, b.y);
-                        ctx.stroke();
+                        for (let k = 0; k < bucket.length; k++) {
+                            const j = bucket[k];
+                            if (j <= i) {
+                                continue;
+                            }
+                            const b = particles[j];
+                            const dx = a.x - b.x;
+                            const dy = a.y - b.y;
+                            const distSq = dx * dx + dy * dy;
+                            if (distSq >= connectionDistanceSq) {
+                                continue;
+                            }
+                            const distance = Math.sqrt(distSq);
+                            const connectionAlpha = CONFIG.connectionOpacity * (1 - distance / connectionDistance);
+                            if (connectionAlpha <= 0) {
+                                continue;
+                            }
+                            // 增加连线亮度 20% 基础（不再基于鼠标靠近放大线宽）
+                            let brightness = 0.6 + 0.4 * Math.min(a.alpha, b.alpha);
+                            brightness = Math.min(1, brightness * 1.2);
+                            ctx.strokeStyle = `rgba(180, 220, 255, ${Math.min(1, connectionAlpha * brightness)})`;
+                            ctx.beginPath();
+                            ctx.moveTo(a.x, a.y);
+                            ctx.lineTo(b.x, b.y);
+                            ctx.stroke();
+                        }
                     }
                 }
             }
@@ -443,7 +499,12 @@
             "rgba(255, 140, 170, 0.9)",
             "rgba(173, 255, 201, 0.9)"
         ];
+        const MAX_ACTIVE_EFFECTS = 14;
+        const MIN_SPAWN_INTERVAL = 90; // ms
+        const QUICK_CLICK_SPARK_SCALE = 0.6;
+        const REMOVE_BUFFER = 200; // ms
         let container;
+        let lastSpawnTime = 0;
 
         function init() {
             container = document.getElementById("clickEffects");
@@ -467,7 +528,30 @@
             spawnEffect(event.clientX, event.clientY);
         }
 
+        function pruneEffects(maxActive) {
+            if (!container) {
+                return;
+            }
+            while (container.childElementCount > maxActive) {
+                const oldest = container.firstElementChild;
+                if (!(oldest instanceof HTMLElement)) {
+                    break;
+                }
+                const timerId = oldest.dataset.removeTimerId;
+                if (timerId) {
+                    window.clearTimeout(Number(timerId));
+                }
+                oldest.remove();
+            }
+        }
+
         function spawnEffect(x, y) {
+            const now = performance.now();
+            const isRapid = (now - lastSpawnTime) < MIN_SPAWN_INTERVAL;
+            lastSpawnTime = now;
+
+            pruneEffects(MAX_ACTIVE_EFFECTS - 1);
+
             const effect = document.createElement("span");
             effect.className = "click-effect";
             effect.style.left = `${x}px`;
@@ -475,7 +559,8 @@
 
             const color = COLORS[Math.floor(Math.random() * COLORS.length)];
             // 烟花效果：保持散开半径不变，但使视觉更明显（更多火花、更大发光、更快完成）
-            const sparkCount = 24 + Math.floor(Math.random() * 10); // 24-33 火花（增多）
+            const baseSparkCount = 24 + Math.floor(Math.random() * 10); // 24-33 火花
+            const sparkCount = isRapid ? Math.max(12, Math.round(baseSparkCount * QUICK_CLICK_SPARK_SCALE)) : baseSparkCount;
             // 散开半径：缩小为原来的一半以减小爆炸覆盖范围
             const minDist = 12;
             const maxDist = 36;
@@ -514,10 +599,15 @@
 
             container.appendChild(effect);
             // 移除时间基于最长 spark 动画时长（留有少量缓冲）
-            const removeAfter = Math.round(maxDur + 200); // 安全上限
-            window.setTimeout(() => {
+            const removeAfter = Math.round(maxDur + REMOVE_BUFFER); // 安全上限
+            const timerId = window.setTimeout(() => {
                 effect.remove();
             }, removeAfter);
+            effect.dataset.removeTimerId = String(timerId);
+
+            if (container.childElementCount > MAX_ACTIVE_EFFECTS) {
+                pruneEffects(MAX_ACTIVE_EFFECTS);
+            }
         }
 
         return { init };
