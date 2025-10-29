@@ -33,8 +33,8 @@
                 <h2>注册用户</h2>
                 <form class="action-form" data-action="register" autocomplete="off">
                     <div class="field-row">
-                        <label>用户名<input name="username" required></label>
-                        <label>密码<input name="password" type="password" required></label>
+                        <label>用户名<input name="username" placeholder="必填" required></label>
+                        <label>密码<input name="password" type="password" placeholder="必填" required></label>
                     </div>
                     <button type="submit" class="primary-btn">提交注册</button>
                 </form>
@@ -44,8 +44,8 @@
                 <h2>用户登录</h2>
                 <form class="action-form" data-action="login" autocomplete="off">
                     <div class="field-row">
-                        <label>用户名<input name="username" required></label>
-                        <label>密码<input name="password" type="password" required></label>
+                        <label>用户名<input name="username" placeholder="必填" required></label>
+                        <label>密码<input name="password" type="password" placeholder="必填" required></label>
                     </div>
                     <button type="submit" class="primary-btn">执行登录</button>
                 </form>
@@ -55,8 +55,8 @@
                 <h2>新增账目</h2>
                 <form class="action-form" data-action="add" autocomplete="off">
                     <div class="field-row">
-                        <label>金额<input name="amount" type="number" step="0.01" min="0.01" required></label>
-                        <label>日期<input name="date" type="text" placeholder="2025/10/23" required></label>
+                        <label>金额<input name="amount" type="number" step="0.01" min="0.01" placeholder="必填" required></label>
+                        <label>日期（格式：2025/1/1）<input name="date" type="text" placeholder="必填" required aria-required="true"></label>
                     </div>
                     <div class="field-row">
                         <label>用途<input name="subject" placeholder="可留空"></label>
