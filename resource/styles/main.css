@@ -328,14 +328,21 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .search-totals-display,
-#searchTotalsDisplay,
-#recordsTotalsDisplay {
+#searchTotalsDisplay {
+    /* 查询结果的总计使用黑色系（与页面正文文本色一致） */
     text-align: center;
     margin: 8px 0 6px;
     font-weight: 600;
-    /* 总计信息使用白色系字体，便于在深色或渐变背景下显示 */
+    color: var(--text);
+    font-size: 1.15rem;
+}
+
+#recordsTotalsDisplay {
+    /* 交易记录的总计保持白色系以适配 records 面板顶部的深色/渐变样式 */
+    text-align: center;
+    margin: 8px 0 6px;
+    font-weight: 600;
     color: #ffffff;
-    /* 轻微的文字阴影提高浅色文本在亮色背景上的可读性 */
     text-shadow: 0 1px 0 rgba(0,0,0,0.18);
     font-size: 1.15rem;
 }

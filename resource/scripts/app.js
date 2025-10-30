@@ -750,6 +750,10 @@ function handlePostAction(parsed, context) {
             clearSearchResult();
         }
     }
+    // 将 delete 视为已处理以防止后续通用分支误清空查询结果，保证平滑移除能在 DOM 上执行
+    if (parsed.action === "delete") {
+        handled = true;
+    }
     if (!handled) {
         clearSearchResult();
     }
@@ -1193,6 +1197,15 @@ function registerDeleteHandler(target) {
         if (!(button instanceof HTMLButtonElement) || button.disabled) {
             return;
         }
+        // 阻止任何默认行为（例如被包裹在 form 中时触发的提交）并停止冒泡，
+        // 以避免点击删除触发页面刷新或父级处理器。
+        try {
+            event.preventDefault();
+        } catch (e) {}
+        try {
+            event.stopPropagation();
+        } catch (e) {}
+
         const entryId = button.dataset.entryId;
         if (!entryId) {
             logMessage("无法删除：缺少记录标识。", "warning");
