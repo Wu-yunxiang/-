@@ -333,7 +333,10 @@ input[type="number"]::-webkit-inner-spin-button {
     text-align: center;
     margin: 8px 0 6px;
     font-weight: 600;
-    color: var(--text);
+    /* 总计信息使用白色系字体，便于在深色或渐变背景下显示 */
+    color: #ffffff;
+    /* 轻微的文字阴影提高浅色文本在亮色背景上的可读性 */
+    text-shadow: 0 1px 0 rgba(0,0,0,0.18);
     font-size: 1.15rem;
 }
 

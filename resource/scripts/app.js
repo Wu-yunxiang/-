@@ -192,7 +192,6 @@ function initializeApplication() {
     setupTabs();
     setupForms();
     setupSelectPlaceholders();
-    try { disableSelectClickFocus(); } catch (e) { /* 忽略 */ }
     setupConfirmModal();
     setupRecordsUI();
     setupSearchSortControl();
