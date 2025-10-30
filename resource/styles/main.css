@@ -293,6 +293,12 @@ input[type="number"]::-webkit-inner-spin-button {
     box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 8px 20px rgba(15,40,75,0.06);
 }
 
+/* 鼠标点击时避免短暂的深色焦点框，但保留键盘无障碍焦点显示 */
+.field-row select:focus:not(:focus-visible) {
+    outline: none;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.4);
+}
+
 .primary-btn {
     justify-self: start;
     padding: 12px 20px;

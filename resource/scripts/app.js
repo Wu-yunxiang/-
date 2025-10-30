@@ -68,6 +68,11 @@ const networkState = {
     endpoint: null
 };
 
+const SUBMISSION_DEBOUNCE_MS = 200;
+const formSubmissionControl = new WeakMap();
+const requestLocks = new Map();
+const BUTTON_BUSY_CLASS = "is-busy";
+
 const LOG_MAX_ENTRIES = 30;
 
 function getCachedElementById(id) {
@@ -307,7 +312,163 @@ function handleActionFormSubmit(event) {
         return;
     }
     event.preventDefault();
-    void processActionFormSubmission(form);
+    queueActionFormSubmission(form, event.submitter);
+}
+
+function queueActionFormSubmission(form, submitter) {
+    const stateRecord = ensureFormSubmissionState(form);
+    const resolvedSubmitter = resolveSubmitterElement(form, submitter || stateRecord.pendingSubmitter);
+    if (resolvedSubmitter) {
+        stateRecord.pendingSubmitter = resolvedSubmitter;
+    }
+    if (stateRecord.timer) {
+        window.clearTimeout(stateRecord.timer);
+        stateRecord.timer = 0;
+    }
+    if (stateRecord.locked) {
+        stateRecord.pendingAfterLock = true;
+        return;
+    }
+    stateRecord.timer = window.setTimeout(() => {
+        stateRecord.timer = 0;
+        void executeQueuedActionSubmission(form);
+    }, SUBMISSION_DEBOUNCE_MS);
+}
+
+function ensureFormSubmissionState(form) {
+    let stateRecord = formSubmissionControl.get(form);
+    if (!stateRecord) {
+        stateRecord = {
+            timer: 0,
+            locked: false,
+            pendingSubmitter: null,
+            pendingAfterLock: false
+        };
+        formSubmissionControl.set(form, stateRecord);
+    }
+    return stateRecord;
+}
+
+async function executeQueuedActionSubmission(form) {
+    const stateRecord = ensureFormSubmissionState(form);
+    if (stateRecord.timer) {
+        window.clearTimeout(stateRecord.timer);
+        stateRecord.timer = 0;
+    }
+    if (stateRecord.locked) {
+        stateRecord.pendingAfterLock = true;
+        return;
+    }
+    stateRecord.locked = true;
+    const submitter = resolveSubmitterElement(form, stateRecord.pendingSubmitter);
+    stateRecord.pendingSubmitter = null;
+    setFormSubmittingState(form, submitter, true);
+    try {
+        await processActionFormSubmission(form);
+    } finally {
+        setFormSubmittingState(form, submitter, false);
+        stateRecord.locked = false;
+        const pendingSubmitter = stateRecord.pendingSubmitter;
+        const shouldReschedule = stateRecord.pendingAfterLock;
+        stateRecord.pendingAfterLock = false;
+        if (shouldReschedule) {
+            queueActionFormSubmission(form, pendingSubmitter);
+        }
+    }
+}
+
+function resolveSubmitterElement(form, submitter) {
+    if (submitter instanceof HTMLElement && form.contains(submitter)) {
+        return submitter;
+    }
+    const fallback = form.querySelector("button[type='submit'], input[type='submit']");
+    return fallback instanceof HTMLElement ? fallback : null;
+}
+
+function setFormSubmittingState(form, submitter, isSubmitting) {
+    if (!(form instanceof HTMLFormElement)) {
+        return;
+    }
+    const buttons = Array.from(form.querySelectorAll("button[type='submit'], input[type='submit']"));
+    if (submitter instanceof HTMLElement && !buttons.includes(submitter)) {
+        buttons.push(submitter);
+    }
+    for (let i = 0; i < buttons.length; i++) {
+        toggleButtonBusy(buttons[i], isSubmitting);
+    }
+    form.classList.toggle("is-submitting", Boolean(isSubmitting));
+}
+
+function toggleButtonBusy(button, busy) {
+    if (!(button instanceof HTMLElement)) {
+        return;
+    }
+    if (button instanceof HTMLButtonElement || button instanceof HTMLInputElement) {
+        button.disabled = Boolean(busy);
+    }
+    button.classList.toggle(BUTTON_BUSY_CLASS, Boolean(busy));
+    if (busy) {
+        button.setAttribute("aria-busy", "true");
+        button.setAttribute("aria-disabled", "true");
+    } else {
+        button.removeAttribute("aria-busy");
+        button.removeAttribute("aria-disabled");
+    }
+}
+
+function preventMultipleClicks(handler, delay = 1000) {
+    let locked = false;
+    return async function wrappedListener(event) {
+        if (locked) {
+            if (event?.preventDefault) {
+                event.preventDefault();
+            }
+            return;
+        }
+        locked = true;
+        const button = this instanceof HTMLElement ? this : (event?.currentTarget instanceof HTMLElement ? event.currentTarget : null);
+        const shouldToggleBusy = Boolean(button && button.dataset.multiClickLocked !== "1" && !button.disabled);
+        if (button) {
+            button.dataset.multiClickLocked = "1";
+        }
+        if (shouldToggleBusy && button) {
+            toggleButtonBusy(button, true);
+            button.dataset.multiClickBusy = "1";
+        }
+        try {
+            await handler.apply(this, arguments);
+        } finally {
+            window.setTimeout(() => {
+                if (button) {
+                    if (button.dataset.multiClickBusy === "1") {
+                        toggleButtonBusy(button, false);
+                        delete button.dataset.multiClickBusy;
+                    }
+                    delete button.dataset.multiClickLocked;
+                }
+                locked = false;
+            }, Math.max(0, Number(delay) || 0));
+        }
+    };
+}
+
+function runWithRequestLock(key, task) {
+    if (!key) {
+        return task();
+    }
+    const existing = requestLocks.get(key);
+    if (existing) {
+        return existing;
+    }
+    const wrapped = (async () => {
+        try {
+            return await task();
+        } finally {
+            requestLocks.delete(key);
+        }
+    })();
+    requestLocks.set(key, wrapped);
+    return wrapped;
 }
 
 async function processActionFormSubmission(form) {
@@ -322,9 +483,37 @@ async function processActionFormSubmission(form) {
         const parsed = parseResponse(responseText);
         showParsed(parsed);
         handlePostAction(parsed, displayValues);
+
         const success = parsed?.success;
         if (success === false) {
-            logMessage(`${actionLabel}请求已完成，但服务器未能执行该操作。`, "warning");
+            // 为注册与登录失败提供更友好的提示
+            try {
+                const serverMsg = parsed?.message || "";
+                const lower = String(serverMsg).toLowerCase();
+                if (action === "register") {
+                    if (!serverMsg || /存在|exist|already|taken/.test(lower)) {
+                        logMessage("注册的用户名已存在", "warning");
+                    } else {
+                        logMessage(`注册未成功：${serverMsg}`, "warning");
+                    }
+                } else if (action === "login") {
+                    if (serverMsg) {
+                        if (/用户不存在|用户名不存在|user not found|no such user|no user|not found|not exist|not exists|不存在/.test(lower)) {
+                            logMessage("用户名不存在", "warning");
+                        } else if (/密码|password|incorrect|wrong|错误/.test(lower)) {
+                            logMessage("密码错误", "warning");
+                        } else {
+                            logMessage(`登录未成功：${serverMsg}`, "warning");
+                        }
+                    } else {
+                        logMessage("密码错误", "warning");
+                    }
+                } else {
+                    logMessage(`${actionLabel}请求已完成，但服务器未能执行该操作。`, "warning");
+                }
+            } catch (e) {
+                logMessage(`${actionLabel}请求已完成，但服务器未能执行该操作。`, "warning");
+            }
         } else if (!actionsWithCustomCompletion.has(action)) {
             logMessage(`${actionLabel}请求已完成。`, "info");
         }
@@ -793,7 +982,8 @@ function handlePostAction(parsed, context) {
             }
         }
     }
-    if (parsed.message && parsed.action !== "clear") {
+    // 对于 delete 操作，删除结果会由 `logDeleteOutcome` 统一输出；因此避免重复输出服务器原始提示（例如“删除成功”）
+    if (parsed.message && parsed.action !== "clear" && parsed.action !== "delete") {
         logMessage(`服务器提示：${parsed.message}`);
     }
 }
@@ -818,7 +1008,6 @@ function renderSearchEntries() {
     const summary = getCachedElementById("searchSummary");
     const tbody = getCachedElementById("searchTableBody");
     const sortSelect = getCachedElementById("searchSortSelect");
-    const totalsCell = getCachedElementById("searchTotals");
     if (!container || !summary || !tbody) {
         return;
     }
@@ -833,23 +1022,36 @@ function renderSearchEntries() {
         sortSelect.value = state.searchSortKey;
     }
 
-    const filtersLabel = formatSearchFilters(state.lastSearchFilters);
-    const totals = calculateTotals(entries);
-    // 将统计显示在查询结果上方的新展示区，并清空表格尾部的统计单元格以避免重复
-    updateTotalsCell(getCachedElementById("searchTotalsDisplay"), totals);
-    updateTotalsCell(totalsCell, null);
-
+    updateSearchSummaryAndTotals(entries);
     if (!entries.length) {
-        summary.textContent = filtersLabel ? `没有符合条件的记录${filtersLabel}` : "没有符合条件的记录。";
         return;
     }
 
-    summary.textContent = `共返回 ${entries.length} 条记录${filtersLabel}`;
     const fragment = document.createDocumentFragment();
     for (let i = 0, len = entries.length; i < len; i++) {
         fragment.appendChild(buildSearchRow(entries[i]));
     }
     tbody.appendChild(fragment);
+}
+
+function updateSearchSummaryAndTotals(entries) {
+    const summary = getCachedElementById("searchSummary");
+    if (!summary) {
+        return;
+    }
+    const totalsDisplay = getCachedElementById("searchTotalsDisplay");
+    const totalsCell = getCachedElementById("searchTotals");
+    const safeEntries = Array.isArray(entries) ? entries : [];
+    const totals = calculateTotals(safeEntries);
+    updateTotalsCell(totalsDisplay, totals);
+    updateTotalsCell(totalsCell, null);
+
+    const filtersLabel = formatSearchFilters(state.lastSearchFilters);
+    if (!safeEntries.length) {
+        summary.textContent = filtersLabel ? `没有符合条件的记录${filtersLabel}` : "没有符合条件的记录。";
+        return;
+    }
+    summary.textContent = `共返回 ${safeEntries.length} 条记录${filtersLabel}`;
 }
 
 function buildSearchRow(entry) {
@@ -1097,12 +1299,12 @@ function setupRecordsUI() {
 
     const clearBtn = getCachedElementById("clearRecordsBtn");
     if (clearBtn) {
-        clearBtn.addEventListener("click", handleClearRecordsClick);
+        clearBtn.addEventListener("click", preventMultipleClicks(handleClearRecordsClick, 1000));
     }
 
     const refreshBtn = getCachedElementById("refreshRecordsBtn");
     if (refreshBtn) {
-        refreshBtn.addEventListener("click", handleRefreshRecordsClick);
+        refreshBtn.addEventListener("click", preventMultipleClicks(handleRefreshRecordsClick, 800));
     }
     registerDeleteHandler("recordsTableBody");
     registerDeleteHandler("searchTableBody");
@@ -1143,7 +1345,8 @@ function handleRecordsSortChange(event) {
     } catch (e) {}
 }
 
-async function handleClearRecordsClick() {
+async function handleClearRecordsClick(event) {
+    const triggerButton = event?.currentTarget instanceof HTMLButtonElement ? event.currentTarget : null;
     if (!state.loggedInUser) {
         logMessage("请先登录后再清空记录。", "warning");
         return;
@@ -1158,11 +1361,35 @@ async function handleClearRecordsClick() {
     if (!confirmed) {
         return;
     }
-    clearAllRecords();
+    const wrapperLocked = triggerButton?.dataset.multiClickLocked === "1";
+    if (!wrapperLocked) {
+        toggleButtonBusy(triggerButton, true);
+    }
+    try {
+        await clearAllRecords();
+    } finally {
+        if (!wrapperLocked) {
+            toggleButtonBusy(triggerButton, false);
+        }
+    }
 }
 
-function handleRefreshRecordsClick() {
-    refreshRecords({ force: true, silent: false });
+async function handleRefreshRecordsClick(event) {
+    const triggerButton = event?.currentTarget instanceof HTMLButtonElement ? event.currentTarget : null;
+    if (triggerButton && triggerButton.disabled) {
+        return;
+    }
+    const wrapperLocked = triggerButton?.dataset.multiClickLocked === "1";
+    if (!wrapperLocked) {
+        toggleButtonBusy(triggerButton, true);
+    }
+    try {
+        await refreshRecords({ force: true, silent: false });
+    } finally {
+        if (!wrapperLocked) {
+            toggleButtonBusy(triggerButton, false);
+        }
+    }
 }
 
 function handleSearchSortChange(event) {
@@ -1215,7 +1442,12 @@ function registerDeleteHandler(target) {
         if (!confirmed) {
             return;
         }
-        deleteRecord(entryId);
+        toggleButtonBusy(button, true);
+        try {
+            await deleteRecord(entryId);
+        } finally {
+            toggleButtonBusy(button, false);
+        }
     });
 }
 
@@ -1228,27 +1460,29 @@ async function refreshRecords({ force = false, silent = true } = {}) {
         return;
     }
     const request = `${state.loggedInUser},list`;
-    try {
-        if (!silent) {
-            logMessage("正在加载交易记录...");
+    return runWithRequestLock("refresh-records", async () => {
+        try {
+            if (!silent) {
+                logMessage("正在加载交易记录...");
+            }
+            resetRecordsView();
+            showRequest(request);
+            const responseText = await sendPayload(request);
+            showResponse(responseText);
+            const parsed = parseResponse(responseText);
+            showParsed(parsed);
+            if (!parsed || parsed.action !== "list") {
+                logMessage("刷新交易记录失败：服务器响应格式不正确。", "error");
+                return;
+            }
+            handlePostAction(parsed, { username: state.loggedInUser });
+        } catch (error) {
+            const level = silent ? "warning" : "error";
+            const summary = summarizeError(error);
+            const prefix = silent ? "刷新交易记录遇到问题" : "刷新交易记录失败";
+            logMessage(`${prefix}：${summary}`, level);
         }
-        resetRecordsView();
-        showRequest(request);
-        const responseText = await sendPayload(request);
-        showResponse(responseText);
-        const parsed = parseResponse(responseText);
-        showParsed(parsed);
-        if (!parsed || parsed.action !== "list") {
-            logMessage("刷新交易记录失败：服务器响应格式不正确。", "error");
-            return;
-        }
-        handlePostAction(parsed, { username: state.loggedInUser });
-    } catch (error) {
-        const level = silent ? "warning" : "error";
-        const summary = summarizeError(error);
-        const prefix = silent ? "刷新交易记录遇到问题" : "刷新交易记录失败";
-        logMessage(`${prefix}：${summary}`, level);
-    }
+    });
 }
 
 async function deleteRecord(entryId) {
@@ -1262,17 +1496,19 @@ async function deleteRecord(entryId) {
         return;
     }
     const request = `${state.loggedInUser},delete,${trimmed}`;
-    try {
-    logMessage(`正在删除编号 ${trimmed} 的记录...`);
-        showRequest(request);
-        const responseText = await sendPayload(request);
-        showResponse(responseText);
-        const parsed = parseResponse(responseText);
-        showParsed(parsed);
-        handlePostAction(parsed, { entryId: trimmed });
-    } catch (error) {
-        logMessage(`删除操作失败：${summarizeError(error)}`, "error");
-    }
+    return runWithRequestLock(`delete:${trimmed}`, async () => {
+        try {
+            // 不再在开始时写入“正在删除…”日志，以免与后续成功日志重复；成功时由统一的删除结果日志负责输出一次清晰的信息
+            showRequest(request);
+            const responseText = await sendPayload(request);
+            showResponse(responseText);
+            const parsed = parseResponse(responseText);
+            showParsed(parsed);
+            handlePostAction(parsed, { entryId: trimmed });
+        } catch (error) {
+            logMessage(`删除操作失败：${summarizeError(error)}`, "error");
+        }
+    });
 }
 
 async function clearAllRecords() {
@@ -1281,21 +1517,23 @@ async function clearAllRecords() {
         return;
     }
     const request = `${state.loggedInUser},clear`;
-    try {
-        logMessage("正在删除全部交易记录...");
-        showRequest(request);
-        const responseText = await sendPayload(request);
-        showResponse(responseText);
-        const parsed = parseResponse(responseText);
-        showParsed(parsed);
-        if (!parsed || parsed.action !== "clear") {
-            logMessage("删除全部操作失败：服务器响应格式不正确。", "error");
-            return;
+    return runWithRequestLock("clear-all-records", async () => {
+        try {
+            logMessage("正在删除全部交易记录...");
+            showRequest(request);
+            const responseText = await sendPayload(request);
+            showResponse(responseText);
+            const parsed = parseResponse(responseText);
+            showParsed(parsed);
+            if (!parsed || parsed.action !== "clear") {
+                logMessage("删除全部操作失败：服务器响应格式不正确。", "error");
+                return;
+            }
+            handlePostAction(parsed, null);
+        } catch (error) {
+            logMessage(`删除全部操作失败：${summarizeError(error)}`, "error");
         }
-        handlePostAction(parsed, null);
-    } catch (error) {
-        logMessage(`删除全部操作失败：${summarizeError(error)}`, "error");
-    }
+    });
 }
 
 function renderRecords(entries) {
@@ -1737,7 +1975,8 @@ function logDeleteOutcome(parsed, context) {
     const entryId = context?.entryId ? Number(context.entryId) : null;
     if (parsed.success) {
         if (entryId != null && Number.isFinite(entryId)) {
-            logMessage(`编号 ${entryId} 的记录已删除。`);
+            // 仅输出一条统一的成功日志，格式：编号xx的记录已删除
+            logMessage(`编号${entryId}的记录已删除`);
         } else {
             logMessage("指定记录已删除。");
         }
@@ -1770,6 +2009,13 @@ function removeEntryFromStateAndUI(entryId) {
         state.records = state.records.filter((e) => Number(e?.id) !== idNum);
         const afterLen = state.records.length;
 
+        let searchEntriesChanged = false;
+        if (Array.isArray(state.lastSearchEntries) && state.lastSearchEntries.length) {
+            const beforeSearchLen = state.lastSearchEntries.length;
+            state.lastSearchEntries = state.lastSearchEntries.filter((entry) => Number(entry?.id) !== idNum);
+            searchEntriesChanged = state.lastSearchEntries.length !== beforeSearchLen;
+        }
+
         // 更新计数与统计（如果当前在 records 页）
         updateRecordsCount(state.records.length);
         const totals = calculateTotals(state.records);
@@ -1790,6 +2036,11 @@ function removeEntryFromStateAndUI(entryId) {
             }
         });
 
+        if (searchEntriesChanged) {
+            const sortedSearchEntries = sortEntries(state.lastSearchEntries || [], state.searchSortKey);
+            updateSearchSummaryAndTotals(sortedSearchEntries);
+        }
+
         // 若移除后没有记录，切换到空视图
         if (state.records.length === 0) {
             const board = getCachedElementById("recordsBoard");
@@ -1801,10 +2052,8 @@ function removeEntryFromStateAndUI(entryId) {
             }
         }
 
-        // 记录日志
-        if (afterLen < beforeLen) {
-            logMessage(`已从页面移除记录 ${entryId}。`);
-        }
+        // 以前在这里写入“已从页面移除记录 ...”的日志，会导致删除一条记录时出现多条日志（开始、成功、移除）
+        // 为了只输出一条统一的成功日志，移除该处的成功日志。仅在发生异常时记录警告。
     } catch (e) {
         // 任何异常都不阻断 UI 流程，只记录日志
         logMessage(`在移除记录 ${entryId} 时发生错误：${e?.message || e}`, "warning");
