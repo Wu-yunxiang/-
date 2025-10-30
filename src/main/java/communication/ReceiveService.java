@@ -35,11 +35,15 @@ public final class ReceiveService {
         }
         serverSocket = new ServerSocket(port);
         running = true;
-        // 使用缓存线程池为每个连接提供并发处理能力（轻量级、适合短连接）
-        executor = Executors.newCachedThreadPool();
+        // 使用固定大小线程池，避免无限制创建线程
+        int corePoolSize = Math.max(2, Runtime.getRuntime().availableProcessors());
+        executor = Executors.newFixedThreadPool(corePoolSize);
+        
         while (running) {
             final Socket client = serverSocket.accept();
-            // 提交到线程池处理，避免阻塞 accept() 从而支持并发客户端
+            // 设置合理的超时时间
+            client.setSoTimeout(30000);
+            
             executor.submit(() -> {
                 try (BufferedReader reader = new BufferedReader(
                         new java.io.InputStreamReader(client.getInputStream(), StandardCharsets.UTF_8));
@@ -56,8 +60,7 @@ public final class ReceiveService {
                         line = reader.readLine();
                     }
                 } catch (Throwable t) {
-                    // 日志打印（如果需要）或静默失败以防单个连接影响其它连接
-                    // t.printStackTrace();
+                    // 静默处理异常
                 } finally {
                     try {
                         client.close();

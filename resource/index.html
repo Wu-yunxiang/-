@@ -59,9 +59,8 @@
                         <label>日期（格式：2025/1/1）<input name="date" type="text" placeholder="必填" required aria-required="true"></label>
                         <label>类型（收入/支出）
                             <select name="type" required aria-required="true">
-                                <!-- 隐藏占位项（关闭时显示文本；打开下拉时大多数浏览器会将其隐藏） -->
-                                <option value="" disabled selected hidden>请选择</option>
-                                <option value="income">收入</option>
+                                <!-- 占位提示已移除，首个选项作为默认值显示并提交 -->
+                                <option value="income" selected>收入</option>
                                 <option value="expense">支出</option>
                             </select>
                         </label>
@@ -81,10 +80,9 @@
                         <label>开始日期（格式：2025/1/1）<input name="startDate" type="text" placeholder="留空为不限"></label>
                         <label>截止日期（格式：2025/1/1）<input name="endDate" type="text" placeholder="留空为不限"></label>
                         <label>类型（不限/收入/支出）
-                            <select name="type">
-                                <!-- 与记账页相同的占位表现：关闭时显示占位，打开下拉时占位不在列表中 -->
-                                <option value="" disabled selected hidden>请选择</option>
-                                <option value="">不限</option>
+                            <select name="type" data-keep-color>
+                                <!-- 占位提示已移除，首个选项（不限）作为默认值显示并提交 -->
+                                <option value="" selected>不限</option>
                                 <option value="income">收入</option>
                                 <option value="expense">支出</option>
                             </select>

@@ -15,6 +15,8 @@
 body {
     margin: 0;
     background: var(--bg);
+    /* 防止滚动时布局抖动 */
+    overflow-x: hidden;
 }
 
 #app {
@@ -23,6 +25,8 @@ body {
     padding: 64px 20px 60px;
     display: grid;
     gap: 24px;
+    /* 创建合成层避免重绘影响 */
+    transform: translateZ(0);
 }
 
 .app-header {
@@ -34,6 +38,9 @@ body {
     gap: 24px;
     align-items: center;
     box-shadow: 0 12px 24px rgba(15, 20, 35, 0.08);
+    /* 提升渲染性能 */
+    transform: translateZ(0);
+    will-change: transform;
 }
 
 .title-group {
@@ -74,6 +81,8 @@ body {
     border: 1px solid var(--border);
     background: #fdfdff;
     font-size: 0.95rem;
+    /* 输入框性能优化 */
+    transform: translateZ(0);
 }
 
 .path-label input {
@@ -88,6 +97,9 @@ body {
     padding: 8px 14px;
     cursor: pointer;
     font-weight: 600;
+    /* 按钮动画性能优化 */
+    transform: translateZ(0);
+    transition: all 0.18s ease;
 }
 
 .toggle {
@@ -107,12 +119,14 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
     gap: 10px;
+    /* 网格布局性能优化 */
+    transform: translateZ(0);
 }
 
 .user-status {
     justify-self: end;
     color: var(--muted);
-        font-size: 1.05rem; /* 提高“共返回 x 条记录”的字号，与统计行一致 */
+    font-size: 1.05rem;
 }
 
 .user-status strong {
@@ -133,6 +147,22 @@ body {
     color: var(--muted);
     cursor: pointer;
     transition: all 0.18s ease;
+    /* 标签动画性能优化 */
+    transform: translateZ(0);
+    will-change: transform, opacity;
+}
+
+body:not(.js-ready) .tab {
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-6px);
+}
+
+body.js-ready .tab {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+    transition: opacity 260ms ease, transform 260ms ease;
 }
 
 .tab.active {
@@ -153,6 +183,8 @@ main {
     border-radius: 18px;
     padding: 26px 28px;
     box-shadow: 0 14px 28px rgba(16, 30, 60, 0.08);
+    /* 视图切换性能优化 */
+    transform: translateZ(0);
 }
 
 .view.active {
@@ -188,70 +220,77 @@ main {
     border: 1px solid var(--border);
     background: #fdfdff;
     font-size: 1rem;
+    /* 输入框渲染优化 */
+    transform: translateZ(0);
 }
 
-/* 使 input 的 placeholder 与 select 未选中（占位）显示保持一致的外观 */
 .field-row input::placeholder,
 .field-row textarea::placeholder {
     color: var(--muted);
     font-size: 1rem;
     font-family: inherit;
-    opacity: 1; /* 在某些浏览器下 placeholder 默认较淡，强制可见度一致 */
+    opacity: 1;
 }
 
-/* 当 select 没有选中有效值（通常由 value="" 的占位 option 与 required 一起使用）
-   时，浏览器会把 select 视为 :invalid，我们在此状态下将可见文本颜色设为与 placeholder 相同 */
 .field-row select:invalid {
     color: var(--muted);
 }
 
-/* 确保 select 与 option 使用相同的字体大小和家族，尽可能在不同浏览器中保持一致 */
 .field-row select,
 .field-row select option {
     font-size: 1rem;
     font-family: inherit;
 }
 
-/* 移除最低/最高金额输入框的上下微调箭头（spinner），确保不能用箭头调整数值 */
-/* 禁止使用上下微调箭头（spinner）来调整金额类输入，所有金额输入仅可通过手动输入获得数值 */
+.field-row select,
+.field-row select option {
+    color: var(--text) !important;
+}
+
+/* 数字输入框微调器移除优化 */
 input[type="number"][name="amount"],
 input[type="number"][name="minAmount"],
-input[type="number"][name="maxAmount"] {
-    -webkit-appearance: none !important; /* Chrome, Edge, Safari */
-    -moz-appearance: textfield !important; /* Firefox */
-    appearance: textfield !important; /* 标准 */
-    overflow: visible;
-}
-
-/* 移除 WebKit 的箭头伪元素 */
-input[type="number"][name="amount"]::-webkit-outer-spin-button,
-input[type="number"][name="amount"]::-webkit-inner-spin-button,
-input[type="number"][name="minAmount"]::-webkit-outer-spin-button,
-input[type="number"][name="minAmount"]::-webkit-inner-spin-button,
-input[type="number"][name="maxAmount"]::-webkit-outer-spin-button,
-input[type="number"][name="maxAmount"]::-webkit-inner-spin-button {
-    -webkit-appearance: none !important;
-    margin: 0 !important;
-}
-
-/* 备用类：如果未来想批量应用，可在元素上加 class="no-spinner" */
+input[type="number"][name="maxAmount"],
 input.no-spinner {
     -webkit-appearance: none !important;
     -moz-appearance: textfield !important;
     appearance: textfield !important;
+    overflow: visible;
+}
+
+/* 合并WebKit微调器移除规则 */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0 !important;
 }
 
 .field-row select {
     padding: 10px 12px;
+    padding-right: 40px;
     border-radius: 12px;
     border: 1px solid var(--border);
     background: #fdfdff;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='10'%3E%3Cpath d='M2 2l5 5 5-5' stroke='%232b3b4a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 14px 10px;
     font-size: 1rem;
+    /* 选择框性能优化 */
+    transform: translateZ(0);
 }
 
-/* 当 select 当前值为空（占位）时，使可见文本样式与 input 的 placeholder 一致 */
 .field-row select.placeholder {
     color: var(--muted);
+}
+
+.field-row select:hover,
+.field-row select:focus-visible {
+    transform: translateY(-1px);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 8px 20px rgba(15,40,75,0.06);
 }
 
 .primary-btn {
@@ -266,6 +305,9 @@ input.no-spinner {
     box-shadow: 0 12px 24px rgba(60, 124, 255, 0.35);
     cursor: pointer;
     transition: transform 0.16s ease;
+    /* 主按钮性能优化 */
+    transform: translateZ(0);
+    will-change: transform;
 }
 
 .primary-btn:hover {
@@ -282,26 +324,16 @@ input.no-spinner {
 
 .search-result h3 {
     margin: 0;
-    font-size: 1.37rem; /* 略微增加“查询结果”标题的大小 */
+    font-size: 1.37rem;
 }
 
-/* 查询结果上方的统计展示，居中显示；降低粗度以减少视觉权重 */
-.search-totals-display {
+.search-totals-display,
+#searchTotalsDisplay,
+#recordsTotalsDisplay {
     text-align: center;
     margin: 8px 0 6px;
-    font-weight: 600; /* 适度加粗以便统计数字更醒目 */
+    font-weight: 600;
     color: var(--text);
-    font-size: 1.15rem; /* 增大统计字号以提高可读性 */
-}
-
-/* 仅将交易记录的上方统计字号与查询统计字号保持一致（只改大小，不改其他样式） */
-#searchTotalsDisplay {
-    /* 已由 .search-totals-display 定义字体与粗细，此处仅保留显式大小以防样式覆盖 */
-    font-size: 1.15rem;
-}
-
-#recordsTotalsDisplay {
-    /* 只修改字号，保留其它继承或已有样式不变 */
     font-size: 1.15rem;
 }
 
@@ -310,6 +342,21 @@ input.no-spinner {
     border-collapse: collapse;
     margin-top: 14px;
     font-size: 0.95rem;
+    /* 表格渲染优化 */
+    transform: translateZ(0);
+}
+
+tbody tr.removing {
+    opacity: 0;
+    transform: translateX(8px) scaleY(0.98);
+    transition: opacity 260ms ease, transform 260ms ease;
+    will-change: transform, opacity;
+}
+
+tbody tr.removing td {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    transition: padding 260ms ease;
 }
 
 .search-result th,
@@ -333,7 +380,7 @@ input.no-spinner {
 
 .summary {
     color: var(--muted);
-    font-size: 1.15rem; /* 将“共返回 xx 条记录”字号增大，便于阅读 */
+    font-size: 1.15rem;
 }
 
 .records-header {
@@ -376,6 +423,8 @@ input.no-spinner {
     box-shadow: 0 12px 26px rgba(210, 32, 60, 0.45);
     cursor: pointer;
     transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+    transform: translateZ(0);
+    will-change: transform;
 }
 
 .records-clear-btn:hover {
@@ -396,15 +445,12 @@ input.no-spinner {
 }
 
 .sort-select {
-    /* 与表单内其他 select 保持一致的填充与字体 */
     border: none;
     background: linear-gradient(135deg, rgba(58, 162, 224, 0.92), rgba(41, 133, 206, 0.94));
     color: #ffffff;
-    /* 与 .field-row select 保持同样的 font-size */
     font-size: 1rem;
     font-weight: 600;
-    min-width: 160px; /* 确保查询与记录的排序控件外观宽度一致 */
-    /* 使用同样的内边距，保留右侧用于箭头的额外空间 */
+    min-width: 160px;
     padding: 10px 12px;
     padding-right: 40px;
     border-radius: 12px;
@@ -412,13 +458,16 @@ input.no-spinner {
     cursor: pointer;
     transition: transform 0.15s ease, box-shadow 0.15s ease;
     appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
     background-image: linear-gradient(45deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 60%), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='10'%3E%3Cpath d='M2 2l5 5 5-5' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 12px center;
-    background-size: 14px 10px, auto;
+    background-size: auto, 14px 10px;
+    transform: translateZ(0);
+    will-change: transform;
 }
 
-/* 尽量让原生下拉项在可控范围内与关闭状态的字体/填充一致（不同浏览器对 option 的支持不完全一致） */
 .sort-select option {
     font-family: inherit;
     font-size: 1rem;
@@ -435,6 +484,17 @@ input.no-spinner {
 .sort-select:focus-visible {
     outline: 2px solid rgba(225, 245, 255, 0.9);
     outline-offset: 3px;
+}
+
+#searchSortSelect {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35),
+                0 12px 34px rgba(0, 200, 170, 0.32),
+                0 0 20px 6px rgba(0, 200, 170, 0.12);
+    border: 1px solid rgba(0, 200, 170, 0.55);
+    color: #00c8aa;
+    font-weight: 700;
+    background-image: linear-gradient(45deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 60%),
+                      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='10'%3E%3Cpath d='M2 2l5 5 5-5' stroke='%2300c8aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");
 }
 
 .search-header {
@@ -459,6 +519,7 @@ input.no-spinner {
     border-collapse: collapse;
     margin-top: 6px;
     font-size: 0.95rem;
+    transform: translateZ(0);
 }
 
 .records-board th,
@@ -501,6 +562,7 @@ input.no-spinner {
     backdrop-filter: blur(10px);
     cursor: pointer;
     transition: all 0.16s ease;
+    transform: translateZ(0);
 }
 
 .ghost-btn:hover {
@@ -517,6 +579,8 @@ input.no-spinner {
     background: linear-gradient(135deg, #d96a6a, #f1a1a1);
     cursor: pointer;
     transition: transform 0.16s ease, box-shadow 0.16s ease;
+    transform: translateZ(0);
+    will-change: transform;
 }
 
 .record-delete-btn:hover {
@@ -554,6 +618,8 @@ input.no-spinner {
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.2s ease;
+    /* 对话框性能优化 */
+    transform: translateZ(0);
 }
 
 .confirm-overlay.visible {
@@ -573,6 +639,7 @@ input.no-spinner {
     box-shadow: 0 30px 60px rgba(6, 12, 28, 0.45);
     border: 1px solid rgba(255, 255, 255, 0.1);
     color: #f5f8ff;
+    transform: translateZ(0);
 }
 
 .confirm-dialog[data-variant="danger"] {
@@ -630,6 +697,7 @@ input.no-spinner {
     border-radius: 18px;
     padding: 22px;
     box-shadow: 0 12px 24px rgba(10, 20, 40, 0.08);
+    transform: translateZ(0);
 }
 
 .console h2 {
@@ -645,6 +713,8 @@ input.no-spinner {
     gap: 8px;
     max-height: 240px;
     overflow-y: auto;
+    /* 滚动性能优化 */
+    transform: translateZ(0);
 }
 
 #logPanel li {
@@ -666,6 +736,7 @@ input.no-spinner {
     font-size: 0.85rem;
 }
 
+/* 响应式优化 */
 @media (min-width: 720px) {
     .field-row {
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -679,5 +750,43 @@ input.no-spinner {
 
     .primary-btn {
         width: 100%;
+    }
+    
+    /* 移动端减少合成层数量以节省内存 */
+    #app,
+    .app-header,
+    .view,
+    .console,
+    .tab-bar,
+    .tab {
+        transform: none;
+        will-change: auto;
+    }
+}
+
+/* 高DPI设备优化 */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    /* 为高分辨率屏幕提供更清晰的渲染 */
+    .app-header,
+    .view,
+    .console {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+}
+
+/* 减少动画用户的优化 */
+@media (prefers-reduced-motion: reduce) {
+    .tab,
+    .primary-btn,
+    .records-clear-btn,
+    .record-delete-btn,
+    .sort-select,
+    .ghost-btn {
+        transition-duration: 0.1s;
+    }
+    
+    tbody tr.removing {
+        transition-duration: 0.1s;
     }
 }

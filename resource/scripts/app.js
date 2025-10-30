@@ -27,21 +27,186 @@ const confirmState = {
     defaults: null
 };
 const actionsWithCustomCompletion = new Set(["login", "search", "add", "clear"]);
+
+const DOM_ID_CACHE = Object.create(null);
+const SELECTOR_CACHE = Object.create(null);
+const BUTTON_POOL = [];
+const STATIC_ID_LIST = [
+    "app",
+    "recordsBoard",
+    "recordsCount",
+    "recordsEmptyNotice",
+    "recordsSortSelect",
+    "recordsTableBody",
+    "recordsTotals",
+    "recordsTotalsDisplay",
+    "clearRecordsBtn",
+    "refreshRecordsBtn",
+    "searchResult",
+    "searchSummary",
+    "searchTableBody",
+    "searchTotals",
+    "searchTotalsDisplay",
+    "searchSortSelect",
+    "confirmOverlay",
+    "confirmTitle",
+    "confirmMessage",
+    "logPanel",
+    "requestPreview",
+    "responsePreview",
+    "parsedPreview",
+    "pageTitle"
+];
+
+const TAB_BAR_SELECTOR = ".tab-bar";
+const TAB_SELECTOR = ".tab";
+const ACTION_FORM_SELECTOR = ".action-form";
+const FIELD_ROW_SELECT_SELECTOR = ".field-row select";
+
+const networkState = {
+    controller: null,
+    endpoint: null
+};
+
+const LOG_MAX_ENTRIES = 30;
+
+function getCachedElementById(id) {
+    if (!id) {
+        return null;
+    }
+    const cached = DOM_ID_CACHE[id];
+    if (cached && document.contains(cached)) {
+        return cached;
+    }
+    const element = document.getElementById(id);
+    if (element) {
+        DOM_ID_CACHE[id] = element;
+    }
+    return element;
+}
+
+function querySelectorCached(selector) {
+    if (!selector) {
+        return null;
+    }
+    const cached = SELECTOR_CACHE[selector];
+    if (cached && document.contains(cached)) {
+        return cached;
+    }
+    const element = document.querySelector(selector);
+    if (element) {
+        SELECTOR_CACHE[selector] = element;
+    }
+    return element;
+}
+
+function primeStaticCaches() {
+    for (let i = 0, len = STATIC_ID_LIST.length; i < len; i++) {
+        getCachedElementById(STATIC_ID_LIST[i]);
+    }
+}
+
+function clearCachedId(id) {
+    if (id && Object.prototype.hasOwnProperty.call(DOM_ID_CACHE, id)) {
+        delete DOM_ID_CACHE[id];
+    }
+}
+
+function acquireDeleteButton() {
+    const button = BUTTON_POOL.pop() || document.createElement("button");
+    button.type = "button";
+    button.className = "record-delete-btn";
+    button.textContent = "删除";
+    return button;
+}
+
+function releaseDeleteButton(button) {
+    if (!button) {
+        return;
+    }
+    button.disabled = false;
+    button.removeAttribute("title");
+    button.removeAttribute("aria-disabled");
+    button.dataset.entryId = "";
+    BUTTON_POOL.push(button);
+}
+
+function releaseRowResources(row) {
+    if (!row) {
+        return;
+    }
+    const buttons = row.querySelectorAll("button.record-delete-btn");
+    for (let i = 0, len = buttons.length; i < len; i++) {
+        releaseDeleteButton(buttons[i]);
+    }
+}
+
+function recycleTableBody(tbody) {
+    if (!tbody) {
+        return;
+    }
+    const children = tbody.children;
+    for (let i = children.length - 1; i >= 0; i--) {
+        releaseRowResources(children[i]);
+    }
+    tbody.textContent = "";
+}
+
+function cancelPendingRequest() {
+    if (networkState.controller) {
+        networkState.controller.abort();
+        networkState.controller = null;
+    }
+}
+
+function resetEndpointCache() {
+    networkState.endpoint = null;
+}
+
+function ensureEndpoint() {
+    if (networkState.endpoint) {
+        return networkState.endpoint;
+    }
+    const scheme = window.location.protocol;
+    const portNumber = Number(state.port);
+    const defaultPort = (scheme === "https:" && portNumber === 443) || (scheme === "http:" && portNumber === 80);
+    const hostPort = !portNumber || defaultPort ? state.host : `${state.host}:${portNumber}`;
+    const base = `${scheme}//${hostPort}`;
+    networkState.endpoint = new URL(state.path, base);
+    return networkState.endpoint;
+}
 document.addEventListener("DOMContentLoaded", () => {
-    const emptyNotice = document.getElementById("recordsEmptyNotice");
+    window.requestAnimationFrame(initializeApplication);
+});
+
+function initializeApplication() {
+    markDocumentReady();
+    primeStaticCaches();
+
+    const emptyNotice = getCachedElementById("recordsEmptyNotice");
     if (emptyNotice && emptyNotice.textContent) {
         defaultRecordsEmptyMessage = emptyNotice.textContent;
     }
+
     initializeEndpointDefaults();
     setupTabs();
     setupForms();
     setupSelectPlaceholders();
+    try { disableSelectClickFocus(); } catch (e) { /* 忽略 */ }
     setupConfirmModal();
     setupRecordsUI();
     setupSearchSortControl();
     updateAuthUI();
     logMessage("客户端已就绪，等待输入。", "info");
-});
+}
+
+function markDocumentReady() {
+    try {
+        document.body.classList.add("js-ready");
+    } catch (e) {
+        /* 忽略 */
+    }
+}
 
 function setActiveTab(target) {
     const tab = document.querySelector(`.tab[data-target="${target}"]`);
@@ -72,7 +237,7 @@ function updateAuthUI() {
         applyVisibility(element, authed);
     });
     // 保留页面标题随登录用户变化的逻辑（移除了单独的 DOM 状态面板）
-    const title = document.getElementById("pageTitle");
+    const title = getCachedElementById("pageTitle");
     if (title) {
         title.textContent = state.loggedInUser ? `${state.loggedInUser} 的记账本` : "记账系统";
     }
@@ -107,57 +272,68 @@ function applyVisibility(element, hidden) {
 }
 
 function setupTabs() {
-    const tabs = document.querySelectorAll(".tab");
-    tabs.forEach((tab) => {
-        tab.addEventListener("click", () => {
-            if (tab.hidden || tab.classList.contains("active")) {
-                return;
-            }
-            setActiveTab(tab.dataset.target);
-        });
+    const tabBar = querySelectorCached(TAB_BAR_SELECTOR);
+    if (!tabBar) {
+        return;
+    }
+    tabBar.addEventListener("click", handleTabBarClick);
+    const tabs = tabBar.querySelectorAll(TAB_SELECTOR);
+    for (let i = 0, len = tabs.length; i < len; i++) {
+        const tab = tabs[i];
         if (!tab.classList.contains("active")) {
             tab.setAttribute("aria-selected", "false");
         }
-    });
-    const initialActive = document.querySelector(".tab.active");
+    }
+    const initialActive = tabBar.querySelector(`${TAB_SELECTOR}.active`);
     if (initialActive) {
         state.activeTab = initialActive.dataset.target;
     }
 }
 
+function handleTabBarClick(event) {
+    const tab = event.target instanceof Element ? event.target.closest(TAB_SELECTOR) : null;
+    if (!tab || tab.hidden || tab.classList.contains("active")) {
+        return;
+    }
+    setActiveTab(tab.dataset.target);
+}
+
 function setupForms() {
-    document.querySelectorAll(".action-form").forEach((form) => {
-        form.addEventListener("submit", async (event) => {
-            event.preventDefault();
-            const action = form.dataset.action;
-            try {
-                const { request, displayValues } = composePayload(action, new FormData(form));
-                showRequest(request);
-                const actionLabel = describeAction(action);
-                logMessage(`正在提交${actionLabel}请求…`, "info");
-                const responseText = await sendPayload(request);
-                showResponse(responseText);
-                const parsed = parseResponse(responseText);
-                showParsed(parsed);
-                handlePostAction(parsed, displayValues);
-                const success = parsed?.success;
-                // 对于某些操作（登录、查询、新增、清空），我们由各自的处理函数输出更友好的用户消息，
-                // 因此在成功时避免重复输出“请求已完成”这种通用日志。
-                if (success === false) {
-                    logMessage(`${actionLabel}请求已完成，但服务器未能执行该操作。`, "warning");
-                } else {
-                    if (!actionsWithCustomCompletion.has(action)) {
-                        logMessage(`${actionLabel}请求已完成。`, "info");
-                    }
-                }
-            } catch (error) {
-                const actionLabel = describeAction(action);
-                logMessage(`${actionLabel}请求未完成：${summarizeError(error)}`, "error");
-                showResponse(error.stack || error.message || String(error));
-                showParsed(null);
-            }
-        });
-    });
+    document.addEventListener("submit", handleActionFormSubmit);
+}
+
+function handleActionFormSubmit(event) {
+    const form = event.target;
+    if (!(form instanceof HTMLFormElement) || !form.classList.contains("action-form")) {
+        return;
+    }
+    event.preventDefault();
+    void processActionFormSubmission(form);
+}
+
+async function processActionFormSubmission(form) {
+    const action = form.dataset.action;
+    const actionLabel = describeAction(action);
+    try {
+        const { request, displayValues } = composePayload(action, new FormData(form));
+        showRequest(request);
+        logMessage(`正在提交${actionLabel}请求…`, "info");
+        const responseText = await sendPayload(request);
+        showResponse(responseText);
+        const parsed = parseResponse(responseText);
+        showParsed(parsed);
+        handlePostAction(parsed, displayValues);
+        const success = parsed?.success;
+        if (success === false) {
+            logMessage(`${actionLabel}请求已完成，但服务器未能执行该操作。`, "warning");
+        } else if (!actionsWithCustomCompletion.has(action)) {
+            logMessage(`${actionLabel}请求已完成。`, "info");
+        }
+    } catch (error) {
+        logMessage(`${actionLabel}请求未完成：${summarizeError(error)}`, "error");
+        showResponse(error.stack || error.message || String(error));
+        showParsed(null);
+    }
 }
 
 /**
@@ -165,26 +341,83 @@ function setupForms() {
  * 以便 CSS 能将其显示为与 input 的 placeholder 一致的样式（颜色/大小/字体）。
  */
 function setupSelectPlaceholders() {
-    const selects = document.querySelectorAll('.field-row select');
-    if (!selects || selects.length === 0) return;
+    const selects = document.querySelectorAll(FIELD_ROW_SELECT_SELECTOR);
+    const length = selects.length;
+    if (!length) {
+        return;
+    }
+    for (let i = 0; i < length; i++) {
+        const select = selects[i];
+        updateSelectPlaceholder(select);
+        select.addEventListener('change', handleSelectPlaceholderEvent);
+        select.addEventListener('input', handleSelectPlaceholderEvent);
+    }
+}
 
-    const update = (select) => {
-        try {
-            if (!select.value) {
-                select.classList.add('placeholder');
-            } else {
-                select.classList.remove('placeholder');
-            }
-        } catch (e) {
-            // 忽略只读或其它异常
+function handleSelectPlaceholderEvent(event) {
+    if (event && event.target instanceof HTMLSelectElement) {
+        updateSelectPlaceholder(event.target);
+    }
+}
+
+function updateSelectPlaceholder(select) {
+    if (!(select instanceof HTMLSelectElement)) {
+        return;
+    }
+    try {
+        if (select.hasAttribute('data-keep-color')) {
+            select.classList.remove('placeholder');
+            return;
         }
-    };
+        if (!select.value) {
+            select.classList.add('placeholder');
+        } else {
+            select.classList.remove('placeholder');
+        }
+    } catch (e) {
+        /* 忽略 */
+    }
+}
 
-    selects.forEach((s) => {
-        update(s);
-        s.addEventListener('change', () => update(s));
-        s.addEventListener('input', () => update(s));
-    });
+/**
+ * 防止点击 select 时出现短暂的焦点闪烁（黑框）。
+ * 实现思路：对所有 select 绑定 mousedown，阻止原默认行为，之后 focus 并在下一事件循环触发 click 来展开下拉。
+ * 只针对鼠标交互；键盘焦点保持不变，利于无障碍键盘导航。
+ */
+function disableSelectClickFocus() {
+    const selects = document.querySelectorAll('select');
+    const length = selects.length;
+    if (!length) {
+        return;
+    }
+    for (let i = 0; i < length; i++) {
+        const select = selects[i];
+        if (select.dataset.noFocusHandlerApplied) {
+            continue;
+        }
+        select.dataset.noFocusHandlerApplied = '1';
+        select.addEventListener('mousedown', handleSelectMouseDown, { passive: false });
+    }
+}
+
+function handleSelectMouseDown(event) {
+    const select = event.currentTarget;
+    if (!(select instanceof HTMLSelectElement)) {
+        return;
+    }
+    try {
+        event.preventDefault();
+        select.focus();
+        setTimeout(() => {
+            try {
+                select.click();
+            } catch (err) {
+                /* 忽略 */
+            }
+        }, 0);
+    } catch (err) {
+        /* 忽略 */
+    }
 }
 
 function initializeEndpointDefaults() {
@@ -200,6 +433,9 @@ function initializeEndpointDefaults() {
 
     const metaApiPath = document.querySelector('meta[name="backend-path"]')?.content?.trim();
     state.path = metaApiPath || "/api";
+
+    resetEndpointCache();
+    ensureEndpoint();
 
     logMessage("后端地址已准备就绪。", "info");
 }
@@ -392,14 +628,10 @@ function composePayload(action, formData) {
 }
 
 async function sendPayload(request) {
-    // Build an origin-aware URL so the client uses the same scheme as the page
-    // (important when the page is served via HTTPS through ngrok). Do not
-    // hardcode `http://` here.
-    const scheme = window.location.protocol; // includes trailing ':' e.g. 'https:'
-    const hostPort = state.port ? `${state.host}:${state.port}` : state.host;
-    const base = `${scheme}//${hostPort}`;
-    const endpoint = new URL(state.path, base);
+    cancelPendingRequest();
     const controller = new AbortController();
+    networkState.controller = controller;
+    const endpoint = ensureEndpoint();
     const payload = `${request}\n`;
 
     try {
@@ -414,14 +646,14 @@ async function sendPayload(request) {
         });
 
         const text = await response.text();
-        controller.abort();
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}: ${text}`);
         }
         return text.trim();
-    } catch (error) {
-        controller.abort();
-        throw error;
+    } finally {
+        if (networkState.controller === controller) {
+            networkState.controller = null;
+        }
     }
 }
 
@@ -545,9 +777,16 @@ function handlePostAction(parsed, context) {
     if (parsed.action === "delete") {
         logDeleteOutcome(parsed, context);
         if (parsed.success) {
-            state.recordsLoaded = false;
-            if (state.activeTab === "records") {
-                refreshRecords({ force: true, silent: true });
+            // 平滑删除：从本地 state 中移除并从 DOM 以动画方式删除对应行，避免整表刷新
+            const entryId = context?.entryId ? String(context.entryId) : null;
+            if (entryId) {
+                removeEntryFromStateAndUI(entryId);
+            } else {
+                // 若没有 entryId 则回退为刷新（兼容旧服务行为）
+                state.recordsLoaded = false;
+                if (state.activeTab === "records") {
+                    refreshRecords({ force: true, silent: true });
+                }
             }
         }
     }
@@ -557,9 +796,9 @@ function handlePostAction(parsed, context) {
 }
 
 function renderSearchResult(parsed, context) {
-    const container = document.getElementById("searchResult");
-    const summary = document.getElementById("searchSummary");
-    const tbody = document.getElementById("searchTableBody");
+    const container = getCachedElementById("searchResult");
+    const summary = getCachedElementById("searchSummary");
+    const tbody = getCachedElementById("searchTableBody");
     if (!container || !summary || !tbody) {
         return;
     }
@@ -572,16 +811,16 @@ function renderSearchResult(parsed, context) {
 }
 
 function renderSearchEntries() {
-    const container = document.getElementById("searchResult");
-    const summary = document.getElementById("searchSummary");
-    const tbody = document.getElementById("searchTableBody");
-    const sortSelect = document.getElementById("searchSortSelect");
-    const totalsCell = document.getElementById("searchTotals");
+    const container = getCachedElementById("searchResult");
+    const summary = getCachedElementById("searchSummary");
+    const tbody = getCachedElementById("searchTableBody");
+    const sortSelect = getCachedElementById("searchSortSelect");
+    const totalsCell = getCachedElementById("searchTotals");
     if (!container || !summary || !tbody) {
         return;
     }
 
-    tbody.innerHTML = "";
+    recycleTableBody(tbody);
     const normalizedSortKey = normalizeSortKey(state.searchSortKey) || DEFAULT_SORT_KEY;
     if (normalizedSortKey !== state.searchSortKey) {
         state.searchSortKey = normalizedSortKey;
@@ -594,7 +833,7 @@ function renderSearchEntries() {
     const filtersLabel = formatSearchFilters(state.lastSearchFilters);
     const totals = calculateTotals(entries);
     // 将统计显示在查询结果上方的新展示区，并清空表格尾部的统计单元格以避免重复
-    updateTotalsCell(document.getElementById("searchTotalsDisplay"), totals);
+    updateTotalsCell(getCachedElementById("searchTotalsDisplay"), totals);
     updateTotalsCell(totalsCell, null);
 
     if (!entries.length) {
@@ -603,63 +842,68 @@ function renderSearchEntries() {
     }
 
     summary.textContent = `共返回 ${entries.length} 条记录${filtersLabel}`;
+    const fragment = document.createDocumentFragment();
+    for (let i = 0, len = entries.length; i < len; i++) {
+        fragment.appendChild(buildSearchRow(entries[i]));
+    }
+    tbody.appendChild(fragment);
+}
 
-    entries.forEach((entry) => {
-        const row = document.createElement("tr");
+function buildSearchRow(entry) {
+    const row = document.createElement("tr");
+    appendCell(row, entry.username || "");
+    appendCell(row, formatEntryType(entry.type));
+    appendCell(row, formatAmount(entry.amount));
+    appendCell(row, entry.date || "");
+    appendCell(row, entry.subject || "");
+    appendCell(row, entry.note || "");
 
-        const userCell = document.createElement("td");
-        userCell.textContent = entry.username || "";
+    const actionCell = document.createElement("td");
+    actionCell.appendChild(createDeleteButton(entry, { enforceOwnership: true }));
+    row.appendChild(actionCell);
+    return row;
+}
 
-        const typeCell = document.createElement("td");
-        typeCell.textContent = formatEntryType(entry.type);
+function buildRecordRow(entry) {
+    const row = document.createElement("tr");
+    appendCell(row, formatEntryType(entry.type));
+    appendCell(row, formatAmount(entry.amount));
+    appendCell(row, entry.date || "");
+    appendCell(row, entry.subject || "");
+    appendCell(row, entry.note || "");
 
-        const amountCell = document.createElement("td");
-        amountCell.textContent = formatAmount(entry.amount);
+    const actionCell = document.createElement("td");
+    actionCell.appendChild(createDeleteButton(entry));
+    row.appendChild(actionCell);
+    return row;
+}
 
-        const dateCell = document.createElement("td");
-        dateCell.textContent = entry.date || "";
-
-        const subjectCell = document.createElement("td");
-        subjectCell.textContent = entry.subject || "";
-
-        const noteCell = document.createElement("td");
-        noteCell.textContent = entry.note || "";
-
-        const actionCell = document.createElement("td");
-        actionCell.appendChild(createDeleteButton(entry, { enforceOwnership: true }));
-
-        row.appendChild(userCell);
-    row.appendChild(typeCell);
-        row.appendChild(amountCell);
-        row.appendChild(dateCell);
-        row.appendChild(subjectCell);
-        row.appendChild(noteCell);
-        row.appendChild(actionCell);
-
-        tbody.appendChild(row);
-    });
+function appendCell(row, text) {
+    const cell = document.createElement("td");
+    cell.textContent = text;
+    row.appendChild(cell);
 }
 
 function clearSearchResult() {
-    const container = document.getElementById("searchResult");
-    const summary = document.getElementById("searchSummary");
-    const tbody = document.getElementById("searchTableBody");
-    const totalsCell = document.getElementById("searchTotals");
+    const container = getCachedElementById("searchResult");
+    const summary = getCachedElementById("searchSummary");
+    const tbody = getCachedElementById("searchTableBody");
+    const totalsCell = getCachedElementById("searchTotals");
     if (!container || !summary || !tbody) {
         return;
     }
     container.hidden = true;
     summary.textContent = "";
-    tbody.innerHTML = "";
+    recycleTableBody(tbody);
     state.lastSearchEntries = [];
     state.lastSearchFilters = null;
     // 更新上方展示区并清空表格尾部统计
-    updateTotalsCell(document.getElementById("searchTotalsDisplay"), { incomeTotal: 0, expenseTotal: 0 });
+    updateTotalsCell(getCachedElementById("searchTotalsDisplay"), { incomeTotal: 0, expenseTotal: 0 });
     updateTotalsCell(totalsCell, null);
 }
 
 function showRequest(raw) {
-    const preview = document.getElementById("requestPreview");
+    const preview = getCachedElementById("requestPreview");
     if (!preview) {
         return;
     }
@@ -667,7 +911,7 @@ function showRequest(raw) {
 }
 
 function showResponse(raw) {
-    const preview = document.getElementById("responsePreview");
+    const preview = getCachedElementById("responsePreview");
     if (!preview) {
         return;
     }
@@ -675,7 +919,7 @@ function showResponse(raw) {
 }
 
 function showParsed(parsed) {
-    const preview = document.getElementById("parsedPreview");
+    const preview = getCachedElementById("parsedPreview");
     if (!preview) {
         return;
     }
@@ -687,14 +931,14 @@ function showParsed(parsed) {
 }
 
 function setupConfirmModal() {
-    const overlay = document.getElementById("confirmOverlay");
+    const overlay = getCachedElementById("confirmOverlay");
     if (!overlay) {
         return;
     }
     confirmState.overlay = overlay;
     confirmState.dialogEl = overlay.querySelector(".confirm-dialog");
-    confirmState.titleEl = document.getElementById("confirmTitle");
-    confirmState.messageEl = document.getElementById("confirmMessage");
+    confirmState.titleEl = getCachedElementById("confirmTitle");
+    confirmState.messageEl = getCachedElementById("confirmMessage");
     confirmState.okButton = overlay.querySelector("[data-confirm-ok]");
     confirmState.cancelButton = overlay.querySelector("[data-confirm-cancel]");
 
@@ -838,84 +1082,106 @@ function closeConfirmDialog(result) {
 }
 
 function setupRecordsUI() {
-    const recordsSortSelect = document.getElementById("recordsSortSelect");
+    const recordsSortSelect = getCachedElementById("recordsSortSelect");
     if (recordsSortSelect) {
         recordsSortSelect.value = state.recordsSortKey;
-        recordsSortSelect.addEventListener("change", () => {
-            const nextKey = normalizeSortKey(recordsSortSelect.value);
-            if (!nextKey) {
-                recordsSortSelect.value = state.recordsSortKey;
-                return;
-            }
-            state.recordsSortKey = nextKey;
-            logMessage(`交易记录列表已切换为${describeSortKey(nextKey)}。`);
-            renderRecords(state.records);
-        });
+        recordsSortSelect.addEventListener("change", handleRecordsSortChange);
         // 与查询排序控件保持一致的提示（鼠标悬停显示当前排序方式）
         try {
             recordsSortSelect.setAttribute('title', describeSortKey(state.recordsSortKey));
         } catch (e) {}
     }
 
-    const clearBtn = document.getElementById("clearRecordsBtn");
+    const clearBtn = getCachedElementById("clearRecordsBtn");
     if (clearBtn) {
-        clearBtn.addEventListener("click", async () => {
-            if (!state.loggedInUser) {
-                logMessage("请先登录后再清空记录。", "warning");
-                return;
-            }
-            const confirmed = await showConfirmDialog({
-                title: "删除所有交易记录",
-                message: "此操作会永久删除当前账户的全部交易记录，且无法撤销。是否继续？",
-                confirmLabel: "确认删除",
-                cancelLabel: "保留数据",
-                variant: "danger"
-            });
-            if (!confirmed) {
-                return;
-            }
-            clearAllRecords();
-        });
+        clearBtn.addEventListener("click", handleClearRecordsClick);
     }
 
-    const refreshBtn = document.getElementById("refreshRecordsBtn");
+    const refreshBtn = getCachedElementById("refreshRecordsBtn");
     if (refreshBtn) {
-        refreshBtn.addEventListener("click", () => {
-            refreshRecords({ force: true, silent: false });
-        });
+        refreshBtn.addEventListener("click", handleRefreshRecordsClick);
     }
     registerDeleteHandler("recordsTableBody");
     registerDeleteHandler("searchTableBody");
     updateRecordsCount(0);
     // 初始化：在记录上方显示初始统计（0）并清空表脚显示
-    updateTotalsCell(document.getElementById("recordsTotalsDisplay"), { incomeTotal: 0, expenseTotal: 0 });
-    updateTotalsCell(document.getElementById("recordsTotals"), null);
+    updateTotalsCell(getCachedElementById("recordsTotalsDisplay"), { incomeTotal: 0, expenseTotal: 0 });
+    updateTotalsCell(getCachedElementById("recordsTotals"), null);
 }
 
 function setupSearchSortControl() {
-    const searchSortSelect = document.getElementById("searchSortSelect");
+    const searchSortSelect = getCachedElementById("searchSortSelect");
     if (!searchSortSelect) {
         return;
     }
     searchSortSelect.value = state.searchSortKey;
-    searchSortSelect.addEventListener("change", () => {
-        const nextKey = normalizeSortKey(searchSortSelect.value);
-        if (!nextKey) {
-            searchSortSelect.value = state.searchSortKey;
-            return;
-        }
-        state.searchSortKey = nextKey;
-        logMessage(`查询结果现以${describeSortKey(nextKey)}显示。`);
-        renderSearchEntries();
-    });
+    searchSortSelect.addEventListener("change", handleSearchSortChange);
     // 与交易记录排序控件保持一致的提示（鼠标悬停显示当前排序方式）
     try {
         searchSortSelect.setAttribute('title', describeSortKey(state.searchSortKey));
     } catch (e) {}
 }
 
+function handleRecordsSortChange(event) {
+    const select = event.currentTarget;
+    if (!(select instanceof HTMLSelectElement)) {
+        return;
+    }
+    const nextKey = normalizeSortKey(select.value);
+    if (!nextKey) {
+        select.value = state.recordsSortKey;
+        return;
+    }
+    state.recordsSortKey = nextKey;
+    logMessage(`交易记录列表已切换为${describeSortKey(nextKey)}。`);
+    renderRecords(state.records);
+    try {
+        select.setAttribute('title', describeSortKey(nextKey));
+    } catch (e) {}
+}
+
+async function handleClearRecordsClick() {
+    if (!state.loggedInUser) {
+        logMessage("请先登录后再清空记录。", "warning");
+        return;
+    }
+    const confirmed = await showConfirmDialog({
+        title: "删除所有交易记录",
+        message: "此操作会永久删除当前账户的全部交易记录，且无法撤销。是否继续？",
+        confirmLabel: "确认删除",
+        cancelLabel: "保留数据",
+        variant: "danger"
+    });
+    if (!confirmed) {
+        return;
+    }
+    clearAllRecords();
+}
+
+function handleRefreshRecordsClick() {
+    refreshRecords({ force: true, silent: false });
+}
+
+function handleSearchSortChange(event) {
+    const select = event.currentTarget;
+    if (!(select instanceof HTMLSelectElement)) {
+        return;
+    }
+    const nextKey = normalizeSortKey(select.value);
+    if (!nextKey) {
+        select.value = state.searchSortKey;
+        return;
+    }
+    state.searchSortKey = nextKey;
+    logMessage(`查询结果现以${describeSortKey(nextKey)}显示。`);
+    renderSearchEntries();
+    try {
+        select.setAttribute('title', describeSortKey(nextKey));
+    } catch (e) {}
+}
+
 function registerDeleteHandler(target) {
-    const container = typeof target === "string" ? document.getElementById(target) : target;
+    const container = typeof target === "string" ? getCachedElementById(target) : target;
     if (!container) {
         return;
     }
@@ -1021,11 +1287,11 @@ async function clearAllRecords() {
 }
 
 function renderRecords(entries) {
-    const board = document.getElementById("recordsBoard");
-    const emptyNotice = document.getElementById("recordsEmptyNotice");
-    const tbody = document.getElementById("recordsTableBody");
-    const sortSelect = document.getElementById("recordsSortSelect");
-    const totalsCell = document.getElementById("recordsTotals");
+    const board = getCachedElementById("recordsBoard");
+    const emptyNotice = getCachedElementById("recordsEmptyNotice");
+    const tbody = getCachedElementById("recordsTableBody");
+    const sortSelect = getCachedElementById("recordsSortSelect");
+    const totalsCell = getCachedElementById("recordsTotals");
     if (!board || !emptyNotice || !tbody) {
         return;
     }
@@ -1036,12 +1302,12 @@ function renderRecords(entries) {
     }
     state.records = sortEntries(normalizedEntries, state.recordsSortKey);
     state.recordsLoaded = true;
-    tbody.innerHTML = "";
+    recycleTableBody(tbody);
 
     updateRecordsCount(state.records.length);
     const totals = calculateTotals(state.records);
     // 将统计显示在记录上方的新展示区，并清空表格尾部的统计单元格以避免重复
-    updateTotalsCell(document.getElementById("recordsTotalsDisplay"), totals);
+    updateTotalsCell(getCachedElementById("recordsTotalsDisplay"), totals);
     updateTotalsCell(totalsCell, null);
 
     if (sortSelect) {
@@ -1058,44 +1324,19 @@ function renderRecords(entries) {
     board.hidden = false;
     emptyNotice.hidden = true;
 
-    state.records.forEach((entry) => {
-        const row = document.createElement("tr");
-
-        const typeCell = document.createElement("td");
-        typeCell.textContent = formatEntryType(entry.type);
-
-        const amountCell = document.createElement("td");
-        amountCell.textContent = formatAmount(entry.amount);
-
-        const dateCell = document.createElement("td");
-        dateCell.textContent = entry.date || "";
-
-        const subjectCell = document.createElement("td");
-        subjectCell.textContent = entry.subject || "";
-
-        const noteCell = document.createElement("td");
-        noteCell.textContent = entry.note || "";
-
-        const actionCell = document.createElement("td");
-        actionCell.appendChild(createDeleteButton(entry));
-
-    row.appendChild(typeCell);
-        row.appendChild(amountCell);
-        row.appendChild(dateCell);
-        row.appendChild(subjectCell);
-        row.appendChild(noteCell);
-        row.appendChild(actionCell);
-
-        tbody.appendChild(row);
-    });
+    const fragment = document.createDocumentFragment();
+    for (let i = 0, len = state.records.length; i < len; i++) {
+        fragment.appendChild(buildRecordRow(state.records[i]));
+    }
+    tbody.appendChild(fragment);
 }
 
 function createDeleteButton(entry, { enforceOwnership = false } = {}) {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "record-delete-btn";
-    button.textContent = "删除";
-
+    const button = acquireDeleteButton();
+    button.disabled = false;
+    button.removeAttribute("aria-disabled");
+    button.removeAttribute("title");
+    button.dataset.entryId = "";
     const id = entry ? entry.id : null;
     const numericId = Number(id);
     if (id == null || Number.isNaN(numericId)) {
@@ -1116,18 +1357,18 @@ function createDeleteButton(entry, { enforceOwnership = false } = {}) {
 }
 
 function resetRecordsView() {
-    const board = document.getElementById("recordsBoard");
-    const emptyNotice = document.getElementById("recordsEmptyNotice");
-    const tbody = document.getElementById("recordsTableBody");
-    const totalsCell = document.getElementById("recordsTotals");
+    const board = getCachedElementById("recordsBoard");
+    const emptyNotice = getCachedElementById("recordsEmptyNotice");
+    const tbody = getCachedElementById("recordsTableBody");
+    const totalsCell = getCachedElementById("recordsTotals");
     if (!board || !emptyNotice || !tbody) {
         return;
     }
-    tbody.innerHTML = "";
+    recycleTableBody(tbody);
     board.hidden = true;
     updateRecordsCount(0);
     // 在记录上方的展示区显示初始统计并清空表格尾部
-    updateTotalsCell(document.getElementById("recordsTotalsDisplay"), { incomeTotal: 0, expenseTotal: 0 });
+    updateTotalsCell(getCachedElementById("recordsTotalsDisplay"), { incomeTotal: 0, expenseTotal: 0 });
     updateTotalsCell(totalsCell, null);
     if (!state.loggedInUser) {
         emptyNotice.textContent = "请先登录后查看交易记录。";
@@ -1496,7 +1737,7 @@ function logDeleteOutcome(parsed, context) {
 }
 
 function updateRecordsCount(count) {
-    const label = document.getElementById("recordsCount");
+    const label = getCachedElementById("recordsCount");
     if (!label) {
         return;
     }
@@ -1505,21 +1746,99 @@ function updateRecordsCount(count) {
     setClearButtonState(safeCount === 0);
 }
 
+function removeEntryFromStateAndUI(entryId) {
+    try {
+        const idNum = Number(entryId);
+        if (!Number.isFinite(idNum)) {
+            return;
+        }
+
+        // 从 state.records 过滤掉该条目
+        const beforeLen = state.records.length;
+        state.records = state.records.filter((e) => Number(e?.id) !== idNum);
+        const afterLen = state.records.length;
+
+        // 更新计数与统计（如果当前在 records 页）
+        updateRecordsCount(state.records.length);
+        const totals = calculateTotals(state.records);
+        updateTotalsCell(getCachedElementById("recordsTotalsDisplay"), totals);
+        updateTotalsCell(getCachedElementById("recordsTotals"), null);
+
+        // 在 DOM 中查找并平滑移除对应行（records 和 search 两个表）
+        const selectors = ["recordsTableBody", "searchTableBody"];
+        selectors.forEach((id) => {
+            const tbody = getCachedElementById(id);
+            if (!tbody) return;
+            const button = tbody.querySelector(`button.record-delete-btn[data-entry-id=\"${entryId}\"]`);
+            if (button) {
+                const row = button.closest("tr");
+                if (row) {
+                    smoothRemoveRow(row);
+                }
+            }
+        });
+
+        // 若移除后没有记录，切换到空视图
+        if (state.records.length === 0) {
+            const board = getCachedElementById("recordsBoard");
+            const emptyNotice = getCachedElementById("recordsEmptyNotice");
+            if (board && emptyNotice) {
+                board.hidden = true;
+                emptyNotice.textContent = defaultRecordsEmptyMessage;
+                emptyNotice.hidden = false;
+            }
+        }
+
+        // 记录日志
+        if (afterLen < beforeLen) {
+            logMessage(`已从页面移除记录 ${entryId}。`);
+        }
+    } catch (e) {
+        // 任何异常都不阻断 UI 流程，只记录日志
+        logMessage(`在移除记录 ${entryId} 时发生错误：${e?.message || e}`, "warning");
+    }
+}
+
+function smoothRemoveRow(row) {
+    if (!(row instanceof Element)) return;
+    // 若已经在移除中，则忽略
+    if (row.classList.contains("removing")) return;
+    row.classList.add("removing");
+    // 确保在 transitionEnd 后移除节点（最多 400ms 的后备）
+    const cleanup = () => {
+        releaseRowResources(row);
+        if (row.parentElement) {
+            row.parentElement.removeChild(row);
+        }
+        row.removeEventListener("transitionend", onEnd);
+        clearTimeout(timeout);
+        row.classList.remove("removing");
+    };
+    const onEnd = (ev) => {
+        // 仅在 opacity 或 transform 的 transition 结束时执行一次
+        if (ev.propertyName === "opacity" || ev.propertyName === "transform") {
+            cleanup();
+        }
+    };
+    row.addEventListener("transitionend", onEnd);
+    const timeout = setTimeout(cleanup, 420);
+}
+
 function logMessage(message, level = "info") {
-    const list = document.getElementById("logPanel");
+    const list = getCachedElementById("logPanel");
     const entry = document.createElement("li");
     entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
     if (level === "error" || level === "warning") {
         entry.classList.add("error");
     }
     list.prepend(entry);
-    while (list.children.length > 30) {
+    while (list.children.length > LOG_MAX_ENTRIES) {
         list.removeChild(list.lastChild);
     }
 }
 
 function setClearButtonState(disabled) {
-    const button = document.getElementById("clearRecordsBtn");
+    const button = getCachedElementById("clearRecordsBtn");
     if (!button) {
         return;
     }

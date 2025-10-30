@@ -7,22 +7,26 @@ class addrequest {
         this.entry = new Entry(username, amount, type, date, subject, note);
     }
 }
+
 class registerOrloginrequest {
     String username;
     String password;
 }
+
 class registerrequest extends registerOrloginrequest {
     public registerrequest(String username, String password) {
         this.username = username;
         this.password = password;
     }
 }
+
 class loginrequest extends registerOrloginrequest {
     public loginrequest(String username, String password) {
         this.username = username;
         this.password = password;
     }
 }
+
 class searchrequest {
     String username;
     String startDate;
@@ -39,6 +43,7 @@ class searchrequest {
         this.maxAmount = maxAmount;
     }
 }
+
 class deleterequest {
     String username;
     long entryId;
@@ -46,4 +51,4 @@ class deleterequest {
         this.username = username;
         this.entryId = entryId;
     }
-}   
+}

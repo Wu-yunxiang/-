@@ -8,33 +8,31 @@ public class Entry {
     public String date;
     public String subject;
     public String note;
+    
     public Entry(Long id, String username, double amount, String type, String date, String subject, String note) {
         this.id = id;
         this.username = username;
-    this.amount = amount;
-    this.type = (type == null || type.isBlank()) ? "expense" : type;
+        this.amount = amount;
+        this.type = (type == null || type.isBlank()) ? "expense" : type;
         this.date = date;
         this.subject = subject;
         this.note = note;
     }
+    
     public Entry(String username, double amount, String type, String date, String subject, String note) {
         this(null, username, amount, type, date, subject, note);
     }
+    
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append(id == null ? "null" : id.toString());
-        builder.append(',');
-        builder.append(username);
-        builder.append(',');
-        builder.append(String.valueOf(amount));
-        builder.append(',');
-        builder.append(type == null ? "" : type);
-        builder.append(',');
-        builder.append(date == null ? "" : date);
-        builder.append(',');
-        builder.append(subject == null ? "" : subject);
-        builder.append(',');
-        builder.append(note == null ? "" : note);
-        return builder.toString();
+        // 使用StringBuilder提高字符串拼接性能
+        return new StringBuilder()
+            .append(id == null ? "null" : id.toString()).append(',')
+            .append(username).append(',')
+            .append(amount).append(',')
+            .append(type == null ? "" : type).append(',')
+            .append(date == null ? "" : date).append(',')
+            .append(subject == null ? "" : subject).append(',')
+            .append(note == null ? "" : note)
+            .toString();
     }
 }

@@ -1,35 +1,48 @@
-/* 动态背景样式 - 深空主题 */
+/* ===== 动态背景优化 ===== */
 #dynamicBackground {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw; /* 使用视口单位避免回流 */
+    height: 100vh;
     z-index: -1;
-    /* 更丰富的深空渐变：增加多层径向与线性渐变，并加入非常细微的星尘层，保持深邃同时增加层次感 */
+    
+    /* 创建独立的合成层，减少重绘影响 */
+    transform: translateZ(0);
+    will-change: transform;
+    
+    /* 优化背景渐变：减少层数，合并相似渐变 */
     background:
-    radial-gradient(1600px 800px at 6% 10%, rgba(80,105,150,0.14), transparent 12%),
-    /* 轻柔的光晕层：低不透明度、大尺寸，位于画面偏上方，提升立体感但不刺眼 */
-    radial-gradient(900px 500px at 50% 32%, rgba(255, 220, 160, 0.035), transparent 22%),
+        /* 合并光晕效果 - 减少一层绘制 */
+        radial-gradient(1600px 800px at 6% 10%, 
+            rgba(80,105,150,0.14) 0%,
+            rgba(255,220,160,0.035) 12%,
+            transparent 22%),
+        /* 保留主要色彩渐变 */
         radial-gradient(1200px 600px at 90% 80%, rgba(120,70,160,0.06), transparent 10%),
-        radial-gradient(520px 240px at 55% 20%, rgba(255,220,180,0.03), transparent 6%),
-        radial-gradient(700px 320px at 22% 78%, rgba(30,70,120,0.04), transparent 6%),
         linear-gradient(180deg, #020617 0%, #041022 18%, #071a2b 40%, #0b2340 65%, #0b1226 100%),
-        /* 轻微星尘/颗粒层：极低不透明度，保持背景深度但提供点状纹理 */
-        radial-gradient(circle at 20% 30%, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.0) 1px),
-        repeating-radial-gradient(circle at 80% 10%, rgba(255,255,255,0.006) 0px, rgba(255,255,255,0.0) 3px, rgba(255,255,255,0.006) 4px);
+        /* 使用背景图案替代重复渐变 - 性能更好 */
+        radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.02) 50%, transparent 50%),
+        radial-gradient(1px 1px at 80% 10%, rgba(255,255,255,0.006) 50%, transparent 50%);
+    
+    background-size: auto, auto, auto, 100px 100px, 200px 200px;
+    background-repeat: no-repeat;
 }
 
-/* 点击特效样式 */
+/* ===== 点击特效优化 ===== */
 #clickEffects {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     pointer-events: none;
     overflow: hidden;
     z-index: 9998;
+    
+    /* GPU加速和复合层优化 */
+    transform: translateZ(0);
+    will-change: contents;
 }
 
 .click-effect {
@@ -39,6 +52,9 @@
     z-index: 9999;
     width: 0;
     height: 0;
+    
+    /* 动画性能优化 */
+    will-change: transform, opacity;
 }
 
 .click-effect__core,
@@ -48,6 +64,9 @@
     left: 50%;
     transform: translate(-50%, -50%);
     border-radius: 50%;
+    
+    /* 动画元素单独提升 */
+    will-change: transform, opacity;
 }
 
 .click-effect__core {
@@ -80,8 +99,12 @@
     transform: translate(-50%, -50%);
     opacity: 0.95;
     animation: sparkFly 520ms ease-out forwards;
+    
+    /* 火花动画性能优化 */
+    will-change: transform, opacity;
 }
 
+/* ===== 动画关键帧优化 ===== */
 @keyframes corePulse {
     0% {
         transform: translate(-50%, -50%) scale(0.35);
@@ -118,67 +141,83 @@
         opacity: 1;
     }
     100% {
+        /* 使用transform代替left/top变化 - GPU加速 */
         transform: translate(calc(-50% + var(--spark-x)), calc(-50% + var(--spark-y))) scale(0.2);
         opacity: 0;
     }
 }
 
-/* 确保应用内容在背景之上 */
+/* ===== 应用内容层级 ===== */
 #app {
     position: relative;
     z-index: 1;
+    
+    /* 防止布局抖动 */
+    transform: translateZ(0);
 }
 
-/* 调整原有元素的背景透明度，让动态背景更明显 */
-/* 操作界面半透明面板，和深空背景搭配：采用深色半透明玻璃质感 */
+/* ===== 统一面板样式 - 减少重复和提升性能 ===== */
 .app-header,
 .view,
-.tab-bar,
 .console,
 .app-footer {
-    background: rgba(18, 28, 44, 0.50); /* 深蓝灰半透明，设为 0.5 以满足要求 */
+    background: rgba(18, 28, 44, 0.50);
     backdrop-filter: blur(10px) saturate(1.05);
-    border: 1px solid rgba(255, 255, 255, 0.04); /* 细微高光边框 */
+    border: 1px solid rgba(255, 255, 255, 0.04);
     color: rgba(230, 240, 255, 0.95);
+    
+    /* 创建合成层，隔离模糊效果 */
+    transform: translateZ(0);
+    isolation: isolate;
 }
 
-/* 为卡片添加更明显的阴影，增强层次感 */
+/* 阴影优化 - 减少阴影扩散范围 */
 .app-header,
 .view,
 .console {
-    box-shadow: 0 10px 40px rgba(3, 7, 18, 0.6);
+    box-shadow: 0 8px 32px rgba(3, 7, 18, 0.4);
 }
+
 .tab-bar {
-     background: transparent;
-     border: none;
-     box-shadow: none;
+    background: transparent;
+    border: none;
+    box-shadow: none;
 }
 
-/* 非激活的导引(tab)在浅色灰框中需要更深一些以提高辨识度但不过于生硬 */
-.tab:not(.active) {
-    /* 不是纯黑，而是柔和的深墨色，适合浅色卡片 */
-    color: rgba(28, 38, 52, 0.88); /* 近似 #1c2634, 88% 不透明 */
-}
+/* ===== 文本颜色优化 - 合并重复规则 ===== */
 
-/* 调整卡片/面板内的标题和文本颜色以匹配深空主题 */
-.app-header h1, .view h1, .console h1 {
+/* 深色面板文本统一 */
+.app-header h1, 
+.view h1, 
+.console h1 {
     color: rgba(235, 245, 255, 0.95);
 }
-.app-header p, .view p, .console p, .app-footer p {
+
+.app-header p, 
+.view p, 
+.console p, 
+.app-footer p {
     color: rgba(200, 215, 235, 0.9);
 }
 
-/* 在深色面板中使字段标签（例如：开始日期、截止日期、金额、用途）颜色偏白但柔和，便于层级区分 */
+/* 标签和表单元素统一 */
 .app-header .field-row label,
 .view .field-row label,
 .console .field-row label,
 .app-header .endpoint-form label,
 .view .endpoint-form label,
-.console .endpoint-form label {
-    color: rgba(235, 245, 255, 0.92); /* 轻微偏白，保留柔和度 */
+.console .endpoint-form label,
+.required-note {
+    color: rgba(235, 245, 255, 0.92);
 }
 
-/* 深色面板内的输入文本应为浅色以配合背景（同时保留白底输入的深色覆盖） */
+.required-note {
+    font-size: 0.88rem;
+    margin-left: 6px;
+    font-weight: 500;
+}
+
+/* 输入框文本颜色优化 */
 .app-header input,
 .view input,
 .console input,
@@ -192,7 +231,7 @@
     caret-color: rgba(235, 245, 255, 0.95);
 }
 
-/* 保证白色输入框内的文字为深色以保持可读性 */
+/* 浅色背景输入框 */
 .app-header input,
 .view input,
 .field-row input,
@@ -201,61 +240,79 @@
 .action-form input,
 textarea,
 select {
-    color: #0b1226; /* 深色文本用于白色背景输入框 */
+    color: #0b1226;
     caret-color: #0b1226;
 }
 
-/* 额外覆盖：确保所有白色/浅色面板内的文本为黑色系，提升可读性 */
-/* 操作日志（白底列表项） */
+/* ===== 数据展示优化 ===== */
+.search-result,
+.records-board,
 #logPanel,
 #logPanel li {
     color: #0b1226;
 }
 
-/* 增大操作日志标题（h2）字体，使其更加突出但保持风格一致 */
-.console h2 {
-    font-size: 1.15rem; /* 从默认 1rem 增大一点 */
-    font-weight: 600;
-    color: rgba(235, 245, 255, 0.95); /* 深色面板中的浅色文字，恢复为偏白 */
-}
-
-/* 必填标注样式：在标签后显示小而柔和的提示（深色面板为偏白，浅色面板为深色通过继承覆盖） */
-.required-note {
-    font-size: 0.88rem;
-    margin-left: 6px;
-    color: rgba(235, 245, 255, 0.85);
-    font-weight: 500;
-}
-
-/* 查询结果面板及表头/单元格（白色或浅色背景时） */
-.search-result,
-.search-result h3,
-.search-result table,
 .search-result th,
-.search-result td {
-    color: #0b1226;
-}
-.search-result th {
-    font-weight: 600; /* 列名稍微加粗以便识别 */
-}
-
-/* 交易记录面板（白色背景文本色） */
-.records-board,
-.records-board table,
-.records-board th,
-.records-board td {
-    color: #0b1226;
+.records-board th {
+    font-weight: 600;
 }
 
 .records-empty {
     color: rgba(10, 18, 38, 0.65);
 }
 
-/* 小提示（例如日期格式） */
+.console h2 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: rgba(235, 245, 255, 0.95);
+}
+
 .field-hint {
     display: block;
     font-size: 0.88rem;
     color: rgba(200,215,235,0.85);
     margin-bottom: 6px;
 }
-/* 如果需要更细粒度覆盖，可在此处添加针对特定白色面板的选择器 */
+
+/* ===== 移动端性能优化 ===== */
+@media (max-width: 768px) {
+    #dynamicBackground {
+        /* 移动端减少渐变复杂度 */
+        background:
+            radial-gradient(800px 400px at 6% 10%, rgba(80,105,150,0.14), transparent 12%),
+            linear-gradient(180deg, #020617 0%, #041022 25%, #0b2340 65%, #0b1226 100%);
+    }
+    
+    .app-header,
+    .view,
+    .console,
+    .app-footer {
+        /* 移动端减少模糊强度 */
+        backdrop-filter: blur(5px) saturate(1.05);
+    }
+}
+
+/* ===== 高性能设备优化 ===== */
+@media (min-width: 1200px) and (min-resolution: 192dpi) {
+    #dynamicBackground {
+        /* 高分辨率设备使用更精细的背景 */
+        background-size: auto, auto, auto, 50px 50px, 100px 100px;
+    }
+}
+
+/* ===== 减少布局抖动优化 ===== */
+.tab:not(.active) {
+    color: rgba(28, 38, 52, 0.88);
+    
+    /* 防止颜色变化导致重绘 */
+    will-change: color;
+}
+
+/* ===== 动画性能监控备用方案 ===== */
+@media (prefers-reduced-motion: reduce) {
+    .click-effect__core,
+    .click-effect__glow,
+    .click-effect__spark {
+        animation-duration: 0.1s;
+    }
+}
