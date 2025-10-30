@@ -46,16 +46,18 @@
             pointerDirectPull: 0.28,
             pointerVelocitySet: 1.2,
             connectionDistance: Math.round(220 * 0.775 * Math.sqrt(0.9) * 0.9),
-            connectionOpacity: 0.38,
-            connectionWidth: 0.9 * 2 * 0.9 * 0.9,
-            sizeRange: [Math.round(1.68 * 0.9 * 0.9 * 100) / 100, Math.round(5.04 * 0.9 * 0.9 * 100) / 100],
+            // 恢复原来的连线参数
+            connectionOpacity: 0.38, // 恢复为 0.38
+            connectionWidth: 0.9 * 2 * 0.9 * 0.9, // 恢复为原来的值
+            // 保持增加的粒子尺寸范围
+            sizeRange: [Math.round(1.88 * 0.9 * 0.9 * 100) / 100, Math.round(5.64 * 0.9 * 0.9 * 100) / 100],
             wrapMargin: 0,
             colors: [
-                "255, 211, 134",
-                "118, 212, 255",
-                "214, 174, 255",
-                "255, 140, 170",
-                "173, 255, 201"
+                "255, 221, 154", // 保持增加的亮度
+                "138, 222, 255", // 保持增加的亮度
+                "224, 184, 255", // 保持增加的亮度
+                "255, 160, 190", // 保持增加的亮度
+                "183, 255, 211"  // 保持增加的亮度
             ],
             twinkleSpeedRange: [0.5, 1.4]
         };
@@ -137,7 +139,8 @@
             const baseSpeed = origSpeed * 0.75;
             const [minSize, maxSize] = CONFIG.sizeRange;
             const color = CONFIG.colors[Math.floor(Math.random() * CONFIG.colors.length)];
-            const baseAlpha = 0.45 + Math.random() * 0.4;
+            // 保持增加的粒子透明度
+            const baseAlpha = 0.65 + Math.random() * 0.4;
             
             return {
                 x: Math.random() * width,
@@ -152,7 +155,8 @@
                 baseAlpha,
                 twinklePhase: Math.random() * Math.PI * 2,
                 twinkleSpeed: CONFIG.twinkleSpeedRange[0] + Math.random() * (CONFIG.twinkleSpeedRange[1] - CONFIG.twinkleSpeedRange[0]),
-                glowIntensity: 6 + Math.random() * 8
+                // 保持增加的发光强度
+                glowIntensity: 9 + Math.random() * 10
             };
         }
 
@@ -260,10 +264,11 @@
                 particle.y += particle.vy * delta;
 
                 particle.twinklePhase += delta * particle.twinkleSpeed;
+                // 保持增加的闪烁幅度
                 particle.alpha = clamp(
-                    particle.baseAlpha + Math.sin(particle.twinklePhase) * 0.22,
-                    0.2,
-                    1
+                    particle.baseAlpha + Math.sin(particle.twinklePhase) * 0.28,
+                    0.3,
+                    1.1
                 );
 
                 const margin = CONFIG.wrapMargin;
@@ -315,7 +320,7 @@
                 bucket.push(i);
             }
 
-            // 渲染连接线
+            // 渲染连接线 - 恢复原来的连线参数
             for (let i = 0; i < particleCount; i++) {
                 const a = particles[i];
                 const baseCellX = cellXCache[i];
@@ -343,8 +348,10 @@
                             const connectionAlpha = CONFIG.connectionOpacity * (1 - tempVector.distance / connectionDistance);
                             if (connectionAlpha <= 0) continue;
                             
+                            // 恢复原来的连线亮度计算
                             let brightness = 0.6 + 0.4 * Math.min(a.alpha, b.alpha);
                             brightness = Math.min(1, brightness * 1.2);
+                            // 恢复原来的连线颜色
                             ctx.strokeStyle = `rgba(180, 220, 255, ${Math.min(1, connectionAlpha * brightness)})`;
                             ctx.beginPath();
                             ctx.moveTo(a.x, a.y);
@@ -355,15 +362,17 @@
                 }
             }
 
-            // 渲染粒子
+            // 渲染粒子 - 保持增加的亮度和发光效果
             ctx.save();
             ctx.globalCompositeOperation = "lighter";
             for (let i = 0; i < particleCount; i++) {
                 const particle = particles[i];
-                const displayAlpha = Math.min(1, particle.alpha * 1.3);
+                // 保持增加的显示透明度
+                const displayAlpha = Math.min(1.2, particle.alpha * 1.5);
                 ctx.fillStyle = `rgba(${particle.color}, ${displayAlpha})`;
-                ctx.shadowBlur = particle.glowIntensity * 1.3;
-                ctx.shadowColor = `rgba(${particle.color}, ${Math.min(0.98, displayAlpha + 0.25)})`;
+                // 保持增加的阴影模糊和强度
+                ctx.shadowBlur = particle.glowIntensity * 1.5;
+                ctx.shadowColor = `rgba(${particle.color}, ${Math.min(1.1, displayAlpha + 0.35)})`;
                 ctx.beginPath();
                 ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
                 ctx.fill();
@@ -515,12 +524,13 @@
     })();
 
     const ClickEffects = (() => {
+        // 保持增加的点击效果颜色亮度
         const COLORS = [
-            "rgba(255, 211, 134, 0.9)",
-            "rgba(118, 212, 255, 0.9)",
-            "rgba(214, 174, 255, 0.9)",
-            "rgba(255, 140, 170, 0.9)",
-            "rgba(173, 255, 201, 0.9)"
+            "rgba(255, 221, 154, 0.9)",
+            "rgba(138, 222, 255, 0.9)",
+            "rgba(224, 184, 255, 0.9)",
+            "rgba(255, 160, 190, 0.9)",
+            "rgba(183, 255, 211, 0.9)"
         ];
         const MAX_ACTIVE_EFFECTS = 14;
         const MIN_SPAWN_INTERVAL = 90;
@@ -596,7 +606,8 @@
                 const spark = document.createElement("span");
                 spark.className = "click-effect__spark";
                 spark.style.background = color;
-                spark.style.boxShadow = `0 0 ${10 + Math.random() * 18}px ${color}`;
+                // 保持增加的火花光晕效果
+                spark.style.boxShadow = `0 0 ${12 + Math.random() * 20}px ${color}`;
 
                 const s = 4 + Math.random() * 8;
                 spark.style.width = `${s}px`;

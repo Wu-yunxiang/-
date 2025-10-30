@@ -112,7 +112,6 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>用户</th>
                                 <th>类型</th>
                                 <th>金额（￥）</th>
                                 <th>日期</th>
@@ -124,7 +123,7 @@
                         <tbody id="searchTableBody"></tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="7" id="searchTotals" class="totals-row"></td>
+                                <td colspan="6" id="searchTotals" class="totals-row"></td>
                             </tr>
                         </tfoot>
                     </table>
@@ -149,7 +148,7 @@
                             <option value="type-expense">支出在前</option>
                         </select>
                         <button type="button" class="records-clear-btn" id="clearRecordsBtn" data-requires-auth="true">删除全部</button>
-                        <button type="button" class="ghost-btn" id="refreshRecordsBtn">刷新</button>
+                        <!-- 刷新功能已移除 -->
                     </div>
                 </div>
                 <p id="recordsEmptyNotice" class="records-empty" hidden>暂无记录。提交账目后即可在此查看并删除。</p>

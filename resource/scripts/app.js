@@ -41,7 +41,7 @@ const STATIC_ID_LIST = [
     "recordsTotals",
     "recordsTotalsDisplay",
     "clearRecordsBtn",
-    "refreshRecordsBtn",
+    /* refreshRecordsBtn removed per feature removal */
     "searchResult",
     "searchSummary",
     "searchTableBody",
@@ -1054,7 +1054,6 @@ function updateSearchSummaryAndTotals(entries) {
 
 function buildSearchRow(entry) {
     const row = document.createElement("tr");
-    appendCell(row, entry.username || "");
     appendCell(row, formatEntryType(entry.type));
     appendCell(row, formatAmount(entry.amount));
     appendCell(row, entry.date || "");
@@ -1300,10 +1299,7 @@ function setupRecordsUI() {
         clearBtn.addEventListener("click", preventMultipleClicks(handleClearRecordsClick, 1000));
     }
 
-    const refreshBtn = getCachedElementById("refreshRecordsBtn");
-    if (refreshBtn) {
-        refreshBtn.addEventListener("click", preventMultipleClicks(handleRefreshRecordsClick, 800));
-    }
+    // refresh button removed — no UI hook needed
     registerDeleteHandler("recordsTableBody");
     registerDeleteHandler("searchTableBody");
     updateRecordsCount(0);
@@ -1372,23 +1368,7 @@ async function handleClearRecordsClick(event) {
     }
 }
 
-async function handleRefreshRecordsClick(event) {
-    const triggerButton = event?.currentTarget instanceof HTMLButtonElement ? event.currentTarget : null;
-    if (triggerButton && triggerButton.disabled) {
-        return;
-    }
-    const wrapperLocked = triggerButton?.dataset.multiClickLocked === "1";
-    if (!wrapperLocked) {
-        toggleButtonBusy(triggerButton, true);
-    }
-    try {
-        await refreshRecords({ force: true, silent: false });
-    } finally {
-        if (!wrapperLocked) {
-            toggleButtonBusy(triggerButton, false);
-        }
-    }
-}
+// handleRefreshRecordsClick removed — refresh UI control deleted
 
 function handleSearchSortChange(event) {
     const select = event.currentTarget;
