@@ -90,8 +90,18 @@ public class parser {
         }
         
         String password = parts[2];
+        // 先判断用户名是否存在，再判断密码，确保可以向客户端返回更明确的错误信息
+        if (!sql.userExists(username)) {
+            return new ParseResult("login", Boolean.FALSE, "用户名不存在", null);
+        }
+
         loginrequest Login = new loginrequest(username, password);
-        return new ParseResult("login", sql.solveLogin(Login), null, null);
+        Boolean ok = sql.solveLogin(Login);
+        if (ok != null && ok) {
+            return new ParseResult("login", Boolean.TRUE, null, null);
+        } else {
+            return new ParseResult("login", Boolean.FALSE, "密码错误", null);
+        }
     }
     
     private ParseResult handleSearchRequest(String username, String[] parts) throws SQLException {

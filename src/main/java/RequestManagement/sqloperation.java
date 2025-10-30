@@ -3,12 +3,14 @@ package RequestManagement;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import java.util.logging.Logger;
 import sharedmodel.*;
 
 public class sqloperation {
+    private static final Logger LOGGER = Logger.getLogger(sqloperation.class.getName());
     private static final Path DB_PATH = Paths.get(System.getProperty("user.dir"), "accounting_db").toAbsolutePath();
     public static final String JDBC_URL = "jdbc:h2:file:" + DB_PATH.toString().replace("\\", "/") + ";DB_CLOSE_DELAY=-1";
     public static String JDBC_USER = "sa";
@@ -134,11 +136,38 @@ public class sqloperation {
                 try (ResultSet rs = query.executeQuery()) {
                     if (rs.next()) {
                         String storedPassword = rs.getString(1);
-                        return storedPassword != null && storedPassword.equals(Login.password);
+                        boolean ok = storedPassword != null && storedPassword.equals(Login.password);
+                        if (ok) {
+                            LOGGER.info("登录成功: 用户名='" + Login.username + "'");
+                        } else {
+                            // 用户存在但密码不匹配
+                            LOGGER.info("登录失败: 密码错误, 用户名='" + Login.username + "'");
+                        }
+                        return ok;
+                    } else {
+                        // 用户名不存在
+                        LOGGER.info("登录失败: 用户名不存在, 用户名='" + Login.username + "'");
                     }
                 }
             }
             return Boolean.FALSE;
+        } finally {
+            closeThreadConnection();
+        }
+    }
+
+    /**
+     * 检查指定用户名是否存在于 users 表中。
+     */
+    public boolean userExists(String username) throws SQLException {
+        try {
+            Connection c = getConnection();
+            try (PreparedStatement query = c.prepareStatement("SELECT 1 FROM users WHERE username = ?")) {
+                query.setString(1, username);
+                try (ResultSet rs = query.executeQuery()) {
+                    return rs.next();
+                }
+            }
         } finally {
             closeThreadConnection();
         }
@@ -154,8 +183,6 @@ public class sqloperation {
                 "SELECT id, username, amount, type, date, subject, note FROM entries WHERE username = ?");
             List<Object> parameters = new ArrayList<>();
             parameters.add(Search.username);
-            
-            int paramIndex = 2;
             
             if (Search.startDate != null && !Search.startDate.isEmpty()) {
                 sql.append(" AND date >= ?");
@@ -241,26 +268,6 @@ public class sqloperation {
             }
         } finally {
             closeThreadConnection();
-        }
-    }
-
-    private LocalDate parseDateOrNull(String date) {
-        if (date == null || date.isEmpty()) {
-            return null;
-        }
-
-        String[] parts = date.split("/");
-        if (parts.length != 3) {
-            return null;
-        }
-
-        try {
-            int year = Integer.parseInt(parts[0]);
-            int month = Integer.parseInt(parts[1]);
-            int day = Integer.parseInt(parts[2]);
-            return LocalDate.of(year, month, day);
-        } catch (NumberFormatException e) {
-            return null;
         }
     }
 

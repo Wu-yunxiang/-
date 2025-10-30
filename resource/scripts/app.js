@@ -983,9 +983,7 @@ function handlePostAction(parsed, context) {
         }
     }
     // 对于 delete 操作，删除结果会由 `logDeleteOutcome` 统一输出；因此避免重复输出服务器原始提示（例如“删除成功”）
-    if (parsed.message && parsed.action !== "clear" && parsed.action !== "delete") {
-        logMessage(`服务器提示：${parsed.message}`);
-    }
+    // 已由各操作的专用分支处理用户可见的提示信息，避免重复输出通用 "服务器提示" 行。
 }
 
 function renderSearchResult(parsed, context) {
