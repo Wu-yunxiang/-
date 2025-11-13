@@ -1,3 +1,4 @@
+// === Part 1: 全局状态与常量 ===
 const state = {
     host: "",
     port: 80,
@@ -75,6 +76,7 @@ const BUTTON_BUSY_CLASS = "is-busy";
 
 const LOG_MAX_ENTRIES = 30;
 
+// === Part 2: DOM 缓存与基础工具 ===
 function getCachedElementById(id) {
     if (!id) {
         return null;
@@ -157,6 +159,32 @@ function recycleTableBody(tbody) {
     tbody.textContent = "";
 }
 
+function smoothRemoveRow(row) {
+    if (!(row instanceof Element)) return;
+    // 若已经在移除中，则忽略
+    if (row.classList.contains("removing")) return;
+    row.classList.add("removing");
+    // 确保在 transitionEnd 后移除节点（最多 400ms 的后备）
+    const cleanup = () => {
+        releaseRowResources(row);
+        if (row.parentElement) {
+            row.parentElement.removeChild(row);
+        }
+        row.removeEventListener("transitionend", onEnd);
+        clearTimeout(timeout);
+        row.classList.remove("removing");
+    };
+    const onEnd = (ev) => {
+        // 仅在 opacity 或 transform 的 transition 结束时执行一次
+        if (ev.propertyName === "opacity" || ev.propertyName === "transform") {
+            cleanup();
+        }
+    };
+    row.addEventListener("transitionend", onEnd);
+    const timeout = setTimeout(cleanup, 420);
+}
+
+// === Part 3: 网络端点与请求控制 ===
 function cancelPendingRequest() {
     if (networkState.controller) {
         networkState.controller.abort();
@@ -180,6 +208,58 @@ function ensureEndpoint() {
     networkState.endpoint = new URL(state.path, base);
     return networkState.endpoint;
 }
+
+function runWithRequestLock(key, task) {
+    if (!key) {
+        return task();
+    }
+    const existing = requestLocks.get(key);
+    if (existing) {
+        return existing;
+    }
+    const wrapped = (async () => {
+        try {
+            return await task();
+        } finally {
+            requestLocks.delete(key);
+        }
+    })();
+    requestLocks.set(key, wrapped);
+    return wrapped;
+}
+
+async function sendPayload(request) {
+    cancelPendingRequest();
+    const controller = new AbortController();
+    networkState.controller = controller;
+    const endpoint = ensureEndpoint();
+    const payload = `${request}\n`;
+
+    try {
+        const response = await fetch(endpoint.toString(), {
+            method: "POST",
+            body: payload,
+            headers: {
+                "Content-Type": "text/plain; charset=UTF-8",
+                "Cache-Control": "no-cache"
+            },
+            signal: controller.signal
+        });
+
+        const text = await response.text();
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${text}`);
+        }
+        return text.trim();
+    } finally {
+        if (networkState.controller === controller) {
+            networkState.controller = null;
+        }
+    }
+}
+
+// === Part 4: 应用生命周期与状态管理 ===
+
 document.addEventListener("DOMContentLoaded", () => {
     window.requestAnimationFrame(initializeApplication);
 });
@@ -274,6 +354,8 @@ function applyVisibility(element, hidden) {
         element.disabled = hidden;
     }
 }
+
+// === Part 5: 标签页与表单交互 ===
 
 function setupTabs() {
     const tabBar = querySelectorCached(TAB_BAR_SELECTOR);
@@ -452,25 +534,6 @@ function preventMultipleClicks(handler, delay = 1000) {
     };
 }
 
-function runWithRequestLock(key, task) {
-    if (!key) {
-        return task();
-    }
-    const existing = requestLocks.get(key);
-    if (existing) {
-        return existing;
-    }
-    const wrapped = (async () => {
-        try {
-            return await task();
-        } finally {
-            requestLocks.delete(key);
-        }
-    })();
-    requestLocks.set(key, wrapped);
-    return wrapped;
-}
-
 async function processActionFormSubmission(form) {
     const action = form.dataset.action;
     const actionLabel = describeAction(action);
@@ -627,6 +690,8 @@ function initializeEndpointDefaults() {
 
     logMessage("后端地址已准备就绪。", "info");
 }
+
+// === Part 6: 输入校验与请求构造 ===
 
 function validateAmountInput(rawAmount) {
     const value = (rawAmount ?? "").trim();
@@ -815,35 +880,7 @@ function composePayload(action, formData) {
     }
 }
 
-async function sendPayload(request) {
-    cancelPendingRequest();
-    const controller = new AbortController();
-    networkState.controller = controller;
-    const endpoint = ensureEndpoint();
-    const payload = `${request}\n`;
-
-    try {
-        const response = await fetch(endpoint.toString(), {
-            method: "POST",
-            body: payload,
-            headers: {
-                "Content-Type": "text/plain; charset=UTF-8",
-                "Cache-Control": "no-cache"
-            },
-            signal: controller.signal
-        });
-
-        const text = await response.text();
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${text}`);
-        }
-        return text.trim();
-    } finally {
-        if (networkState.controller === controller) {
-            networkState.controller = null;
-        }
-    }
-}
+// === Part 7: 请求响应解析与动作执行 ===
 
 function parseResponse(raw) {
     if (!raw) {
@@ -985,6 +1022,8 @@ function handlePostAction(parsed, context) {
     // 对于 delete 操作，删除结果会由 `logDeleteOutcome` 统一输出；因此避免重复输出服务器原始提示（例如“删除成功”）
     // 已由各操作的专用分支处理用户可见的提示信息，避免重复输出通用 "服务器提示" 行。
 }
+
+// === Part 8: 渲染与记录界面 ===
 
 function renderSearchResult(parsed, context) {
     const container = getCachedElementById("searchResult");
@@ -1584,6 +1623,30 @@ function createDeleteButton(entry, { enforceOwnership = false } = {}) {
     return button;
 }
 
+function updateRecordsCount(count) {
+    const label = getCachedElementById("recordsCount");
+    if (!label) {
+        return;
+    }
+    const safeCount = Number.isFinite(count) ? count : 0;
+    label.textContent = `共 ${safeCount} 条记录`;
+    setClearButtonState(safeCount === 0);
+}
+
+function setClearButtonState(disabled) {
+    const button = getCachedElementById("clearRecordsBtn");
+    if (!button) {
+        return;
+    }
+    const shouldDisable = Boolean(disabled);
+    button.disabled = shouldDisable;
+    if (shouldDisable) {
+        button.setAttribute("aria-disabled", "true");
+    } else {
+        button.removeAttribute("aria-disabled");
+    }
+}
+
 function resetRecordsView() {
     const board = getCachedElementById("recordsBoard");
     const emptyNotice = getCachedElementById("recordsEmptyNotice");
@@ -1606,6 +1669,71 @@ function resetRecordsView() {
         emptyNotice.hidden = true;
     }
 }
+
+function removeEntryFromStateAndUI(entryId) {
+    try {
+        const idNum = Number(entryId);
+        if (!Number.isFinite(idNum)) {
+            return;
+        }
+
+        // 从 state.records 过滤掉该条目
+        const beforeLen = state.records.length;
+        state.records = state.records.filter((e) => Number(e?.id) !== idNum);
+        const afterLen = state.records.length;
+
+        let searchEntriesChanged = false;
+        if (Array.isArray(state.lastSearchEntries) && state.lastSearchEntries.length) {
+            const beforeSearchLen = state.lastSearchEntries.length;
+            state.lastSearchEntries = state.lastSearchEntries.filter((entry) => Number(entry?.id) !== idNum);
+            searchEntriesChanged = state.lastSearchEntries.length !== beforeSearchLen;
+        }
+
+        // 更新计数与统计（如果当前在 records 页）
+        updateRecordsCount(state.records.length);
+        const totals = calculateTotals(state.records);
+        updateTotalsCell(getCachedElementById("recordsTotalsDisplay"), totals);
+        updateTotalsCell(getCachedElementById("recordsTotals"), null);
+
+        // 在 DOM 中查找并平滑移除对应行（records 和 search 两个表）
+        const selectors = ["recordsTableBody", "searchTableBody"];
+        selectors.forEach((id) => {
+            const tbody = getCachedElementById(id);
+            if (!tbody) return;
+            const button = tbody.querySelector(`button.record-delete-btn[data-entry-id="${entryId}"]`);
+            if (button) {
+                const row = button.closest("tr");
+                if (row) {
+                    smoothRemoveRow(row);
+                }
+            }
+        });
+
+        if (searchEntriesChanged) {
+            const sortedSearchEntries = sortEntries(state.lastSearchEntries || [], state.searchSortKey);
+            updateSearchSummaryAndTotals(sortedSearchEntries);
+        }
+
+        // 若移除后没有记录，切换到空视图
+        if (state.records.length === 0) {
+            const board = getCachedElementById("recordsBoard");
+            const emptyNotice = getCachedElementById("recordsEmptyNotice");
+            if (board && emptyNotice) {
+                board.hidden = true;
+                emptyNotice.textContent = defaultRecordsEmptyMessage;
+                emptyNotice.hidden = false;
+            }
+        }
+
+        // 以前在这里写入“已从页面移除记录 ...”的日志，会导致删除一条记录时出现多条日志（开始、成功、移除）
+        // 为了只输出一条统一的成功日志，移除该处的成功日志。仅在发生异常时记录警告。
+    } catch (e) {
+        // 任何异常都不阻断 UI 流程，只记录日志
+        logMessage(`在移除记录 ${entryId} 时发生错误：${e?.message || e}`, "warning");
+    }
+}
+
+// === Part 9: 数据格式化与排序 ===
 
 function formatAmount(value) {
     if (value == null) {
@@ -1753,6 +1881,37 @@ function formatEntryType(type) {
     return normalizeEntryType(type) === "income" ? "收入" : "支出";
 }
 
+function formatSearchFilters(context, { withBrackets = true } = {}) {
+    if (!context) {
+        return "";
+    }
+    const parts = [];
+    const { startDate, endDate, typeFilter, minAmount, maxAmount } = context;
+    if (startDate || endDate) {
+        if (startDate && endDate) {
+            parts.push(`范围：${startDate} 至 ${endDate}`);
+        } else if (startDate) {
+            parts.push(`自 ${startDate} 起`);
+        } else if (endDate) {
+            parts.push(`截至 ${endDate}`);
+        }
+    }
+    if (typeFilter) {
+        parts.push(`类型：${formatEntryType(typeFilter)}`);
+    }
+    if (minAmount) {
+        parts.push(`金额≥${minAmount}`);
+    }
+    if (maxAmount) {
+        parts.push(`金额≤${maxAmount}`);
+    }
+    if (!parts.length) {
+        return "";
+    }
+    const text = parts.join("，");
+    return withBrackets ? `（${text}）` : text;
+}
+
 function normalizeSortKey(key) {
     if (typeof key !== "string") {
         return null;
@@ -1825,6 +1984,8 @@ function updateTotalsCell(cell, totals) {
     cell.textContent = `总计：${incomeText} / ${expenseText} = ${netText} ￥`;
 }
 
+// === Part 10: 日志与消息工具 ===
+
 function describeAction(action) {
     const map = {
         register: "注册",
@@ -1864,36 +2025,6 @@ function summarizeError(error) {
     return raw.length > 60 ? `${raw.slice(0, 57)}...` : raw;
 }
 
-function formatSearchFilters(context, { withBrackets = true } = {}) {
-    if (!context) {
-        return "";
-    }
-    const parts = [];
-    const { startDate, endDate, typeFilter, minAmount, maxAmount } = context;
-    if (startDate || endDate) {
-        if (startDate && endDate) {
-            parts.push(`范围：${startDate} 至 ${endDate}`);
-        } else if (startDate) {
-            parts.push(`自 ${startDate} 起`);
-        } else if (endDate) {
-            parts.push(`截至 ${endDate}`);
-        }
-    }
-    if (typeFilter) {
-        parts.push(`类型：${formatEntryType(typeFilter)}`);
-    }
-    if (minAmount) {
-        parts.push(`金额≥${minAmount}`);
-    }
-    if (maxAmount) {
-        parts.push(`金额≤${maxAmount}`);
-    }
-    if (!parts.length) {
-        return "";
-    }
-    const text = parts.join("，");
-    return withBrackets ? `（${text}）` : text;
-}
 
 function logRecordsLoaded() {
     const sortLabel = describeSortKey(state.recordsSortKey);
@@ -1965,104 +2096,6 @@ function logDeleteOutcome(parsed, context) {
     }
 }
 
-function updateRecordsCount(count) {
-    const label = getCachedElementById("recordsCount");
-    if (!label) {
-        return;
-    }
-    const safeCount = Number.isFinite(count) ? count : 0;
-    label.textContent = `共 ${safeCount} 条记录`;
-    setClearButtonState(safeCount === 0);
-}
-
-function removeEntryFromStateAndUI(entryId) {
-    try {
-        const idNum = Number(entryId);
-        if (!Number.isFinite(idNum)) {
-            return;
-        }
-
-        // 从 state.records 过滤掉该条目
-        const beforeLen = state.records.length;
-        state.records = state.records.filter((e) => Number(e?.id) !== idNum);
-        const afterLen = state.records.length;
-
-        let searchEntriesChanged = false;
-        if (Array.isArray(state.lastSearchEntries) && state.lastSearchEntries.length) {
-            const beforeSearchLen = state.lastSearchEntries.length;
-            state.lastSearchEntries = state.lastSearchEntries.filter((entry) => Number(entry?.id) !== idNum);
-            searchEntriesChanged = state.lastSearchEntries.length !== beforeSearchLen;
-        }
-
-        // 更新计数与统计（如果当前在 records 页）
-        updateRecordsCount(state.records.length);
-        const totals = calculateTotals(state.records);
-        updateTotalsCell(getCachedElementById("recordsTotalsDisplay"), totals);
-        updateTotalsCell(getCachedElementById("recordsTotals"), null);
-
-        // 在 DOM 中查找并平滑移除对应行（records 和 search 两个表）
-        const selectors = ["recordsTableBody", "searchTableBody"];
-        selectors.forEach((id) => {
-            const tbody = getCachedElementById(id);
-            if (!tbody) return;
-            const button = tbody.querySelector(`button.record-delete-btn[data-entry-id=\"${entryId}\"]`);
-            if (button) {
-                const row = button.closest("tr");
-                if (row) {
-                    smoothRemoveRow(row);
-                }
-            }
-        });
-
-        if (searchEntriesChanged) {
-            const sortedSearchEntries = sortEntries(state.lastSearchEntries || [], state.searchSortKey);
-            updateSearchSummaryAndTotals(sortedSearchEntries);
-        }
-
-        // 若移除后没有记录，切换到空视图
-        if (state.records.length === 0) {
-            const board = getCachedElementById("recordsBoard");
-            const emptyNotice = getCachedElementById("recordsEmptyNotice");
-            if (board && emptyNotice) {
-                board.hidden = true;
-                emptyNotice.textContent = defaultRecordsEmptyMessage;
-                emptyNotice.hidden = false;
-            }
-        }
-
-        // 以前在这里写入“已从页面移除记录 ...”的日志，会导致删除一条记录时出现多条日志（开始、成功、移除）
-        // 为了只输出一条统一的成功日志，移除该处的成功日志。仅在发生异常时记录警告。
-    } catch (e) {
-        // 任何异常都不阻断 UI 流程，只记录日志
-        logMessage(`在移除记录 ${entryId} 时发生错误：${e?.message || e}`, "warning");
-    }
-}
-
-function smoothRemoveRow(row) {
-    if (!(row instanceof Element)) return;
-    // 若已经在移除中，则忽略
-    if (row.classList.contains("removing")) return;
-    row.classList.add("removing");
-    // 确保在 transitionEnd 后移除节点（最多 400ms 的后备）
-    const cleanup = () => {
-        releaseRowResources(row);
-        if (row.parentElement) {
-            row.parentElement.removeChild(row);
-        }
-        row.removeEventListener("transitionend", onEnd);
-        clearTimeout(timeout);
-        row.classList.remove("removing");
-    };
-    const onEnd = (ev) => {
-        // 仅在 opacity 或 transform 的 transition 结束时执行一次
-        if (ev.propertyName === "opacity" || ev.propertyName === "transform") {
-            cleanup();
-        }
-    };
-    row.addEventListener("transitionend", onEnd);
-    const timeout = setTimeout(cleanup, 420);
-}
-
 function logMessage(message, level = "info") {
     const list = getCachedElementById("logPanel");
     const entry = document.createElement("li");
@@ -2073,20 +2106,6 @@ function logMessage(message, level = "info") {
     list.prepend(entry);
     while (list.children.length > LOG_MAX_ENTRIES) {
         list.removeChild(list.lastChild);
-    }
-}
-
-function setClearButtonState(disabled) {
-    const button = getCachedElementById("clearRecordsBtn");
-    if (!button) {
-        return;
-    }
-    const shouldDisable = Boolean(disabled);
-    button.disabled = shouldDisable;
-    if (shouldDisable) {
-        button.setAttribute("aria-disabled", "true");
-    } else {
-        button.removeAttribute("aria-disabled");
     }
 }
 

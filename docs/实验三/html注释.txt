@@ -1,0 +1,7 @@
+一、在head区声明页面的元信息、样式（.css）和脚本（.js）
+二、body部分：1.全屏的canvas(画布)，id为dynamicBackground,
+            对应dynamicBackground模块，用于绘制粒子背景
+            2.id为clickEffects的空容器，用于插入点击特效
+            3.声明id为app的主应用容器，设置界面的布局和初始值，
+            并设置class引用.css渲染、设置id供.js操作（addeventlistener等）
+            4.id为confirmOverlay的确认对话框

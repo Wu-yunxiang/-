@@ -1,0 +1,157 @@
+@startuml
+title 详细时序图 - 各操作完整交互（前端/代理/服务/数据库）
+
+actor Client
+participant "Frontend (resource/scripts/app.js)" as Frontend
+participant "ngrok (optional)" as NGROK
+participant "reverse_proxy.js" as ReverseProxy
+participant "http_to_tcp_proxy.js" as HTTP_TCP_Proxy
+participant "ReceiveService (socket)" as ReceiveService
+participant "RequestManagement.parser" as Parser
+participant "RequestManagement.sqloperation" as SQL
+participant "H2 Database (file: accounting_db)" as H2
+participant "ResultManagement.ParseResult" as Result
+
+== 场景 A: 新建条目(add) 成功流程 ==
+Client -> Frontend : 填写表单并点击提交
+Frontend -> HTTP_TCP_Proxy : send raw (username,add,amount,date,type,subject,note)
+HTTP_TCP_Proxy -> ReceiveService : forward TCP payload
+ReceiveService -> Parser : parseRequest(raw)
+Parser -> Parser : validate fields (amount, date)
+
+alt 验证失败
+    Parser -> ReceiveService : 返回 ParseResult(action='add', success=false, message='参数不足/格式错误')
+    ReceiveService -> HTTP_TCP_Proxy : 返回错误
+    HTTP_TCP_Proxy -> Frontend : 显示错误
+else 验证通过
+    Parser -> SQL : solveAdd(addrequest)
+    SQL -> H2 : execute INSERT INTO entries (...)
+    
+    alt SQL 报错 (比如 IO or constraint)
+        H2 -> SQL : SQLException
+        SQL -> Parser : throw/return error
+        Parser -> Result : new ParseResult('add', false, '数据库错误: ...', null)
+        Result -> ReceiveService : 返回错误字符串
+        ReceiveService -> HTTP_TCP_Proxy : 返回错误
+        HTTP_TCP_Proxy -> Frontend : 显示错误
+    else SQL 成功
+        H2 -> SQL : OK (generated id)
+        SQL -> Parser : Boolean.TRUE
+        Parser -> Result : new ParseResult('add', true, null, null)
+        Result -> ReceiveService : 返回响应字符串
+        ReceiveService -> HTTP_TCP_Proxy : 返回成功
+        HTTP_TCP_Proxy -> Frontend : 接收成功 -> Frontend 刷新列表 (触发 list)
+    end
+end
+
+== 场景 B: 注册(register) 与 登录(login) 流程 ==
+Client -> Frontend : 输入用户名/密码 -> 提交 register/login
+Frontend -> HTTP_TCP_Proxy : send raw (username,register,password)
+HTTP_TCP_Proxy -> ReceiveService : forward
+ReceiveService -> Parser : parseRequest(raw)
+
+alt action == register
+    Parser -> SQL : solveRegister(registerrequest)
+    SQL -> H2 : INSERT INTO users
+    
+    alt 用户已存在 (SQL 错码 23505)
+        H2 -> SQL : SQLException(23505)
+        SQL -> Parser : return Boolean.FALSE
+        Parser -> Result : new ParseResult('register', false, '用户已存在', null)
+        Result -> ReceiveService : 返回注册失败响应
+        ReceiveService -> HTTP_TCP_Proxy : 转发注册失败响应
+        HTTP_TCP_Proxy -> Frontend : 显示注册失败
+    else 成功
+        SQL -> Parser : Boolean.TRUE
+        Parser -> Result : new ParseResult('register', true, null, null)
+        Result -> ReceiveService : 返回注册成功响应
+        ReceiveService -> HTTP_TCP_Proxy : 转发注册成功响应
+        HTTP_TCP_Proxy -> Frontend : 显示注册成功
+    end
+else action == login
+    Parser -> SQL : userExists(username)
+    SQL -> H2 : SELECT 1 FROM users WHERE username=?
+    
+    alt 用户不存在
+        H2 -> SQL : no rows
+        SQL -> Parser : false
+        Parser -> Result : new ParseResult('login', false, '用户名不存在', null)
+        Result -> ReceiveService : 返回用户名不存在响应
+        ReceiveService -> HTTP_TCP_Proxy : 转发响应
+        HTTP_TCP_Proxy -> Frontend : 显示用户名不存在
+    else 用户存在
+        SQL -> Parser : true
+        Parser -> SQL : solveLogin(loginrequest)
+        SQL -> H2 : SELECT password FROM users WHERE username=?
+        H2 -> SQL : storedPassword
+        
+        alt 密码匹配
+            SQL -> Parser : true
+            Parser -> Result : new ParseResult('login', true, null, null)
+            Result -> ReceiveService : 返回登录成功响应
+            ReceiveService -> HTTP_TCP_Proxy : 转发响应
+            HTTP_TCP_Proxy -> Frontend : 登录成功（前端更新 state）
+        else 密码不匹配
+            SQL -> Parser : false
+            Parser -> Result : new ParseResult('login', false, '密码错误', null)
+            Result -> ReceiveService : 返回登录失败响应
+            ReceiveService -> HTTP_TCP_Proxy : 转发响应
+            HTTP_TCP_Proxy -> Frontend : 登录失败
+        end
+    end
+end
+
+== 场景 C: 查询(search) 与 列表(list) ==
+Frontend -> HTTP_TCP_Proxy : send raw (username,search,startDate,endDate,...) or (username,list)
+HTTP_TCP_Proxy -> ReceiveService : forward
+ReceiveService -> Parser : parseRequest(raw)
+Parser -> SQL : solveSearch(searchrequest) or solveList(username)
+SQL -> H2 : SELECT ... FROM entries WHERE ...
+H2 -> SQL : ResultSet rows
+SQL -> Parser : ListEntries
+Parser -> Result : new ParseResult('search/list', null, null, ListEntries)
+Result -> ReceiveService : 返回 entries 列表
+ReceiveService -> HTTP_TCP_Proxy : 转发 entries 列表
+HTTP_TCP_Proxy -> Frontend : 返回 entries 列表（前端渲染表格）
+
+== 场景 D: 删除(delete) 与 清空(clear) ==
+Frontend -> HTTP_TCP_Proxy : send raw (username,delete,entryId)
+HTTP_TCP_Proxy -> ReceiveService : forward
+ReceiveService -> Parser : parseRequest
+Parser -> SQL : solveDelete(deleterequest)
+SQL -> H2 : DELETE FROM entries WHERE id=? AND username=?
+H2 -> SQL : affectedRows
+SQL -> Parser : success/failure
+Parser -> Result : new ParseResult('delete', success, message, null)
+Result -> ReceiveService : 返回删除结果
+ReceiveService -> HTTP_TCP_Proxy : 转发删除结果
+HTTP_TCP_Proxy -> Frontend : 显示删除结果
+
+Frontend -> HTTP_TCP_Proxy : send raw (username,clear)
+HTTP_TCP_Proxy -> ReceiveService : forward
+ReceiveService -> Parser : parseRequest
+Parser -> SQL : solveClear(username)
+SQL -> H2 : DELETE FROM entries WHERE username=?
+H2 -> SQL : deletedCount
+SQL -> Parser : deletedCount
+Parser -> Result : new ParseResult('clear', true, Integer.toString(deletedCount), null)
+Result -> ReceiveService : 返回清空数量
+ReceiveService -> HTTP_TCP_Proxy : 转发清空数量
+HTTP_TCP_Proxy -> Frontend : 返回清空数量
+
+== 异常与退化处理 ==
+opt 接收连接超时/网络错误
+    ReceiveService -> ReceiveService : close client socket / log
+    ReceiveService -> HTTP_TCP_Proxy : 无响应/连接断开
+end
+
+opt 未知操作或协议错误
+    Parser -> ReceiveService : ParseResult('unknown', false, '未知操作', null)
+    ReceiveService -> HTTP_TCP_Proxy : 返回 unknown
+    HTTP_TCP_Proxy -> Frontend : 显示未知操作错误
+end
+
+note over Frontend, ReceiveService
+    说明：前端目前以 raw 字符串协议与后端通信（username,action,...），也可适配为 HTTP+JSON 或 WebSocket
+end note
+@enduml

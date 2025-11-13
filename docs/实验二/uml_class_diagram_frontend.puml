@@ -1,0 +1,103 @@
+@startuml
+title 前端类图 (Frontend Modules)
+
+package "App State" {
+  class AppState {
+    +host: String
+    +port: int
+    +path: String
+    +loggedInUser: String
+    +activeTab: String
+    +records: Array
+    +recordsLoaded: boolean
+    +recordsSortKey: String
+    +lastSearchEntries: Array
+    +lastSearchFilters: Object
+  }
+}
+
+package "DOM Cache" {
+  class DOMCache {
+    +getCachedElementById(id): Element
+    +querySelectorCached(selector): Element
+    +primeStaticCaches(): void
+    +clearCachedId(id): void
+  }
+}
+
+package "Network" {
+  class NetworkManager {
+    -controller
+    -endpoint
+    +ensureEndpoint(): URL
+    +cancelPendingRequest(): void
+    +resetEndpointCache(): void
+  }
+}
+
+package "Forms & Actions" {
+  class FormManager {
+    +setupForms(): void
+    +handleActionFormSubmit(event): void
+    +queueActionFormSubmission(form, submitter): void
+    +executeQueuedActionSubmission(form): Promise
+    +setFormSubmittingState(form, submitter, boolean): void
+  }
+}
+
+package "UI & Controls" {
+  class UIManager {
+    +initializeApplication(): void
+    +setupTabs(): void
+    +setActiveTab(target): void
+    +updateAuthUI(): void
+    +applyVisibility(element, hidden): void
+  }
+
+  class RecordsUI {
+    +setupRecordsUI(): void
+    +refreshRecords(opts): Promise
+    +resetRecordsView(): void
+    +recycleTableBody(tbody): void
+  }
+
+  class ConfirmModal {
+    +setupConfirmModal(): void
+    +show(title,message): Promise
+    +hide(): void
+  }
+}
+
+package "Effects" {
+  class DynamicBackground {
+    +init(): void
+    +start(): void
+    +stop(): void
+    +render(): void
+  }
+}
+
+package "Utils" {
+  class Utils {
+    +logMessage(msg, level): void
+    +clamp(v,min,max): number
+    +lerp(a,b,t): number
+    +parseNullableDouble(raw): Double
+  }
+}
+
+' 关系
+UIManager --> AppState : reads/writes
+UIManager --> DOMCache : manipulates DOM
+UIManager --> FormManager : delegates form handling
+FormManager --> NetworkManager : sends requests
+FormManager --> RecordsUI : updates view after actions
+RecordsUI --> DOMCache : uses
+ConfirmModal --> DOMCache : uses
+DynamicBackground --> DOMCache : uses canvas element
+Utils <.. UIManager
+
+note right of FormManager
+  说明：前端不是面向类的 OOP 设计，但这里以模块/单例类化来便于 UML 表示。
+end note
+@enduml

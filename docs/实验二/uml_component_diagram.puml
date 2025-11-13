@@ -1,0 +1,81 @@
+@startuml
+title 组件图 - 系统模块划分（结构性图示例）
+
+package "Frontend (静态资源)" {
+  component "Index Page\n(resource/index.html)" as FrontIndex
+  component "Static Scripts/CSS\n(resource/scripts/*.js,\n resource/styles/*.css)" as FrontAssets
+  component "Dynamic Effects\n(dynamic-effects.js, canvas)" as DynamicEffects
+}
+
+package "Proxy 层" {
+  component "reverse_proxy.js\n(reverse proxy, route rules)" as ReverseProxy
+  component "http_to_tcp_proxy.js\n(HTTP <-> TCP gateway)" as HTTP_TCP_Proxy
+  component "ngrok / public tunnel\n(optional, ngrok_public_url.txt)" as Ngrok
+}
+
+package "Server Application (Java)" {
+  component "ReceiveService\n(Socket server, port 8080,\n thread-pool, request handler)" as ReceiveService
+  component "Request Parser\n(RequestManagement.parser,\n validate & route action)" as RequestParser
+  component "SQL Operations\n(RequestManagement.sqloperation,\n H2 DB at ./accounting_db)" as SQLOperations
+  component "Result Formatter\n(ResultManagement.ParseResult,\n build response string)" as ResultFormatter
+  component "Entry Model\n(sharedmodel.Entry)" as EntryModel
+  component "Main\n(acounting_system.Main,\n app bootstrap)" as Main
+}
+
+database "H2 Database" as H2DB {
+  
+}
+
+package "运维脚本" {
+  component "scripts/clear_db.ps1\n(clear DB via H2 SQL)" as ClearDBScript
+  component "scripts/start_proxy.ps1\n(start proxy processes)" as StartProxyScript
+  component "scripts/start_reverse_proxy.ps1" as StartReverseProxyScript
+}
+
+actor "Browser" as Browser
+
+' 静态资源加载关系
+FrontIndex --> FrontAssets : loads / includes
+FrontAssets --> DynamicEffects : uses (visual)
+
+' 网络路径（浏览器 -> 公网代理 -> 本地代理 -> 服务）
+Browser --> Ngrok : HTTPS (optional)
+Ngrok --> ReverseProxy : HTTP
+ReverseProxy --> HTTP_TCP_Proxy : route to internal port
+HTTP_TCP_Proxy --> ReceiveService : forward raw TCP/HTTP payload
+
+' 直接本地访问路径
+Browser --> FrontIndex : open resource/index.html
+DynamicEffects --> ReceiveService : websocket/tcp/http request (configurable)
+
+' 服务内部调用链
+ReceiveService --> RequestParser : forward raw request (String)
+RequestParser --> SQLOperations : CRUD calls (solveAdd, solveSearch, ...)
+SQLOperations --> EntryModel : map ResultSet <-> Entry
+SQLOperations --> H2DB : execute SQL (file: ./accounting_db)
+RequestParser --> ResultFormatter : create ParseResult
+ResultFormatter --> ReceiveService : formatted response string
+ReceiveService --> HTTP_TCP_Proxy : send response
+HTTP_TCP_Proxy --> ReverseProxy : send response to client
+
+' 运维脚本与管理
+StartProxyScript --> ReverseProxy : start/stop
+StartProxyScript --> HTTP_TCP_Proxy : start/stop
+ClearDBScript --> H2DB : maintenance (backup/clear)
+
+note left of SQLOperations
+  JDBC_URL = jdbc:h2:file:${workspace}/accounting_db; DB_CLOSE_DELAY=-1
+  Connection pooling: ThreadLocal per worker
+end note
+
+note right of ReverseProxy
+  reverse_proxy.js 可用于路由到多个后端实例，放置于边缘网络
+end note
+
+note bottom of Main
+  设计意图：
+  - 将代理和应用解耦，便于在不同网络拓扑（本地、内网、公网）下部署。
+  - ReceiveService 仅处理 socket 层的读写与线程管理，解析逻辑由 parser 负责，db 操作由 sqloperation 完成。
+  - 将静态资源与视觉特效前端模块分离，降低后端耦合。
+end note
+@enduml

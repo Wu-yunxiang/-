@@ -1,4 +1,6 @@
 (() => {
+    // === Part 1: 动态背景动画模块 ===
+
     const STORAGE_KEY = "dynamicBackgroundEnabled";
 
     const DynamicBackground = (() => {
@@ -11,7 +13,9 @@
         let resizeRaf = null;
         let running = false;
         let particles = [];
-        
+
+        // --- 状态与配置 ---
+
         // 性能优化：重用对象和数组
         const spatialPartition = {
             grid: new Map(),
@@ -62,6 +66,8 @@
             twinkleSpeedRange: [0.5, 1.4]
         };
 
+        // --- 初始化与生命周期 ---
+
         function init() {
             canvas = document.getElementById("dynamicBackground");
             if (!canvas) {
@@ -87,6 +93,58 @@
                 canvas.style.display = "none";
             }
         }
+
+        function start() {
+            if (running || !canvas) return;
+            running = true;
+            canvas.style.display = "";
+            lastTimestamp = performance.now();
+            animationId = requestAnimationFrame(loop);
+        }
+
+        function stop() {
+            if (!running || !canvas) return;
+            running = false;
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+                animationId = null;
+            }
+            ctx.clearRect(0, 0, width, height);
+            canvas.style.display = "none";
+        }
+
+        function handleVisibilityChange() {
+            if (document.hidden) {
+                pointer.active = false;
+                if (running) {
+                    stop();
+                }
+            } else if (isEnabled()) {
+                start();
+            }
+        }
+
+        function cleanup() {
+            stop();
+            if (resizeRaf) {
+                cancelAnimationFrame(resizeRaf);
+                resizeRaf = null;
+            }
+            if (pointerMoveRaf) {
+                cancelAnimationFrame(pointerMoveRaf);
+                pointerMoveRaf = null;
+            }
+
+            const passiveOptions = { passive: true };
+            window.removeEventListener("resize", scheduleResize, passiveOptions);
+            window.removeEventListener("pointermove", handlePointerMove, passiveOptions);
+            window.removeEventListener("pointerdown", handlePointerMove, passiveOptions);
+            window.removeEventListener("pointerleave", handlePointerLeave, passiveOptions);
+            window.removeEventListener("pointercancel", handlePointerLeave, passiveOptions);
+            document.removeEventListener("visibilitychange", handleVisibilityChange);
+        }
+
+        // --- 尺寸与粒子管理 ---
 
         function scheduleResize() {
             if (resizeRaf) {
@@ -159,6 +217,8 @@
                 glowIntensity: 9 + Math.random() * 10
             };
         }
+
+        // --- 动画循环与渲染 ---
 
         function update(delta) {
             const maxSpeed = CONFIG.speedLimit;
@@ -395,24 +455,7 @@
             animationId = requestAnimationFrame(loop);
         }
 
-        function start() {
-            if (running || !canvas) return;
-            running = true;
-            canvas.style.display = "";
-            lastTimestamp = performance.now();
-            animationId = requestAnimationFrame(loop);
-        }
-
-        function stop() {
-            if (!running || !canvas) return;
-            running = false;
-            if (animationId) {
-                cancelAnimationFrame(animationId);
-                animationId = null;
-            }
-            ctx.clearRect(0, 0, width, height);
-            canvas.style.display = "none";
-        }
+        // --- 指针交互 ---
 
         // 性能优化：防抖处理鼠标移动事件
         let pointerMoveRaf = null;
@@ -437,16 +480,7 @@
             pointer.active = false;
         }
 
-        function handleVisibilityChange() {
-            if (document.hidden) {
-                pointer.active = false;
-                if (running) {
-                    stop();
-                }
-            } else if (isEnabled()) {
-                start();
-            }
-        }
+        // --- 模块开关与工具 ---
 
         function enable() {
             localStorage.setItem(STORAGE_KEY, "true");
@@ -474,27 +508,6 @@
             return a + (b - a) * t;
         }
 
-        // 清理函数，防止内存泄漏
-        function cleanup() {
-            stop();
-            if (resizeRaf) {
-                cancelAnimationFrame(resizeRaf);
-                resizeRaf = null;
-            }
-            if (pointerMoveRaf) {
-                cancelAnimationFrame(pointerMoveRaf);
-                pointerMoveRaf = null;
-            }
-            
-            const passiveOptions = { passive: true };
-            window.removeEventListener("resize", scheduleResize, passiveOptions);
-            window.removeEventListener("pointermove", handlePointerMove, passiveOptions);
-            window.removeEventListener("pointerdown", handlePointerMove, passiveOptions);
-            window.removeEventListener("pointerleave", handlePointerLeave, passiveOptions);
-            window.removeEventListener("pointercancel", handlePointerLeave, passiveOptions);
-            document.removeEventListener("visibilitychange", handleVisibilityChange);
-        }
-
         return {
             init,
             enable,
@@ -503,6 +516,8 @@
             cleanup
         };
     })();
+
+    // === Part 2: 背景开关 UI ===
 
     const BackgroundToggle = (() => {
         function init() {
@@ -523,6 +538,8 @@
         return { init };
     })();
 
+    // === Part 3: 点击特效 ===
+
     const ClickEffects = (() => {
         // 保持增加的点击效果颜色亮度
         const COLORS = [
@@ -540,6 +557,8 @@
         let lastSpawnTime = 0;
         // 性能优化：重用数组和对象
         const activeTimers = new Set();
+
+        // --- 初始化与事件绑定 ---
 
         function init() {
             container = document.getElementById("clickEffects");
@@ -563,6 +582,8 @@
             spawnEffect(event.clientX, event.clientY);
         }
 
+        // --- 效果管理 ---
+
         function pruneEffects(maxActive) {
             if (!container) return;
             
@@ -578,6 +599,8 @@
                 oldest.remove();
             }
         }
+
+        // --- 动画生成 ---
 
         function spawnEffect(x, y) {
             const now = performance.now();
@@ -647,6 +670,8 @@
             }
         }
 
+        // --- 清理 ---
+
         // 清理函数，防止内存泄漏
         function cleanup() {
             if (container) {
@@ -669,6 +694,8 @@
             cleanup
         };
     })();
+
+    // === Part 4: 全局入口与清理 ===
 
     // 全局清理函数
     function cleanupAll() {

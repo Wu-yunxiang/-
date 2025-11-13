@@ -1,0 +1,84 @@
+
+@startuml
+title 活动图 - 所有操作的处理流程（行为性图示例）
+
+start
+ :接收原始请求 (socket/readLine);
+ if (空或格式错误?) then (yes)
+     :返回错误响应 (ParseResult unknown/错误提示);
+     stop
+else (no)
+     :解析 username 与 action;
+     split
+         if (action == add) then (yes)
+             :解析 amount/date/type/subject/note;
+             :构造 addrequest;
+             :调用 sqloperation.solveAdd(addrequest);
+             if (SQL 成功?) then (yes)
+                 :返回 add 成功响应;
+             else (no)
+                 :返回数据库错误响应;
+             endif
+         else (no)
+             if (action == register) then (yes)
+                 :检查参数 password;
+                 :构造 registerrequest;
+                 :调用 sqloperation.solveRegister(registerrequest);
+                 if (注册成功?) then (yes)
+                     :返回 register 成功响应;
+                 else (no)
+                     :返回已存在或失败响应;
+                 endif
+             else (no)
+                 if (action == login) then (yes)
+                     :检查参数 password;
+                     :调用 sqloperation.userExists(username);
+                     if (用户存在?) then (yes)
+                         :构造 loginrequest;
+                         :调用 sqloperation.solveLogin(loginrequest);
+                         if (登录成功?) then (yes)
+                             :返回 login 成功响应;
+                         else (no)
+                             :返回 密码错误 响应;
+                         endif
+                     else (no)
+                         :返回 用户名不存在 响应;
+                     endif
+                 else (no)
+                     if (action == search) then (yes)
+                         :解析 startDate/endDate/typeFilter/minAmount/maxAmount;
+                         :构造 searchrequest;
+                         :调用 sqloperation.solveSearch(searchrequest);
+                         :返回 search 的 entries 列表;
+                     else (no)
+                         if (action == list) then (yes)
+                             :调用 sqloperation.solveList(username);
+                             :返回 list 的 entries 列表;
+                         else (no)
+                             if (action == clear) then (yes)
+                                 :调用 sqloperation.solveClear(username);
+                                 :返回清除数量作为 message;
+                             else (no)
+                                 if (action == delete) then (yes)
+                                     :解析 entryId 参数;
+                                     :构造 deleterequest;
+                                     :调用 sqloperation.solveDelete(deleterequest);
+                                     if (删除成功?) then (yes)
+                                         :返回 delete 成功响应;
+                                     else (no)
+                                         :返回 未找到或删除失败 响应;
+                                     endif
+                                 else (no)
+                                     :未知操作 -> 返回未知操作响应;
+                                 endif
+                             endif
+                         endif
+                     endif
+                 endif
+             endif
+         endif
+     end split
+endif
+stop
+
+@enduml

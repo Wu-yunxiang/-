@@ -1,0 +1,108 @@
+@startuml
+title 后端类图 - Backend Classes
+
+package "acounting_system" {
+  class Main {
+    +main(String[]): void
+  }
+}
+
+package "communication" {
+  class ReceiveService {
+    -int port
+    -BiFunction<Socket,String,String> handler
+    +start(): void
+    +stop(): void
+  }
+}
+
+package "RequestManagement" {
+  class Parser {
+    +sqloperation sql
+    +Parser()
+    +parseRequest(String): ParseResult
+  }
+
+  class SqlOperation {
+    +initialize(): void
+    +solveAdd(AddRequest): Boolean
+    +solveRegister(RegisterRequest): Boolean
+    +solveLogin(LoginRequest): Boolean
+    +userExists(String): boolean
+    +solveSearch(SearchRequest): List<Entry>
+    +solveList(String): List<Entry>
+    +solveDelete(DeleteRequest): Boolean
+    +solveClear(String): int
+  }
+
+  class AddRequest {
+    +Entry entry
+    +AddRequest(String,double,String,String,String,String)
+  }
+  
+  class RegisterRequest { 
+    +String username
+    +String password 
+  }
+  
+  class LoginRequest { 
+    +String username
+    +String password 
+  }
+  
+  class SearchRequest { 
+    +String username
+    +String startDate
+    +String endDate
+    +String typeFilter
+    +Double minAmount
+    +Double maxAmount 
+  }
+  
+  class DeleteRequest { 
+    +String username
+    +long entryId 
+  }
+}
+
+package "ResultManagement" {
+  class ParseResult {
+    +String action
+    +Boolean success
+    +String message
+    +List<Entry> entries
+    +ParseResult(String,Boolean,String,List<Entry>)
+    +toString(): String
+  }
+}
+
+package "sharedmodel" {
+  class Entry {
+    +Long id
+    +String username
+    +double amount
+    +String type
+    +String date
+    +String subject
+    +String note
+    +Entry(Long,String,double,String,String,String,String)
+    +Entry(String,double,String,String,String,String)
+    +toString(): String
+  }
+}
+
+' 依赖关系
+Main --> ReceiveService
+ReceiveService --> Parser : handler -> parseRequest
+Parser --> SqlOperation : uses
+Parser --> ParseResult : creates
+SqlOperation ..> Entry : maps/returns
+
+' 请求类之间的关系
+AddRequest --> Entry : contains
+SqlOperation --> AddRequest : uses
+SqlOperation --> RegisterRequest : uses
+SqlOperation --> LoginRequest : uses
+SqlOperation --> SearchRequest : uses
+SqlOperation --> DeleteRequest : uses
+@enduml
