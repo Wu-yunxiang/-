@@ -1,0 +1,26 @@
+{
+    "1": {
+        "CWE": "CWE-319",
+        "name": "Cleartext Transmission of Sensitive Information",
+        "File": "proxy/http_to_tcp_proxy.js",
+        "Line": 155,
+        "At": "server.listen(HTTP_PORT, ...)",
+        "severity": "High"
+    },
+    "2": {
+        "CWE": "CWE-319",
+        "name": "Cleartext Transmission of Sensitive Information",
+        "File": "proxy/reverse_proxy.js",
+        "Line": 116,
+        "At": "server.listen(LISTEN_PORT, ...)",
+        "severity": "High"
+    },
+    "3": {
+        "CWE": "CWE-79",
+        "name": "Potential XSS via innerHTML",
+        "File": "resource/scripts/app.js",
+        "Line": 1126,
+        "At": "cell.innerHTML = text;",
+        "severity": "Medium"
+    }
+}

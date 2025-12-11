@@ -1,0 +1,10 @@
+{
+    "1": {
+        "CWE": "Style",
+        "name": "Unused Variable",
+        "File": "src/main/java/acounting_system/BuggyClass.java",
+        "Line": 31,
+        "At": "int unused = 10;",
+        "severity": "Low"
+    }
+}

@@ -1,0 +1,387 @@
+{
+    "1": {
+        "CWE": null,
+        "name": "Unused eslint-disable directive (no problems were reported from 'no-console').",
+        "File": "http_to_tcp_proxy.js",
+        "Line": 30,
+        "At": "// eslint-disable-next-line no-console"
+    },
+    "2": {
+        "CWE": "no-undef",
+        "name": "'Buffer' is not defined.",
+        "File": "http_to_tcp_proxy.js",
+        "Line": 38,
+        "At": "\"Content-Length\": Buffer.byteLength(body, \"utf8\"),"
+    },
+    "3": {
+        "CWE": "no-undef",
+        "name": "'setTimeout' is not defined.",
+        "File": "http_to_tcp_proxy.js",
+        "Line": 81,
+        "At": "const timeoutId = setTimeout(() => {"
+    },
+    "4": {
+        "CWE": "no-undef",
+        "name": "'clearTimeout' is not defined.",
+        "File": "http_to_tcp_proxy.js",
+        "Line": 96,
+        "At": "clearTimeout(timeoutId);"
+    },
+    "5": {
+        "CWE": "no-undef",
+        "name": "'clearTimeout' is not defined.",
+        "File": "http_to_tcp_proxy.js",
+        "Line": 117,
+        "At": "clearTimeout(timeoutId);"
+    },
+    "6": {
+        "CWE": "no-undef",
+        "name": "'Buffer' is not defined.",
+        "File": "http_to_tcp_proxy.js",
+        "Line": 118,
+        "At": "const responseBuffer = Buffer.concat(chunks);"
+    },
+    "7": {
+        "CWE": null,
+        "name": "Unused eslint-disable directive (no problems were reported from 'no-console').",
+        "File": "reverse_proxy.js",
+        "Line": 33,
+        "At": "// eslint-disable-next-line no-console"
+    },
+    "8": {
+        "CWE": "no-undef",
+        "name": "'Element' is not defined.",
+        "File": "app.js",
+        "Line": 163,
+        "At": "if (!(row instanceof Element)) return;"
+    },
+    "9": {
+        "CWE": "no-undef",
+        "name": "'clearTimeout' is not defined.",
+        "File": "app.js",
+        "Line": 174,
+        "At": "clearTimeout(timeout);"
+    },
+    "10": {
+        "CWE": "no-undef",
+        "name": "'setTimeout' is not defined.",
+        "File": "app.js",
+        "Line": 184,
+        "At": "const timeout = setTimeout(cleanup, 420);"
+    },
+    "11": {
+        "CWE": "no-undef",
+        "name": "'URL' is not defined.",
+        "File": "app.js",
+        "Line": 208,
+        "At": "networkState.endpoint = new URL(state.path, base);"
+    },
+    "12": {
+        "CWE": "no-undef",
+        "name": "'AbortController' is not defined.",
+        "File": "app.js",
+        "Line": 233,
+        "At": "const controller = new AbortController();"
+    },
+    "13": {
+        "CWE": "no-undef",
+        "name": "'fetch' is not defined.",
+        "File": "app.js",
+        "Line": 239,
+        "At": "const response = await fetch(endpoint.toString(), {"
+    },
+    "14": {
+        "CWE": "no-undef",
+        "name": "'Element' is not defined.",
+        "File": "app.js",
+        "Line": 380,
+        "At": "const tab = event.target instanceof Element ? event.target.closest(TAB_SELECTOR) : null;"
+    },
+    "15": {
+        "CWE": "no-undef",
+        "name": "'HTMLFormElement' is not defined.",
+        "File": "app.js",
+        "Line": 393,
+        "At": "if (!(form instanceof HTMLFormElement) || form.classList.contains(\"action-form\")) {"
+    },
+    "16": {
+        "CWE": "no-undef",
+        "name": "'HTMLElement' is not defined.",
+        "File": "app.js",
+        "Line": 463,
+        "At": "if (submitter instanceof HTMLElement && form.contains(submitter)) {"
+    },
+    "17": {
+        "CWE": "no-undef",
+        "name": "'HTMLElement' is not defined.",
+        "File": "app.js",
+        "Line": 467,
+        "At": "return fallback instanceof HTMLElement ? fallback : null;"
+    },
+    "18": {
+        "CWE": "no-undef",
+        "name": "'HTMLFormElement' is not defined.",
+        "File": "app.js",
+        "Line": 471,
+        "At": "if (!(form instanceof HTMLFormElement)) {"
+    },
+    "19": {
+        "CWE": "no-undef",
+        "name": "'HTMLElement' is not defined.",
+        "File": "app.js",
+        "Line": 475,
+        "At": "if (submitter instanceof HTMLElement && !buttons.includes(submitter)) {"
+    },
+    "20": {
+        "CWE": "no-undef",
+        "name": "'HTMLElement' is not defined.",
+        "File": "app.js",
+        "Line": 485,
+        "At": "if (!(button instanceof HTMLElement)) {"
+    },
+    "21": {
+        "CWE": "no-undef",
+        "name": "'HTMLButtonElement' is not defined.",
+        "File": "app.js",
+        "Line": 488,
+        "At": "if (button instanceof HTMLButtonElement || button instanceof HTMLInputElement) {"
+    },
+    "22": {
+        "CWE": "no-undef",
+        "name": "'HTMLInputElement' is not defined.",
+        "File": "app.js",
+        "Line": 488,
+        "At": "if (button instanceof HTMLButtonElement || button instanceof HTMLInputElement) {"
+    },
+    "23": {
+        "CWE": "no-undef",
+        "name": "'HTMLElement' is not defined.",
+        "File": "app.js",
+        "Line": 511,
+        "At": "const button = this instanceof HTMLElement ? this : (event?.currentTarget instanceof HTMLElement ? event.currentTarget : null);"
+    },
+    "24": {
+        "CWE": "no-undef",
+        "name": "'HTMLElement' is not defined.",
+        "File": "app.js",
+        "Line": 511,
+        "At": "const button = this instanceof HTMLElement ? this : (event?.currentTarget instanceof HTMLElement ? event.currentTarget : null);"
+    },
+    "25": {
+        "CWE": "no-undef",
+        "name": "'FormData' is not defined.",
+        "File": "app.js",
+        "Line": 541,
+        "At": "const { request, displayValues } = composePayload(action, new FormData(form));"
+    },
+    "26": {
+        "CWE": "no-undef",
+        "name": "'HTMLSelectElement' is not defined.",
+        "File": "app.js",
+        "Line": 609,
+        "At": "if (event && event.target instanceof HTMLSelectElement) {"
+    },
+    "27": {
+        "CWE": "no-undef",
+        "name": "'HTMLSelectElement' is not defined.",
+        "File": "app.js",
+        "Line": 615,
+        "At": "if (!(select instanceof HTMLSelectElement)) {"
+    },
+    "28": {
+        "CWE": "no-undef",
+        "name": "'HTMLSelectElement' is not defined.",
+        "File": "app.js",
+        "Line": 656,
+        "At": "if (!(select instanceof HTMLSelectElement)) {"
+    },
+    "29": {
+        "CWE": "no-undef",
+        "name": "'setTimeout' is not defined.",
+        "File": "app.js",
+        "Line": 662,
+        "At": "setTimeout(() => {"
+    },
+    "30": {
+        "CWE": "no-undef",
+        "name": "'HTMLSelectElement' is not defined.",
+        "File": "app.js",
+        "Line": 1365,
+        "At": "if (!(select instanceof HTMLSelectElement)) {"
+    },
+    "31": {
+        "CWE": "no-undef",
+        "name": "'HTMLButtonElement' is not defined.",
+        "File": "app.js",
+        "Line": 1382,
+        "At": "const triggerButton = event?.currentTarget instanceof HTMLButtonElement ? event.currentTarget : null;"
+    },
+    "32": {
+        "CWE": "no-undef",
+        "name": "'HTMLSelectElement' is not defined.",
+        "File": "app.js",
+        "Line": 1414,
+        "At": "if (!(select instanceof HTMLSelectElement)) {"
+    },
+    "33": {
+        "CWE": "no-undef",
+        "name": "'Element' is not defined.",
+        "File": "app.js",
+        "Line": 1437,
+        "At": "if (!(source instanceof Element)) {"
+    },
+    "34": {
+        "CWE": "no-undef",
+        "name": "'HTMLButtonElement' is not defined.",
+        "File": "app.js",
+        "Line": 1441,
+        "At": "if (!(button instanceof HTMLButtonElement) || button.disabled) {"
+    },
+    "35": {
+        "CWE": "no-undef",
+        "name": "'performance' is not defined.",
+        "File": "dynamic-effects.js",
+        "Line": 101,
+        "At": "lastTimestamp = performance.now();"
+    },
+    "36": {
+        "CWE": "no-undef",
+        "name": "'requestAnimationFrame' is not defined.",
+        "File": "dynamic-effects.js",
+        "Line": 102,
+        "At": "animationId = requestAnimationFrame(loop);"
+    },
+    "37": {
+        "CWE": "no-undef",
+        "name": "'cancelAnimationFrame' is not defined.",
+        "File": "dynamic-effects.js",
+        "Line": 109,
+        "At": "cancelAnimationFrame(animationId);"
+    },
+    "38": {
+        "CWE": "no-undef",
+        "name": "'cancelAnimationFrame' is not defined.",
+        "File": "dynamic-effects.js",
+        "Line": 130,
+        "At": "cancelAnimationFrame(resizeRaf);"
+    },
+    "39": {
+        "CWE": "no-undef",
+        "name": "'cancelAnimationFrame' is not defined.",
+        "File": "dynamic-effects.js",
+        "Line": 134,
+        "At": "cancelAnimationFrame(pointerMoveRaf);"
+    },
+    "40": {
+        "CWE": "no-undef",
+        "name": "'cancelAnimationFrame' is not defined.",
+        "File": "dynamic-effects.js",
+        "Line": 151,
+        "At": "cancelAnimationFrame(resizeRaf);"
+    },
+    "41": {
+        "CWE": "no-undef",
+        "name": "'requestAnimationFrame' is not defined.",
+        "File": "dynamic-effects.js",
+        "Line": 153,
+        "At": "resizeRaf = requestAnimationFrame(() => {"
+    },
+    "42": {
+        "CWE": "no-undef",
+        "name": "'requestAnimationFrame' is not defined.",
+        "File": "dynamic-effects.js",
+        "Line": 455,
+        "At": "animationId = requestAnimationFrame(loop);"
+    },
+    "43": {
+        "CWE": "no-undef",
+        "name": "'cancelAnimationFrame' is not defined.",
+        "File": "dynamic-effects.js",
+        "Line": 464,
+        "At": "cancelAnimationFrame(pointerMoveRaf);"
+    },
+    "44": {
+        "CWE": "no-undef",
+        "name": "'requestAnimationFrame' is not defined.",
+        "File": "dynamic-effects.js",
+        "Line": 466,
+        "At": "pointerMoveRaf = requestAnimationFrame(() => {"
+    },
+    "45": {
+        "CWE": "no-undef",
+        "name": "'localStorage' is not defined.",
+        "File": "dynamic-effects.js",
+        "Line": 486,
+        "At": "localStorage.setItem(STORAGE_KEY, \"true\");"
+    },
+    "46": {
+        "CWE": "no-undef",
+        "name": "'localStorage' is not defined.",
+        "File": "dynamic-effects.js",
+        "Line": 493,
+        "At": "localStorage.setItem(STORAGE_KEY, \"false\");"
+    },
+    "47": {
+        "CWE": "no-undef",
+        "name": "'localStorage' is not defined.",
+        "File": "dynamic-effects.js",
+        "Line": 499,
+        "At": "const stored = localStorage.getItem(STORAGE_KEY);"
+    },
+    "48": {
+        "CWE": "no-undef",
+        "name": "'HTMLElement' is not defined.",
+        "File": "dynamic-effects.js",
+        "Line": 592,
+        "At": "if (!(oldest instanceof HTMLElement)) break;"
+    },
+    "49": {
+        "CWE": "no-undef",
+        "name": "'clearTimeout' is not defined.",
+        "File": "dynamic-effects.js",
+        "Line": 596,
+        "At": "clearTimeout(Number(timerId));"
+    },
+    "50": {
+        "CWE": "no-undef",
+        "name": "'performance' is not defined.",
+        "File": "dynamic-effects.js",
+        "Line": 606,
+        "At": "const now = performance.now();"
+    },
+    "51": {
+        "CWE": "no-undef",
+        "name": "'setTimeout' is not defined.",
+        "File": "dynamic-effects.js",
+        "Line": 658,
+        "At": "const timerId = setTimeout(() => {"
+    },
+    "52": {
+        "CWE": "no-undef",
+        "name": "'clearTimeout' is not defined.",
+        "File": "dynamic-effects.js",
+        "Line": 685,
+        "At": "clearTimeout(timerId);"
+    },
+    "53": {
+        "CWE": "no-undef",
+        "name": "'clearTimeout' is not defined.",
+        "File": "app.js",
+        "Line": 1243,
+        "At": "clearTimeout(confirmState.hideTimer);"
+    },
+    "54": {
+        "CWE": "no-undef",
+        "name": "'requestAnimationFrame' is not defined.",
+        "File": "app.js",
+        "Line": 1281,
+        "At": "requestAnimationFrame(() => {"
+    },
+    "55": {
+        "CWE": "no-undef",
+        "name": "'clearTimeout' is not defined.",
+        "File": "app.js",
+        "Line": 1317,
+        "At": "clearTimeout(confirmState.hideTimer);"
+    }
+}

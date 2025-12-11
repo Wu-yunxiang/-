@@ -1,0 +1,58 @@
+{
+    "1": {
+        "CWE": "media-feature-name-no-vendor-prefix",
+        "name": "Unexpected vendor-prefix (media-feature-name-no-vendor-prefix)",
+        "File": "main.css",
+        "Line": 784,
+        "At": "@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {"
+    },
+    "2": {
+        "CWE": "property-no-vendor-prefix",
+        "name": "Unexpected vendor-prefixed property \"-webkit-appearance\" (property-no-vendor-prefix)",
+        "File": "main.css",
+        "Line": 255,
+        "At": "-webkit-appearance: none !important;"
+    },
+    "3": {
+        "CWE": "property-no-vendor-prefix",
+        "name": "Unexpected vendor-prefixed property \"-moz-appearance\" (property-no-vendor-prefix)",
+        "File": "main.css",
+        "Line": 256,
+        "At": "-moz-appearance: textfield !important;"
+    },
+    "4": {
+        "CWE": "property-no-vendor-prefix",
+        "name": "Unexpected vendor-prefixed property \"-webkit-appearance\" (property-no-vendor-prefix)",
+        "File": "main.css",
+        "Line": 264,
+        "At": "-webkit-appearance: none !important;"
+    },
+    "5": {
+        "CWE": "property-no-vendor-prefix",
+        "name": "Unexpected vendor-prefixed property \"-webkit-appearance\" (property-no-vendor-prefix)",
+        "File": "main.css",
+        "Line": 275,
+        "At": "-webkit-appearance: none;"
+    },
+    "6": {
+        "CWE": "property-no-vendor-prefix",
+        "name": "Unexpected vendor-prefixed property \"-moz-appearance\" (property-no-vendor-prefix)",
+        "File": "main.css",
+        "Line": 276,
+        "At": "-moz-appearance: none;"
+    },
+    "7": {
+        "CWE": "property-no-vendor-prefix",
+        "name": "Unexpected vendor-prefixed property \"-webkit-appearance\" (property-no-vendor-prefix)",
+        "File": "main.css",
+        "Line": 477,
+        "At": "-webkit-appearance: none;"
+    },
+    "8": {
+        "CWE": "property-no-vendor-prefix",
+        "name": "Unexpected vendor-prefixed property \"-moz-appearance\" (property-no-vendor-prefix)",
+        "File": "main.css",
+        "Line": 478,
+        "At": "-moz-appearance: none;"
+    }
+}

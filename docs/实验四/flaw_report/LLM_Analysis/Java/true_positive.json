@@ -1,0 +1,42 @@
+{
+    "1": {
+        "CWE": "CWE-476",
+        "name": "Null Pointer Dereference",
+        "File": "src/main/java/acounting_system/BuggyClass.java",
+        "Line": 13,
+        "At": "if (str.length() > 0) {",
+        "severity": "High"
+    },
+    "2": {
+        "CWE": "CWE-772",
+        "name": "Resource Leak",
+        "File": "src/main/java/acounting_system/BuggyClass.java",
+        "Line": 21,
+        "At": "FileInputStream fis = new FileInputStream(\"nonexistent_file.txt\");",
+        "severity": "High"
+    },
+    "3": {
+        "CWE": "CWE-835",
+        "name": "Infinite Loop",
+        "File": "src/main/java/acounting_system/BuggyClass.java",
+        "Line": 37,
+        "At": "while (i < 10) {",
+        "severity": "Medium"
+    },
+    "4": {
+        "CWE": "CWE-798",
+        "name": "Hardcoded Credentials",
+        "File": "src/main/java/RequestManagement/sqloperation.java",
+        "Line": 17,
+        "At": "public static String JDBC_PASSWORD = \"\";",
+        "severity": "Critical"
+    },
+    "5": {
+        "CWE": "CWE-89",
+        "name": "Potential SQL Injection",
+        "File": "src/main/java/RequestManagement/sqloperation.java",
+        "Line": 230,
+        "At": "String sql = \"SELECT * FROM entries WHERE username = '\" + username + \"'\";",
+        "severity": "Critical"
+    }
+}

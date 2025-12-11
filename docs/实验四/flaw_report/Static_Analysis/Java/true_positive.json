@@ -1,0 +1,51 @@
+{
+    "1": {
+        "CWE": "MS_SHOULD_BE_FINAL",
+        "name": "MALICIOUS_CODE",
+        "File": "RequestManagement/sqloperation.java",
+        "Line": 17,
+        "At": "public static String JDBC_PASSWORD = \"\";"
+    },
+    "2": {
+        "CWE": "MS_SHOULD_BE_FINAL",
+        "name": "MALICIOUS_CODE",
+        "File": "RequestManagement/sqloperation.java",
+        "Line": 16,
+        "At": "public static String JDBC_USER = \"sa\";"
+    },
+    "3": {
+        "CWE": "NP_ALWAYS_NULL",
+        "name": "CORRECTNESS",
+        "File": "acounting_system/BuggyClass.java",
+        "Line": 13,
+        "At": "if (str.length() > 0) {"
+    },
+    "4": {
+        "CWE": "OBL_UNSATISFIED_OBLIGATION",
+        "name": "EXPERIMENTAL",
+        "File": "acounting_system/BuggyClass.java",
+        "Line": 21,
+        "At": "FileInputStream fis = new FileInputStream(\"nonexistent_file.txt\");"
+    },
+    "5": {
+        "CWE": "OS_OPEN_STREAM",
+        "name": "BAD_PRACTICE",
+        "File": "acounting_system/BuggyClass.java",
+        "Line": 21,
+        "At": "FileInputStream fis = new FileInputStream(\"nonexistent_file.txt\");"
+    },
+    "6": {
+        "CWE": "RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE",
+        "name": "STYLE",
+        "File": "acounting_system/BuggyClass.java",
+        "Line": 51,
+        "At": "if (obj != null) {"
+    },
+    "7": {
+        "CWE": "RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE",
+        "name": "STYLE",
+        "File": "acounting_system/Main.java",
+        "Line": 14,
+        "At": "if (result == null) {"
+    }
+}

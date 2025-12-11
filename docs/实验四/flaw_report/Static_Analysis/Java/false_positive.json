@@ -1,0 +1,16 @@
+{
+    "1": {
+        "CWE": "NM_CLASS_NAMING_CONVENTION",
+        "name": "BAD_PRACTICE",
+        "File": "RequestManagement/parser.java",
+        "Line": 7,
+        "At": "public parser() {"
+    },
+    "2": {
+        "CWE": "NM_CLASS_NAMING_CONVENTION",
+        "name": "BAD_PRACTICE",
+        "File": "RequestManagement/sqloperation.java",
+        "Line": 13,
+        "At": "private static final Logger LOGGER = Logger.getLogger(sqloperation.class.getName());"
+    }
+}

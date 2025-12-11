@@ -1,0 +1,30 @@
+{
+    "1": {
+        "CWE": "Formal-Verification-Trace",
+        "name": "Captured 1 runtime events (No Error)",
+        "File": "proxy/http_to_tcp_proxy.js",
+        "Line": 1,
+        "At": "(Runtime Trace)"
+    },
+    "2": {
+        "CWE": "Formal-Verification-Trace",
+        "name": "Captured 1 runtime events (No Error)",
+        "File": "proxy/reverse_proxy.js",
+        "Line": 1,
+        "At": "(Runtime Trace)"
+    },
+    "3": {
+        "CWE": "Formal-Verification-Trace",
+        "name": "Captured 385 runtime events (No Error)",
+        "File": "resource/scripts/app.js",
+        "Line": 1,
+        "At": "(Runtime Trace)"
+    },
+    "4": {
+        "CWE": "Formal-Verification-Trace",
+        "name": "Captured 142 runtime events (No Error)",
+        "File": "resource/scripts/dynamic-effects.js",
+        "Line": 1,
+        "At": "(Runtime Trace)"
+    }
+}

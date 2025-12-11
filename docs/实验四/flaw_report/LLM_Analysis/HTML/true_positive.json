@@ -1,0 +1,10 @@
+{
+    "1": {
+        "CWE": "Best-Practice",
+        "name": "Button missing type attribute",
+        "File": "resource/index.html",
+        "Line": 22,
+        "At": "<button class=\"tab active\" ...>",
+        "severity": "Low"
+    }
+}

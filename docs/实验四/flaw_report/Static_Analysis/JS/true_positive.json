@@ -1,0 +1,156 @@
+{
+    "1": {
+        "CWE": "no-unused-vars",
+        "name": "'ACTION_FORM_SELECTOR' is assigned a value but never used.",
+        "File": "app.js",
+        "Line": 64,
+        "At": "const ACTION_FORM_SELECTOR = \".action-form\";"
+    },
+    "2": {
+        "CWE": "no-unused-vars",
+        "name": "'clearCachedId' is defined but never used.",
+        "File": "app.js",
+        "Line": 116,
+        "At": "function clearCachedId(id) {"
+    },
+    "3": {
+        "CWE": "no-unused-vars",
+        "name": "'e' is defined but never used.",
+        "File": "app.js",
+        "Line": 290,
+        "At": "} catch (e) {"
+    },
+    "4": {
+        "CWE": "no-unused-vars",
+        "name": "'e' is defined but never used.",
+        "File": "app.js",
+        "Line": 577,
+        "At": "} catch (e) {"
+    },
+    "5": {
+        "CWE": "no-unused-vars",
+        "name": "'e' is defined but never used.",
+        "File": "app.js",
+        "Line": 628,
+        "At": "} catch (e) {"
+    },
+    "6": {
+        "CWE": "no-unused-vars",
+        "name": "'disableSelectClickFocus' is defined but never used.",
+        "File": "app.js",
+        "Line": 638,
+        "At": "function disableSelectClickFocus() {"
+    },
+    "7": {
+        "CWE": "no-unused-vars",
+        "name": "'err' is defined but never used.",
+        "File": "app.js",
+        "Line": 665,
+        "At": "} catch (err) {"
+    },
+    "8": {
+        "CWE": "no-unused-vars",
+        "name": "'err' is defined but never used.",
+        "File": "app.js",
+        "Line": 669,
+        "At": "} catch (err) {"
+    },
+    "9": {
+        "CWE": "no-unused-vars",
+        "name": "'e' is defined but never used.",
+        "File": "app.js",
+        "Line": 1333,
+        "At": "} catch (e) {}"
+    },
+    "10": {
+        "CWE": "no-empty",
+        "name": "Empty block statement.",
+        "File": "app.js",
+        "Line": 1333,
+        "At": "} catch (e) {}"
+    },
+    "11": {
+        "CWE": "no-unused-vars",
+        "name": "'e' is defined but never used.",
+        "File": "app.js",
+        "Line": 1360,
+        "At": "} catch (e) {}"
+    },
+    "12": {
+        "CWE": "no-empty",
+        "name": "Empty block statement.",
+        "File": "app.js",
+        "Line": 1360,
+        "At": "} catch (e) {}"
+    },
+    "13": {
+        "CWE": "no-unused-vars",
+        "name": "'e' is defined but never used.",
+        "File": "app.js",
+        "Line": 1378,
+        "At": "} catch (e) {}"
+    },
+    "14": {
+        "CWE": "no-empty",
+        "name": "Empty block statement.",
+        "File": "app.js",
+        "Line": 1378,
+        "At": "} catch (e) {}"
+    },
+    "15": {
+        "CWE": "no-unused-vars",
+        "name": "'e' is defined but never used.",
+        "File": "app.js",
+        "Line": 1427,
+        "At": "} catch (e) {}"
+    },
+    "16": {
+        "CWE": "no-empty",
+        "name": "Empty block statement.",
+        "File": "app.js",
+        "Line": 1427,
+        "At": "} catch (e) {}"
+    },
+    "17": {
+        "CWE": "no-unused-vars",
+        "name": "'e' is defined but never used.",
+        "File": "app.js",
+        "Line": 1448,
+        "At": "} catch (e) {}"
+    },
+    "18": {
+        "CWE": "no-empty",
+        "name": "Empty block statement.",
+        "File": "app.js",
+        "Line": 1448,
+        "At": "} catch (e) {}"
+    },
+    "19": {
+        "CWE": "no-unused-vars",
+        "name": "'e' is defined but never used.",
+        "File": "app.js",
+        "Line": 1451,
+        "At": "} catch (e) {}"
+    },
+    "20": {
+        "CWE": "no-empty",
+        "name": "Empty block statement.",
+        "File": "app.js",
+        "Line": 1451,
+        "At": "} catch (e) {}"
+    },
+    "21": {
+        "CWE": "no-unused-vars",
+        "name": "'beforeLen' is assigned a value but never used.",
+        "File": "app.js",
+        "Line": 1681,
+        "At": "const beforeLen = state.records.length;"
+    },
+    "22": {
+        "CWE": "no-unused-vars",
+        "name": "'afterLen' is assigned a value but never used.",
+        "File": "app.js",
+        "Line": 1683,
+        "At": "const afterLen = state.records.length;"
+    }
+}

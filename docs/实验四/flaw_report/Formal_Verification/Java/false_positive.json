@@ -1,0 +1,177 @@
+{
+    "1": {
+        "CWE": "Formal-Verification-Failure",
+        "name": "Null pointer check",
+        "File": "acounting_system/BuggyClass.java",
+        "Line": 13,
+        "At": "if (str.length() > 0) {"
+    },
+    "2": {
+        "CWE": "Formal-Verification-Failure",
+        "name": "Null pointer check",
+        "File": "RequestManagement/sqloperation.java",
+        "Line": 29,
+        "At": "Statement stmt = initConn.createStatement()) {"
+    },
+    "3": {
+        "CWE": "Formal-Verification-Failure",
+        "name": "Null pointer check",
+        "File": "RequestManagement/sqloperation.java",
+        "Line": 14,
+        "At": "private static final Path DB_PATH = Paths.get(System.getProperty(\"user.dir\"), \"accounting_db\").toAbsolutePath();"
+    },
+    "4": {
+        "CWE": "Formal-Verification-Failure",
+        "name": "Null pointer check",
+        "File": "RequestManagement/sqloperation.java",
+        "Line": 15,
+        "At": "public static final String JDBC_URL = \"jdbc:h2:file:\" + DB_PATH.toString().replace(\"\\\\\", \"/\") + \";DB_CLOSE_DELAY=-1\";"
+    },
+    "5": {
+        "CWE": "Formal-Verification-Failure",
+        "name": "Null pointer check",
+        "File": "RequestManagement/sqloperation.java",
+        "Line": 15,
+        "At": "public static final String JDBC_URL = \"jdbc:h2:file:\" + DB_PATH.toString().replace(\"\\\\\", \"/\") + \";DB_CLOSE_DELAY=-1\";"
+    },
+    "6": {
+        "CWE": "Formal-Verification-Failure",
+        "name": "unwinding assertion loop 0",
+        "File": "RequestManagement/sqloperation.java",
+        "Line": 58,
+        "At": "for (String sql : initSQLs) {"
+    },
+    "7": {
+        "CWE": "Formal-Verification-Failure",
+        "name": "Null pointer check",
+        "File": "communication/ReceiveService.java",
+        "Line": 39,
+        "At": "int corePoolSize = Math.max(2, Runtime.getRuntime().availableProcessors());"
+    },
+    "8": {
+        "CWE": "Formal-Verification-Failure",
+        "name": "no uncaught exception",
+        "File": "communication/ReceiveService.java",
+        "Line": 33,
+        "At": "if (running) {"
+    },
+    "9": {
+        "CWE": "Formal-Verification-Failure",
+        "name": "unwinding assertion loop 0",
+        "File": "communication/ReceiveService.java",
+        "Line": 42,
+        "At": "while (running) {"
+    },
+    "10": {
+        "CWE": "Formal-Verification-Failure",
+        "name": "Null pointer check",
+        "File": "acounting_system/BuggyClass.java",
+        "Line": 13,
+        "At": "if (str.length() > 0) {"
+    },
+    "11": {
+        "CWE": "Formal-Verification-Failure",
+        "name": "Null pointer check",
+        "File": "RequestManagement/parser.java",
+        "Line": 50,
+        "At": "if (parts.length < 4) {"
+    },
+    "12": {
+        "CWE": "Formal-Verification-Failure",
+        "name": "Null pointer check",
+        "File": "RequestManagement/parser.java",
+        "Line": 88,
+        "At": "if (parts.length < 3) {"
+    },
+    "13": {
+        "CWE": "Formal-Verification-Failure",
+        "name": "Null pointer check",
+        "File": "RequestManagement/parser.java",
+        "Line": 78,
+        "At": "if (parts.length < 3) {"
+    },
+    "14": {
+        "CWE": "Formal-Verification-Failure",
+        "name": "Null pointer check",
+        "File": "RequestManagement/parser.java",
+        "Line": 108,
+        "At": "String startDate = parts.length > 2 ? parts[2] : \"\";"
+    },
+    "15": {
+        "CWE": "Formal-Verification-Failure",
+        "name": "Null pointer check",
+        "File": "RequestManagement/parser.java",
+        "Line": 115,
+        "At": "return new ParseResult(\"search\", null, null, sql.solveSearch(Search));"
+    },
+    "16": {
+        "CWE": "Formal-Verification-Failure",
+        "name": "Null pointer check",
+        "File": "RequestManagement/sqloperation.java",
+        "Line": 210,
+        "At": "try (PreparedStatement query = c.prepareStatement(sql.toString())) {"
+    },
+    "17": {
+        "CWE": "Formal-Verification-Failure",
+        "name": "Null pointer check",
+        "File": "RequestManagement/sqloperation.java",
+        "Line": 215,
+        "At": "try (ResultSet rs = query.executeQuery()) {"
+    },
+    "18": {
+        "CWE": "Formal-Verification-Failure",
+        "name": "Null pointer check",
+        "File": "RequestManagement/sqloperation.java",
+        "Line": 216,
+        "At": "while (rs.next()) {"
+    },
+    "19": {
+        "CWE": "Formal-Verification-Failure",
+        "name": "Dynamic cast check",
+        "File": "RequestManagement/sqloperation.java",
+        "Line": 69,
+        "At": "Connection conn = connectionThreadLocal.get();"
+    },
+    "20": {
+        "CWE": "Formal-Verification-Failure",
+        "name": "Dynamic cast check",
+        "File": "RequestManagement/sqloperation.java",
+        "Line": 79,
+        "At": "Connection conn = connectionThreadLocal.get();"
+    },
+    "21": {
+        "CWE": "Formal-Verification-Failure",
+        "name": "Null pointer check",
+        "File": "RequestManagement/sqloperation.java",
+        "Line": 14,
+        "At": "private static final Path DB_PATH = Paths.get(System.getProperty(\"user.dir\"), \"accounting_db\").toAbsolutePath();"
+    },
+    "22": {
+        "CWE": "Formal-Verification-Failure",
+        "name": "Null pointer check",
+        "File": "RequestManagement/sqloperation.java",
+        "Line": 15,
+        "At": "public static final String JDBC_URL = \"jdbc:h2:file:\" + DB_PATH.toString().replace(\"\\\\\", \"/\") + \";DB_CLOSE_DELAY=-1\";"
+    },
+    "23": {
+        "CWE": "Formal-Verification-Failure",
+        "name": "Null pointer check",
+        "File": "RequestManagement/sqloperation.java",
+        "Line": 15,
+        "At": "public static final String JDBC_URL = \"jdbc:h2:file:\" + DB_PATH.toString().replace(\"\\\\\", \"/\") + \";DB_CLOSE_DELAY=-1\";"
+    },
+    "24": {
+        "CWE": "Formal-Verification-Failure",
+        "name": "unwinding assertion loop 0",
+        "File": "RequestManagement/sqloperation.java",
+        "Line": 212,
+        "At": "query.setObject(i + 1, parameters.get(i));"
+    },
+    "25": {
+        "CWE": "Formal-Verification-Failure",
+        "name": "unwinding assertion loop 1",
+        "File": "RequestManagement/sqloperation.java",
+        "Line": 217,
+        "At": "results.add(mapEntry(rs));"
+    }
+}

@@ -1,0 +1,2396 @@
+{
+    "1": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.14\" to be \"14%\" (alpha-value-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 18,
+        "At": "rgba(80,105,150,0.14) 0%,"
+    },
+    "2": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.035\" to be \"3.5%\" (alpha-value-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 19,
+        "At": "rgba(255,220,160,0.035) 12%,"
+    },
+    "3": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.06\" to be \"6%\" (alpha-value-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 22,
+        "At": "radial-gradient(1200px 600px at 90% 80%, rgba(120,70,160,0.06), transparent 10%),"
+    },
+    "4": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.02\" to be \"2%\" (alpha-value-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 25,
+        "At": "radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.02) 50%, transparent 50%),"
+    },
+    "5": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.006\" to be \"0.6%\" (alpha-value-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 26,
+        "At": "radial-gradient(1px 1px at 80% 10%, rgba(255,255,255,0.006) 50%, transparent 50%);"
+    },
+    "6": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.95\" to be \"95%\" (alpha-value-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 75,
+        "At": "background: var(--effect-color, rgba(255, 255, 255, 0.95));"
+    },
+    "7": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.85\" to be \"85%\" (alpha-value-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 76,
+        "At": "box-shadow: 0 0 14px var(--effect-color, rgba(255, 255, 255, 0.85));"
+    },
+    "8": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.85\" to be \"85%\" (alpha-value-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 97,
+        "At": "background: var(--effect-color, rgba(255, 255, 255, 0.85));"
+    },
+    "9": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.85\" to be \"85%\" (alpha-value-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 98,
+        "At": "box-shadow: 0 0 6px var(--effect-color, rgba(255, 255, 255, 0.85));"
+    },
+    "10": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.50\" to be \"50%\" (alpha-value-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 164,
+        "At": "background: rgba(18, 28, 44, 0.50);"
+    },
+    "11": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.04\" to be \"4%\" (alpha-value-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 166,
+        "At": "border: 1px solid rgba(255, 255, 255, 0.04);"
+    },
+    "12": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.95\" to be \"95%\" (alpha-value-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 167,
+        "At": "color: rgba(230, 240, 255, 0.95);"
+    },
+    "13": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.4\" to be \"40%\" (alpha-value-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 178,
+        "At": "box-shadow: 0 8px 32px rgba(3, 7, 18, 0.4);"
+    },
+    "14": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.95\" to be \"95%\" (alpha-value-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 193,
+        "At": "color: rgba(235, 245, 255, 0.95);"
+    },
+    "15": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.9\" to be \"90%\" (alpha-value-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 200,
+        "At": "color: rgba(200, 215, 235, 0.9);"
+    },
+    "16": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.92\" to be \"92%\" (alpha-value-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 211,
+        "At": "color: rgba(235, 245, 255, 0.92);"
+    },
+    "17": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.95\" to be \"95%\" (alpha-value-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 230,
+        "At": "color: rgba(235, 245, 255, 0.95);"
+    },
+    "18": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.95\" to be \"95%\" (alpha-value-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 231,
+        "At": "caret-color: rgba(235, 245, 255, 0.95);"
+    },
+    "19": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.65\" to be \"65%\" (alpha-value-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 261,
+        "At": "color: rgba(10, 18, 38, 0.65);"
+    },
+    "20": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.95\" to be \"95%\" (alpha-value-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 267,
+        "At": "color: rgba(235, 245, 255, 0.95);"
+    },
+    "21": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.85\" to be \"85%\" (alpha-value-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 273,
+        "At": "color: rgba(200,215,235,0.85);"
+    },
+    "22": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.14\" to be \"14%\" (alpha-value-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 282,
+        "At": "radial-gradient(800px 400px at 6% 10%, rgba(80,105,150,0.14), transparent 12%),"
+    },
+    "23": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.88\" to be \"88%\" (alpha-value-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 305,
+        "At": "color: rgba(28, 38, 52, 0.88);"
+    },
+    "24": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 18,
+        "At": "rgba(80,105,150,0.14) 0%,"
+    },
+    "25": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 19,
+        "At": "rgba(255,220,160,0.035) 12%,"
+    },
+    "26": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 22,
+        "At": "radial-gradient(1200px 600px at 90% 80%, rgba(120,70,160,0.06), transparent 10%),"
+    },
+    "27": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 25,
+        "At": "radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.02) 50%, transparent 50%),"
+    },
+    "28": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 26,
+        "At": "radial-gradient(1px 1px at 80% 10%, rgba(255,255,255,0.006) 50%, transparent 50%);"
+    },
+    "29": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 75,
+        "At": "background: var(--effect-color, rgba(255, 255, 255, 0.95));"
+    },
+    "30": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 76,
+        "At": "box-shadow: 0 0 14px var(--effect-color, rgba(255, 255, 255, 0.85));"
+    },
+    "31": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 97,
+        "At": "background: var(--effect-color, rgba(255, 255, 255, 0.85));"
+    },
+    "32": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 98,
+        "At": "box-shadow: 0 0 6px var(--effect-color, rgba(255, 255, 255, 0.85));"
+    },
+    "33": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 164,
+        "At": "background: rgba(18, 28, 44, 0.50);"
+    },
+    "34": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 166,
+        "At": "border: 1px solid rgba(255, 255, 255, 0.04);"
+    },
+    "35": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 167,
+        "At": "color: rgba(230, 240, 255, 0.95);"
+    },
+    "36": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 178,
+        "At": "box-shadow: 0 8px 32px rgba(3, 7, 18, 0.4);"
+    },
+    "37": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 193,
+        "At": "color: rgba(235, 245, 255, 0.95);"
+    },
+    "38": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 200,
+        "At": "color: rgba(200, 215, 235, 0.9);"
+    },
+    "39": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 211,
+        "At": "color: rgba(235, 245, 255, 0.92);"
+    },
+    "40": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 230,
+        "At": "color: rgba(235, 245, 255, 0.95);"
+    },
+    "41": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 231,
+        "At": "caret-color: rgba(235, 245, 255, 0.95);"
+    },
+    "42": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 261,
+        "At": "color: rgba(10, 18, 38, 0.65);"
+    },
+    "43": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 267,
+        "At": "color: rgba(235, 245, 255, 0.95);"
+    },
+    "44": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 273,
+        "At": "color: rgba(200,215,235,0.85);"
+    },
+    "45": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 282,
+        "At": "radial-gradient(800px 400px at 6% 10%, rgba(80,105,150,0.14), transparent 12%),"
+    },
+    "46": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 305,
+        "At": "color: rgba(28, 38, 52, 0.88);"
+    },
+    "47": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 18,
+        "At": "rgba(80,105,150,0.14) 0%,"
+    },
+    "48": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 19,
+        "At": "rgba(255,220,160,0.035) 12%,"
+    },
+    "49": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 22,
+        "At": "radial-gradient(1200px 600px at 90% 80%, rgba(120,70,160,0.06), transparent 10%),"
+    },
+    "50": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 25,
+        "At": "radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.02) 50%, transparent 50%),"
+    },
+    "51": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 26,
+        "At": "radial-gradient(1px 1px at 80% 10%, rgba(255,255,255,0.006) 50%, transparent 50%);"
+    },
+    "52": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 75,
+        "At": "background: var(--effect-color, rgba(255, 255, 255, 0.95));"
+    },
+    "53": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 76,
+        "At": "box-shadow: 0 0 14px var(--effect-color, rgba(255, 255, 255, 0.85));"
+    },
+    "54": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 97,
+        "At": "background: var(--effect-color, rgba(255, 255, 255, 0.85));"
+    },
+    "55": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 98,
+        "At": "box-shadow: 0 0 6px var(--effect-color, rgba(255, 255, 255, 0.85));"
+    },
+    "56": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 164,
+        "At": "background: rgba(18, 28, 44, 0.50);"
+    },
+    "57": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 166,
+        "At": "border: 1px solid rgba(255, 255, 255, 0.04);"
+    },
+    "58": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 167,
+        "At": "color: rgba(230, 240, 255, 0.95);"
+    },
+    "59": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 178,
+        "At": "box-shadow: 0 8px 32px rgba(3, 7, 18, 0.4);"
+    },
+    "60": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 193,
+        "At": "color: rgba(235, 245, 255, 0.95);"
+    },
+    "61": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 200,
+        "At": "color: rgba(200, 215, 235, 0.9);"
+    },
+    "62": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 211,
+        "At": "color: rgba(235, 245, 255, 0.92);"
+    },
+    "63": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 230,
+        "At": "color: rgba(235, 245, 255, 0.95);"
+    },
+    "64": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 231,
+        "At": "caret-color: rgba(235, 245, 255, 0.95);"
+    },
+    "65": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 261,
+        "At": "color: rgba(10, 18, 38, 0.65);"
+    },
+    "66": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 267,
+        "At": "color: rgba(235, 245, 255, 0.95);"
+    },
+    "67": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 273,
+        "At": "color: rgba(200,215,235,0.85);"
+    },
+    "68": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 282,
+        "At": "radial-gradient(800px 400px at 6% 10%, rgba(80,105,150,0.14), transparent 12%),"
+    },
+    "69": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 305,
+        "At": "color: rgba(28, 38, 52, 0.88);"
+    },
+    "70": {
+        "CWE": "declaration-empty-line-before",
+        "name": "Unexpected empty line before declaration (declaration-empty-line-before)",
+        "File": "dynamic-bg.css",
+        "Line": 28,
+        "At": "background-size: auto, auto, auto, 100px 100px, 200px 200px;"
+    },
+    "71": {
+        "CWE": "declaration-empty-line-before",
+        "name": "Expected empty line before declaration (declaration-empty-line-before)",
+        "File": "dynamic-bg.css",
+        "Line": 91,
+        "At": "position: absolute;"
+    },
+    "72": {
+        "CWE": "declaration-property-value-no-unknown",
+        "name": "Unexpected unknown value \"radial-gradient(1600px 800px at 6% 10%, \r\n            rgba(80,105,150,0.14) 0%,\r\n            rgba(255,220,160,0.035) 12%,\r\n            transparent 22%)\" for property \"background\" (declaration-property-value-no-unknown)",
+        "File": "dynamic-bg.css",
+        "Line": 17,
+        "At": "radial-gradient(1600px 800px at 6% 10%,"
+    },
+    "73": {
+        "CWE": "declaration-property-value-no-unknown",
+        "name": "Unexpected unknown value \"radial-gradient(800px 400px at 6% 10%, rgba(80,105,150,0.14), transparent 12%)\" for property \"background\" (declaration-property-value-no-unknown)",
+        "File": "dynamic-bg.css",
+        "Line": 282,
+        "At": "radial-gradient(800px 400px at 6% 10%, rgba(80,105,150,0.14), transparent 12%),"
+    },
+    "74": {
+        "CWE": "keyframes-name-pattern",
+        "name": "Expected keyframe name \"corePulse\" to be kebab-case (keyframes-name-pattern)",
+        "File": "dynamic-bg.css",
+        "Line": 108,
+        "At": "@keyframes corePulse {"
+    },
+    "75": {
+        "CWE": "keyframes-name-pattern",
+        "name": "Expected keyframe name \"glowFade\" to be kebab-case (keyframes-name-pattern)",
+        "File": "dynamic-bg.css",
+        "Line": 123,
+        "At": "@keyframes glowFade {"
+    },
+    "76": {
+        "CWE": "keyframes-name-pattern",
+        "name": "Expected keyframe name \"sparkFly\" to be kebab-case (keyframes-name-pattern)",
+        "File": "dynamic-bg.css",
+        "Line": 138,
+        "At": "@keyframes sparkFly {"
+    },
+    "77": {
+        "CWE": "media-feature-range-notation",
+        "name": "Expected \"context\" media feature range notation (media-feature-range-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 278,
+        "At": "@media (max-width: 768px) {"
+    },
+    "78": {
+        "CWE": "media-feature-range-notation",
+        "name": "Expected \"context\" media feature range notation (media-feature-range-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 296,
+        "At": "@media (min-width: 1200px) and (min-resolution: 192dpi) {"
+    },
+    "79": {
+        "CWE": "media-feature-range-notation",
+        "name": "Expected \"context\" media feature range notation (media-feature-range-notation)",
+        "File": "dynamic-bg.css",
+        "Line": 296,
+        "At": "@media (min-width: 1200px) and (min-resolution: 192dpi) {"
+    },
+    "80": {
+        "CWE": "no-descending-specificity",
+        "name": "Expected selector \"textarea\" to come before selector \".app-header textarea\", at line 221 (no-descending-specificity)",
+        "File": "dynamic-bg.css",
+        "Line": 241,
+        "At": "textarea,"
+    },
+    "81": {
+        "CWE": "no-descending-specificity",
+        "name": "Expected selector \"select\" to come before selector \".app-header select\", at line 221 (no-descending-specificity)",
+        "File": "dynamic-bg.css",
+        "Line": 242,
+        "At": "select {"
+    },
+    "82": {
+        "CWE": "rule-empty-line-before",
+        "name": "Expected empty line before rule (rule-empty-line-before)",
+        "File": "dynamic-bg.css",
+        "Line": 113,
+        "At": "60% {"
+    },
+    "83": {
+        "CWE": "rule-empty-line-before",
+        "name": "Expected empty line before rule (rule-empty-line-before)",
+        "File": "dynamic-bg.css",
+        "Line": 117,
+        "At": "100% {"
+    },
+    "84": {
+        "CWE": "rule-empty-line-before",
+        "name": "Expected empty line before rule (rule-empty-line-before)",
+        "File": "dynamic-bg.css",
+        "Line": 128,
+        "At": "70% {"
+    },
+    "85": {
+        "CWE": "rule-empty-line-before",
+        "name": "Expected empty line before rule (rule-empty-line-before)",
+        "File": "dynamic-bg.css",
+        "Line": 132,
+        "At": "100% {"
+    },
+    "86": {
+        "CWE": "rule-empty-line-before",
+        "name": "Expected empty line before rule (rule-empty-line-before)",
+        "File": "dynamic-bg.css",
+        "Line": 143,
+        "At": "100% {"
+    },
+    "87": {
+        "CWE": "selector-class-pattern",
+        "name": "Expected class selector \".click-effect__core\" to be kebab-case (selector-class-pattern)",
+        "File": "dynamic-bg.css",
+        "Line": 60,
+        "At": ".click-effect__core,"
+    },
+    "88": {
+        "CWE": "selector-class-pattern",
+        "name": "Expected class selector \".click-effect__glow\" to be kebab-case (selector-class-pattern)",
+        "File": "dynamic-bg.css",
+        "Line": 61,
+        "At": ".click-effect__glow {"
+    },
+    "89": {
+        "CWE": "selector-class-pattern",
+        "name": "Expected class selector \".click-effect__core\" to be kebab-case (selector-class-pattern)",
+        "File": "dynamic-bg.css",
+        "Line": 72,
+        "At": ".click-effect__core {"
+    },
+    "90": {
+        "CWE": "selector-class-pattern",
+        "name": "Expected class selector \".click-effect__glow\" to be kebab-case (selector-class-pattern)",
+        "File": "dynamic-bg.css",
+        "Line": 80,
+        "At": ".click-effect__glow {"
+    },
+    "91": {
+        "CWE": "selector-class-pattern",
+        "name": "Expected class selector \".click-effect__spark\" to be kebab-case (selector-class-pattern)",
+        "File": "dynamic-bg.css",
+        "Line": 88,
+        "At": ".click-effect__spark {"
+    },
+    "92": {
+        "CWE": "selector-class-pattern",
+        "name": "Expected class selector \".click-effect__core\" to be kebab-case (selector-class-pattern)",
+        "File": "dynamic-bg.css",
+        "Line": 313,
+        "At": ".click-effect__core,"
+    },
+    "93": {
+        "CWE": "selector-class-pattern",
+        "name": "Expected class selector \".click-effect__glow\" to be kebab-case (selector-class-pattern)",
+        "File": "dynamic-bg.css",
+        "Line": 314,
+        "At": ".click-effect__glow,"
+    },
+    "94": {
+        "CWE": "selector-class-pattern",
+        "name": "Expected class selector \".click-effect__spark\" to be kebab-case (selector-class-pattern)",
+        "File": "dynamic-bg.css",
+        "Line": 315,
+        "At": ".click-effect__spark {"
+    },
+    "95": {
+        "CWE": "selector-id-pattern",
+        "name": "Expected id selector \"#dynamicBackground\" to be kebab-case (selector-id-pattern)",
+        "File": "dynamic-bg.css",
+        "Line": 2,
+        "At": "#dynamicBackground {"
+    },
+    "96": {
+        "CWE": "selector-id-pattern",
+        "name": "Expected id selector \"#clickEffects\" to be kebab-case (selector-id-pattern)",
+        "File": "dynamic-bg.css",
+        "Line": 33,
+        "At": "#clickEffects {"
+    },
+    "97": {
+        "CWE": "selector-id-pattern",
+        "name": "Expected id selector \"#logPanel\" to be kebab-case (selector-id-pattern)",
+        "File": "dynamic-bg.css",
+        "Line": 250,
+        "At": "#logPanel,"
+    },
+    "98": {
+        "CWE": "selector-id-pattern",
+        "name": "Expected id selector \"#logPanel\" to be kebab-case (selector-id-pattern)",
+        "File": "dynamic-bg.css",
+        "Line": 251,
+        "At": "#logPanel li {"
+    },
+    "99": {
+        "CWE": "selector-id-pattern",
+        "name": "Expected id selector \"#dynamicBackground\" to be kebab-case (selector-id-pattern)",
+        "File": "dynamic-bg.css",
+        "Line": 279,
+        "At": "#dynamicBackground {"
+    },
+    "100": {
+        "CWE": "selector-id-pattern",
+        "name": "Expected id selector \"#dynamicBackground\" to be kebab-case (selector-id-pattern)",
+        "File": "dynamic-bg.css",
+        "Line": 297,
+        "At": "#dynamicBackground {"
+    },
+    "101": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.15\" to be \"15%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 5,
+        "At": "--primary-weak: rgba(60, 124, 255, 0.15);"
+    },
+    "102": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.08\" to be \"8%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 40,
+        "At": "box-shadow: 0 12px 24px rgba(15, 20, 35, 0.08);"
+    },
+    "103": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.55\" to be \"55%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 141,
+        "At": "background: rgba(255, 255, 255, 0.55);"
+    },
+    "104": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.35\" to be \"35%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 142,
+        "At": "border: 1px solid rgba(255, 255, 255, 0.35);"
+    },
+    "105": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.05\" to be \"5%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 143,
+        "At": "box-shadow: 0 10px 18px rgba(40, 60, 90, 0.05);"
+    },
+    "106": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.9\" to be \"90%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 169,
+        "At": "background: linear-gradient(135deg, rgba(60, 124, 255, 0.9), rgba(106, 160, 255, 0.9));"
+    },
+    "107": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.9\" to be \"90%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 169,
+        "At": "background: linear-gradient(135deg, rgba(60, 124, 255, 0.9), rgba(106, 160, 255, 0.9));"
+    },
+    "108": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.4\" to be \"40%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 172,
+        "At": "box-shadow: 0 14px 28px rgba(60, 124, 255, 0.4);"
+    },
+    "109": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.08\" to be \"8%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 185,
+        "At": "box-shadow: 0 14px 28px rgba(16, 30, 60, 0.08);"
+    },
+    "110": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.4\" to be \"40%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 293,
+        "At": "box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 8px 20px rgba(15,40,75,0.06);"
+    },
+    "111": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.06\" to be \"6%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 293,
+        "At": "box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 8px 20px rgba(15,40,75,0.06);"
+    },
+    "112": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.4\" to be \"40%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 299,
+        "At": "box-shadow: inset 0 1px 0 rgba(255,255,255,0.4);"
+    },
+    "113": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.35\" to be \"35%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 311,
+        "At": "box-shadow: 0 12px 24px rgba(60, 124, 255, 0.35);"
+    },
+    "114": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.18\" to be \"18%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 352,
+        "At": "text-shadow: 0 1px 0 rgba(0,0,0,0.18);"
+    },
+    "115": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.92\" to be \"92%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 420,
+        "At": "background: linear-gradient(135deg, rgba(24, 144, 199, 0.92), rgba(16, 115, 174, 0.96));"
+    },
+    "116": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.96\" to be \"96%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 420,
+        "At": "background: linear-gradient(135deg, rgba(24, 144, 199, 0.92), rgba(16, 115, 174, 0.96));"
+    },
+    "117": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.55\" to be \"55%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 421,
+        "At": "border: 1px solid rgba(120, 206, 255, 0.55);"
+    },
+    "118": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.6\" to be \"60%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 422,
+        "At": "box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 4px 10px rgba(13, 86, 135, 0.35);"
+    },
+    "119": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.35\" to be \"35%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 422,
+        "At": "box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 4px 10px rgba(13, 86, 135, 0.35);"
+    },
+    "120": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.95\" to be \"95%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 433,
+        "At": "background: linear-gradient(135deg, rgba(232, 77, 91, 0.95), rgba(197, 29, 56, 0.95));"
+    },
+    "121": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.95\" to be \"95%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 433,
+        "At": "background: linear-gradient(135deg, rgba(232, 77, 91, 0.95), rgba(197, 29, 56, 0.95));"
+    },
+    "122": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.45\" to be \"45%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 439,
+        "At": "box-shadow: 0 12px 26px rgba(210, 32, 60, 0.45);"
+    },
+    "123": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.55\" to be \"55%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 448,
+        "At": "box-shadow: 0 16px 32px rgba(210, 32, 60, 0.55);"
+    },
+    "124": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.85\" to be \"85%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 452,
+        "At": "outline: 2px solid rgba(255, 220, 220, 0.85);"
+    },
+    "125": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.92\" to be \"92%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 465,
+        "At": "background: linear-gradient(135deg, rgba(58, 162, 224, 0.92), rgba(41, 133, 206, 0.94));"
+    },
+    "126": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.94\" to be \"94%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 465,
+        "At": "background: linear-gradient(135deg, rgba(58, 162, 224, 0.92), rgba(41, 133, 206, 0.94));"
+    },
+    "127": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.35\" to be \"35%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 473,
+        "At": "box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 6px 16px rgba(19, 90, 150, 0.35);"
+    },
+    "128": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.35\" to be \"35%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 473,
+        "At": "box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 6px 16px rgba(19, 90, 150, 0.35);"
+    },
+    "129": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.3\" to be \"30%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 479,
+        "At": "background-image: linear-gradient(45deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 60%), url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='10'%3E%3Cpath d='M2 2l5 5 5-5' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E\");"
+    },
+    "130": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0\" to be \"0%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 479,
+        "At": "background-image: linear-gradient(45deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 60%), url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='10'%3E%3Cpath d='M2 2l5 5 5-5' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E\");"
+    },
+    "131": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.4\" to be \"40%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 497,
+        "At": "box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 8px 20px rgba(19, 90, 150, 0.45);"
+    },
+    "132": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.45\" to be \"45%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 497,
+        "At": "box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 8px 20px rgba(19, 90, 150, 0.45);"
+    },
+    "133": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.9\" to be \"90%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 501,
+        "At": "outline: 2px solid rgba(225, 245, 255, 0.9);"
+    },
+    "134": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.35\" to be \"35%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 506,
+        "At": "box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35),"
+    },
+    "135": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.32\" to be \"32%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 507,
+        "At": "0 12px 34px rgba(0, 200, 170, 0.32),"
+    },
+    "136": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.12\" to be \"12%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 508,
+        "At": "0 0 20px 6px rgba(0, 200, 170, 0.12);"
+    },
+    "137": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.55\" to be \"55%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 509,
+        "At": "border: 1px solid rgba(0, 200, 170, 0.55);"
+    },
+    "138": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.3\" to be \"30%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 512,
+        "At": "background-image: linear-gradient(45deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 60%),"
+    },
+    "139": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0\" to be \"0%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 512,
+        "At": "background-image: linear-gradient(45deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 60%),"
+    },
+    "140": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.6\" to be \"60%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 530,
+        "At": "box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);"
+    },
+    "141": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.45\" to be \"45%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 572,
+        "At": "border: 1px solid rgba(255, 255, 255, 0.45);"
+    },
+    "142": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.2\" to be \"20%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 573,
+        "At": "background: rgba(255, 255, 255, 0.2);"
+    },
+    "143": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.3\" to be \"30%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 585,
+        "At": "background: rgba(255, 255, 255, 0.3);"
+    },
+    "144": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.32\" to be \"32%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 604,
+        "At": "box-shadow: 0 8px 18px rgba(217, 106, 106, 0.32);"
+    },
+    "145": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.8\" to be \"80%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 615,
+        "At": "color: rgba(15, 26, 52, 0.8);"
+    },
+    "146": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.55\" to be \"55%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 616,
+        "At": "border-color: rgba(255, 255, 255, 0.55);"
+    },
+    "147": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.85\" to be \"85%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 617,
+        "At": "background: rgba(255, 255, 255, 0.85);"
+    },
+    "148": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.18\" to be \"18%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 618,
+        "At": "box-shadow: 0 8px 18px rgba(16, 28, 52, 0.18);"
+    },
+    "149": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.95\" to be \"95%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 622,
+        "At": "background: rgba(255, 255, 255, 0.95);"
+    },
+    "150": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.55\" to be \"55%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 631,
+        "At": "background: rgba(9, 16, 32, 0.55);"
+    },
+    "151": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.72\" to be \"72%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 647,
+        "At": "background: rgba(68, 10, 20, 0.72);"
+    },
+    "152": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.96\" to be \"96%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 652,
+        "At": "background: linear-gradient(145deg, rgba(17, 28, 48, 0.96), rgba(27, 38, 64, 0.96));"
+    },
+    "153": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.96\" to be \"96%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 652,
+        "At": "background: linear-gradient(145deg, rgba(17, 28, 48, 0.96), rgba(27, 38, 64, 0.96));"
+    },
+    "154": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.45\" to be \"45%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 655,
+        "At": "box-shadow: 0 30px 60px rgba(6, 12, 28, 0.45);"
+    },
+    "155": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.1\" to be \"10%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 656,
+        "At": "border: 1px solid rgba(255, 255, 255, 0.1);"
+    },
+    "156": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.98\" to be \"98%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 662,
+        "At": "background: linear-gradient(155deg, rgba(52, 9, 16, 0.98), rgba(28, 8, 14, 0.96));"
+    },
+    "157": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.96\" to be \"96%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 662,
+        "At": "background: linear-gradient(155deg, rgba(52, 9, 16, 0.98), rgba(28, 8, 14, 0.96));"
+    },
+    "158": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.35\" to be \"35%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 663,
+        "At": "border: 1px solid rgba(255, 115, 137, 0.35);"
+    },
+    "159": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.6\" to be \"60%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 664,
+        "At": "box-shadow: 0 40px 72px rgba(90, 8, 18, 0.6);"
+    },
+    "160": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.92\" to be \"92%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 673,
+        "At": "color: rgba(255, 224, 228, 0.92);"
+    },
+    "161": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.9\" to be \"90%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 685,
+        "At": "color: rgba(230, 238, 255, 0.9);"
+    },
+    "162": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.98\" to be \"98%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 696,
+        "At": "background: linear-gradient(140deg, rgba(235, 85, 102, 0.98), rgba(216, 40, 64, 0.98));"
+    },
+    "163": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.98\" to be \"98%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 696,
+        "At": "background: linear-gradient(140deg, rgba(235, 85, 102, 0.98), rgba(216, 40, 64, 0.98));"
+    },
+    "164": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.55\" to be \"55%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 697,
+        "At": "box-shadow: 0 14px 28px rgba(216, 40, 64, 0.55);"
+    },
+    "165": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.65\" to be \"65%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 702,
+        "At": "box-shadow: 0 18px 36px rgba(216, 40, 64, 0.65);"
+    },
+    "166": {
+        "CWE": "alpha-value-notation",
+        "name": "Expected \"0.08\" to be \"8%\" (alpha-value-notation)",
+        "File": "main.css",
+        "Line": 715,
+        "At": "box-shadow: 0 12px 24px rgba(10, 20, 40, 0.08);"
+    },
+    "167": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 5,
+        "At": "--primary-weak: rgba(60, 124, 255, 0.15);"
+    },
+    "168": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 40,
+        "At": "box-shadow: 0 12px 24px rgba(15, 20, 35, 0.08);"
+    },
+    "169": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 141,
+        "At": "background: rgba(255, 255, 255, 0.55);"
+    },
+    "170": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 142,
+        "At": "border: 1px solid rgba(255, 255, 255, 0.35);"
+    },
+    "171": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 143,
+        "At": "box-shadow: 0 10px 18px rgba(40, 60, 90, 0.05);"
+    },
+    "172": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 169,
+        "At": "background: linear-gradient(135deg, rgba(60, 124, 255, 0.9), rgba(106, 160, 255, 0.9));"
+    },
+    "173": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 169,
+        "At": "background: linear-gradient(135deg, rgba(60, 124, 255, 0.9), rgba(106, 160, 255, 0.9));"
+    },
+    "174": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 172,
+        "At": "box-shadow: 0 14px 28px rgba(60, 124, 255, 0.4);"
+    },
+    "175": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 185,
+        "At": "box-shadow: 0 14px 28px rgba(16, 30, 60, 0.08);"
+    },
+    "176": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 293,
+        "At": "box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 8px 20px rgba(15,40,75,0.06);"
+    },
+    "177": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 293,
+        "At": "box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 8px 20px rgba(15,40,75,0.06);"
+    },
+    "178": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 299,
+        "At": "box-shadow: inset 0 1px 0 rgba(255,255,255,0.4);"
+    },
+    "179": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 311,
+        "At": "box-shadow: 0 12px 24px rgba(60, 124, 255, 0.35);"
+    },
+    "180": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 352,
+        "At": "text-shadow: 0 1px 0 rgba(0,0,0,0.18);"
+    },
+    "181": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 420,
+        "At": "background: linear-gradient(135deg, rgba(24, 144, 199, 0.92), rgba(16, 115, 174, 0.96));"
+    },
+    "182": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 420,
+        "At": "background: linear-gradient(135deg, rgba(24, 144, 199, 0.92), rgba(16, 115, 174, 0.96));"
+    },
+    "183": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 421,
+        "At": "border: 1px solid rgba(120, 206, 255, 0.55);"
+    },
+    "184": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 422,
+        "At": "box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 4px 10px rgba(13, 86, 135, 0.35);"
+    },
+    "185": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 422,
+        "At": "box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 4px 10px rgba(13, 86, 135, 0.35);"
+    },
+    "186": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 433,
+        "At": "background: linear-gradient(135deg, rgba(232, 77, 91, 0.95), rgba(197, 29, 56, 0.95));"
+    },
+    "187": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 433,
+        "At": "background: linear-gradient(135deg, rgba(232, 77, 91, 0.95), rgba(197, 29, 56, 0.95));"
+    },
+    "188": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 439,
+        "At": "box-shadow: 0 12px 26px rgba(210, 32, 60, 0.45);"
+    },
+    "189": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 448,
+        "At": "box-shadow: 0 16px 32px rgba(210, 32, 60, 0.55);"
+    },
+    "190": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 452,
+        "At": "outline: 2px solid rgba(255, 220, 220, 0.85);"
+    },
+    "191": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 465,
+        "At": "background: linear-gradient(135deg, rgba(58, 162, 224, 0.92), rgba(41, 133, 206, 0.94));"
+    },
+    "192": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 465,
+        "At": "background: linear-gradient(135deg, rgba(58, 162, 224, 0.92), rgba(41, 133, 206, 0.94));"
+    },
+    "193": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 473,
+        "At": "box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 6px 16px rgba(19, 90, 150, 0.35);"
+    },
+    "194": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 473,
+        "At": "box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 6px 16px rgba(19, 90, 150, 0.35);"
+    },
+    "195": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 479,
+        "At": "background-image: linear-gradient(45deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 60%), url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='10'%3E%3Cpath d='M2 2l5 5 5-5' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E\");"
+    },
+    "196": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 479,
+        "At": "background-image: linear-gradient(45deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 60%), url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='10'%3E%3Cpath d='M2 2l5 5 5-5' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E\");"
+    },
+    "197": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 497,
+        "At": "box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 8px 20px rgba(19, 90, 150, 0.45);"
+    },
+    "198": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 497,
+        "At": "box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 8px 20px rgba(19, 90, 150, 0.45);"
+    },
+    "199": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 501,
+        "At": "outline: 2px solid rgba(225, 245, 255, 0.9);"
+    },
+    "200": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 506,
+        "At": "box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35),"
+    },
+    "201": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 507,
+        "At": "0 12px 34px rgba(0, 200, 170, 0.32),"
+    },
+    "202": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 508,
+        "At": "0 0 20px 6px rgba(0, 200, 170, 0.12);"
+    },
+    "203": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 509,
+        "At": "border: 1px solid rgba(0, 200, 170, 0.55);"
+    },
+    "204": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 512,
+        "At": "background-image: linear-gradient(45deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 60%),"
+    },
+    "205": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 512,
+        "At": "background-image: linear-gradient(45deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 60%),"
+    },
+    "206": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 530,
+        "At": "box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);"
+    },
+    "207": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 572,
+        "At": "border: 1px solid rgba(255, 255, 255, 0.45);"
+    },
+    "208": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 573,
+        "At": "background: rgba(255, 255, 255, 0.2);"
+    },
+    "209": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 585,
+        "At": "background: rgba(255, 255, 255, 0.3);"
+    },
+    "210": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 604,
+        "At": "box-shadow: 0 8px 18px rgba(217, 106, 106, 0.32);"
+    },
+    "211": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 615,
+        "At": "color: rgba(15, 26, 52, 0.8);"
+    },
+    "212": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 616,
+        "At": "border-color: rgba(255, 255, 255, 0.55);"
+    },
+    "213": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 617,
+        "At": "background: rgba(255, 255, 255, 0.85);"
+    },
+    "214": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 618,
+        "At": "box-shadow: 0 8px 18px rgba(16, 28, 52, 0.18);"
+    },
+    "215": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 622,
+        "At": "background: rgba(255, 255, 255, 0.95);"
+    },
+    "216": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 631,
+        "At": "background: rgba(9, 16, 32, 0.55);"
+    },
+    "217": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 647,
+        "At": "background: rgba(68, 10, 20, 0.72);"
+    },
+    "218": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 652,
+        "At": "background: linear-gradient(145deg, rgba(17, 28, 48, 0.96), rgba(27, 38, 64, 0.96));"
+    },
+    "219": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 652,
+        "At": "background: linear-gradient(145deg, rgba(17, 28, 48, 0.96), rgba(27, 38, 64, 0.96));"
+    },
+    "220": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 655,
+        "At": "box-shadow: 0 30px 60px rgba(6, 12, 28, 0.45);"
+    },
+    "221": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 656,
+        "At": "border: 1px solid rgba(255, 255, 255, 0.1);"
+    },
+    "222": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 662,
+        "At": "background: linear-gradient(155deg, rgba(52, 9, 16, 0.98), rgba(28, 8, 14, 0.96));"
+    },
+    "223": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 662,
+        "At": "background: linear-gradient(155deg, rgba(52, 9, 16, 0.98), rgba(28, 8, 14, 0.96));"
+    },
+    "224": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 663,
+        "At": "border: 1px solid rgba(255, 115, 137, 0.35);"
+    },
+    "225": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 664,
+        "At": "box-shadow: 0 40px 72px rgba(90, 8, 18, 0.6);"
+    },
+    "226": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 673,
+        "At": "color: rgba(255, 224, 228, 0.92);"
+    },
+    "227": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 685,
+        "At": "color: rgba(230, 238, 255, 0.9);"
+    },
+    "228": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 696,
+        "At": "background: linear-gradient(140deg, rgba(235, 85, 102, 0.98), rgba(216, 40, 64, 0.98));"
+    },
+    "229": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 696,
+        "At": "background: linear-gradient(140deg, rgba(235, 85, 102, 0.98), rgba(216, 40, 64, 0.98));"
+    },
+    "230": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 697,
+        "At": "box-shadow: 0 14px 28px rgba(216, 40, 64, 0.55);"
+    },
+    "231": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 702,
+        "At": "box-shadow: 0 18px 36px rgba(216, 40, 64, 0.65);"
+    },
+    "232": {
+        "CWE": "color-function-alias-notation",
+        "name": "Expected \"rgba\" to be \"rgb\" (color-function-alias-notation)",
+        "File": "main.css",
+        "Line": 715,
+        "At": "box-shadow: 0 12px 24px rgba(10, 20, 40, 0.08);"
+    },
+    "233": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 5,
+        "At": "--primary-weak: rgba(60, 124, 255, 0.15);"
+    },
+    "234": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 40,
+        "At": "box-shadow: 0 12px 24px rgba(15, 20, 35, 0.08);"
+    },
+    "235": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 141,
+        "At": "background: rgba(255, 255, 255, 0.55);"
+    },
+    "236": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 142,
+        "At": "border: 1px solid rgba(255, 255, 255, 0.35);"
+    },
+    "237": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 143,
+        "At": "box-shadow: 0 10px 18px rgba(40, 60, 90, 0.05);"
+    },
+    "238": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 169,
+        "At": "background: linear-gradient(135deg, rgba(60, 124, 255, 0.9), rgba(106, 160, 255, 0.9));"
+    },
+    "239": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 169,
+        "At": "background: linear-gradient(135deg, rgba(60, 124, 255, 0.9), rgba(106, 160, 255, 0.9));"
+    },
+    "240": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 172,
+        "At": "box-shadow: 0 14px 28px rgba(60, 124, 255, 0.4);"
+    },
+    "241": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 185,
+        "At": "box-shadow: 0 14px 28px rgba(16, 30, 60, 0.08);"
+    },
+    "242": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 293,
+        "At": "box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 8px 20px rgba(15,40,75,0.06);"
+    },
+    "243": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 293,
+        "At": "box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 8px 20px rgba(15,40,75,0.06);"
+    },
+    "244": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 299,
+        "At": "box-shadow: inset 0 1px 0 rgba(255,255,255,0.4);"
+    },
+    "245": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 311,
+        "At": "box-shadow: 0 12px 24px rgba(60, 124, 255, 0.35);"
+    },
+    "246": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 352,
+        "At": "text-shadow: 0 1px 0 rgba(0,0,0,0.18);"
+    },
+    "247": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 420,
+        "At": "background: linear-gradient(135deg, rgba(24, 144, 199, 0.92), rgba(16, 115, 174, 0.96));"
+    },
+    "248": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 420,
+        "At": "background: linear-gradient(135deg, rgba(24, 144, 199, 0.92), rgba(16, 115, 174, 0.96));"
+    },
+    "249": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 421,
+        "At": "border: 1px solid rgba(120, 206, 255, 0.55);"
+    },
+    "250": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 422,
+        "At": "box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 4px 10px rgba(13, 86, 135, 0.35);"
+    },
+    "251": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 422,
+        "At": "box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 4px 10px rgba(13, 86, 135, 0.35);"
+    },
+    "252": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 433,
+        "At": "background: linear-gradient(135deg, rgba(232, 77, 91, 0.95), rgba(197, 29, 56, 0.95));"
+    },
+    "253": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 433,
+        "At": "background: linear-gradient(135deg, rgba(232, 77, 91, 0.95), rgba(197, 29, 56, 0.95));"
+    },
+    "254": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 439,
+        "At": "box-shadow: 0 12px 26px rgba(210, 32, 60, 0.45);"
+    },
+    "255": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 448,
+        "At": "box-shadow: 0 16px 32px rgba(210, 32, 60, 0.55);"
+    },
+    "256": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 452,
+        "At": "outline: 2px solid rgba(255, 220, 220, 0.85);"
+    },
+    "257": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 465,
+        "At": "background: linear-gradient(135deg, rgba(58, 162, 224, 0.92), rgba(41, 133, 206, 0.94));"
+    },
+    "258": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 465,
+        "At": "background: linear-gradient(135deg, rgba(58, 162, 224, 0.92), rgba(41, 133, 206, 0.94));"
+    },
+    "259": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 473,
+        "At": "box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 6px 16px rgba(19, 90, 150, 0.35);"
+    },
+    "260": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 473,
+        "At": "box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 6px 16px rgba(19, 90, 150, 0.35);"
+    },
+    "261": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 479,
+        "At": "background-image: linear-gradient(45deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 60%), url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='10'%3E%3Cpath d='M2 2l5 5 5-5' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E\");"
+    },
+    "262": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 479,
+        "At": "background-image: linear-gradient(45deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 60%), url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='10'%3E%3Cpath d='M2 2l5 5 5-5' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E\");"
+    },
+    "263": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 497,
+        "At": "box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 8px 20px rgba(19, 90, 150, 0.45);"
+    },
+    "264": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 497,
+        "At": "box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 8px 20px rgba(19, 90, 150, 0.45);"
+    },
+    "265": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 501,
+        "At": "outline: 2px solid rgba(225, 245, 255, 0.9);"
+    },
+    "266": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 506,
+        "At": "box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35),"
+    },
+    "267": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 507,
+        "At": "0 12px 34px rgba(0, 200, 170, 0.32),"
+    },
+    "268": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 508,
+        "At": "0 0 20px 6px rgba(0, 200, 170, 0.12);"
+    },
+    "269": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 509,
+        "At": "border: 1px solid rgba(0, 200, 170, 0.55);"
+    },
+    "270": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 512,
+        "At": "background-image: linear-gradient(45deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 60%),"
+    },
+    "271": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 512,
+        "At": "background-image: linear-gradient(45deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 60%),"
+    },
+    "272": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 530,
+        "At": "box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);"
+    },
+    "273": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 572,
+        "At": "border: 1px solid rgba(255, 255, 255, 0.45);"
+    },
+    "274": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 573,
+        "At": "background: rgba(255, 255, 255, 0.2);"
+    },
+    "275": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 585,
+        "At": "background: rgba(255, 255, 255, 0.3);"
+    },
+    "276": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 604,
+        "At": "box-shadow: 0 8px 18px rgba(217, 106, 106, 0.32);"
+    },
+    "277": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 615,
+        "At": "color: rgba(15, 26, 52, 0.8);"
+    },
+    "278": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 616,
+        "At": "border-color: rgba(255, 255, 255, 0.55);"
+    },
+    "279": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 617,
+        "At": "background: rgba(255, 255, 255, 0.85);"
+    },
+    "280": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 618,
+        "At": "box-shadow: 0 8px 18px rgba(16, 28, 52, 0.18);"
+    },
+    "281": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 622,
+        "At": "background: rgba(255, 255, 255, 0.95);"
+    },
+    "282": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 631,
+        "At": "background: rgba(9, 16, 32, 0.55);"
+    },
+    "283": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 647,
+        "At": "background: rgba(68, 10, 20, 0.72);"
+    },
+    "284": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 652,
+        "At": "background: linear-gradient(145deg, rgba(17, 28, 48, 0.96), rgba(27, 38, 64, 0.96));"
+    },
+    "285": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 652,
+        "At": "background: linear-gradient(145deg, rgba(17, 28, 48, 0.96), rgba(27, 38, 64, 0.96));"
+    },
+    "286": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 655,
+        "At": "box-shadow: 0 30px 60px rgba(6, 12, 28, 0.45);"
+    },
+    "287": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 656,
+        "At": "border: 1px solid rgba(255, 255, 255, 0.1);"
+    },
+    "288": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 662,
+        "At": "background: linear-gradient(155deg, rgba(52, 9, 16, 0.98), rgba(28, 8, 14, 0.96));"
+    },
+    "289": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 662,
+        "At": "background: linear-gradient(155deg, rgba(52, 9, 16, 0.98), rgba(28, 8, 14, 0.96));"
+    },
+    "290": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 663,
+        "At": "border: 1px solid rgba(255, 115, 137, 0.35);"
+    },
+    "291": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 664,
+        "At": "box-shadow: 0 40px 72px rgba(90, 8, 18, 0.6);"
+    },
+    "292": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 673,
+        "At": "color: rgba(255, 224, 228, 0.92);"
+    },
+    "293": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 685,
+        "At": "color: rgba(230, 238, 255, 0.9);"
+    },
+    "294": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 696,
+        "At": "background: linear-gradient(140deg, rgba(235, 85, 102, 0.98), rgba(216, 40, 64, 0.98));"
+    },
+    "295": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 696,
+        "At": "background: linear-gradient(140deg, rgba(235, 85, 102, 0.98), rgba(216, 40, 64, 0.98));"
+    },
+    "296": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 697,
+        "At": "box-shadow: 0 14px 28px rgba(216, 40, 64, 0.55);"
+    },
+    "297": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 702,
+        "At": "box-shadow: 0 18px 36px rgba(216, 40, 64, 0.65);"
+    },
+    "298": {
+        "CWE": "color-function-notation",
+        "name": "Expected modern color-function notation (color-function-notation)",
+        "File": "main.css",
+        "Line": 715,
+        "At": "box-shadow: 0 12px 24px rgba(10, 20, 40, 0.08);"
+    },
+    "299": {
+        "CWE": "color-hex-length",
+        "name": "Expected \"#fff\" to be \"#ffffff\" (color-hex-length)",
+        "File": "main.css",
+        "Line": 171,
+        "At": "color: #fff;"
+    },
+    "300": {
+        "CWE": "color-hex-length",
+        "name": "Expected \"#fff\" to be \"#ffffff\" (color-hex-length)",
+        "File": "main.css",
+        "Line": 308,
+        "At": "color: #fff;"
+    },
+    "301": {
+        "CWE": "color-hex-length",
+        "name": "Expected \"#fff\" to be \"#ffffff\" (color-hex-length)",
+        "File": "main.css",
+        "Line": 576,
+        "At": "color: #fff;"
+    },
+    "302": {
+        "CWE": "color-hex-length",
+        "name": "Expected \"#fff\" to be \"#ffffff\" (color-hex-length)",
+        "File": "main.css",
+        "Line": 594,
+        "At": "color: #fff;"
+    },
+    "303": {
+        "CWE": "comment-empty-line-before",
+        "name": "Expected empty line before comment (comment-empty-line-before)",
+        "File": "main.css",
+        "Line": 18,
+        "At": "/* 防止滚动时布局抖动 */"
+    },
+    "304": {
+        "CWE": "comment-empty-line-before",
+        "name": "Expected empty line before comment (comment-empty-line-before)",
+        "File": "main.css",
+        "Line": 28,
+        "At": "/* 创建合成层避免重绘影响 */"
+    },
+    "305": {
+        "CWE": "comment-empty-line-before",
+        "name": "Expected empty line before comment (comment-empty-line-before)",
+        "File": "main.css",
+        "Line": 41,
+        "At": "/* 提升渲染性能 */"
+    },
+    "306": {
+        "CWE": "comment-empty-line-before",
+        "name": "Expected empty line before comment (comment-empty-line-before)",
+        "File": "main.css",
+        "Line": 84,
+        "At": "/* 输入框性能优化 */"
+    },
+    "307": {
+        "CWE": "comment-empty-line-before",
+        "name": "Expected empty line before comment (comment-empty-line-before)",
+        "File": "main.css",
+        "Line": 100,
+        "At": "/* 按钮动画性能优化 */"
+    },
+    "308": {
+        "CWE": "comment-empty-line-before",
+        "name": "Expected empty line before comment (comment-empty-line-before)",
+        "File": "main.css",
+        "Line": 122,
+        "At": "/* 网格布局性能优化 */"
+    },
+    "309": {
+        "CWE": "comment-empty-line-before",
+        "name": "Expected empty line before comment (comment-empty-line-before)",
+        "File": "main.css",
+        "Line": 150,
+        "At": "/* 标签动画性能优化 */"
+    },
+    "310": {
+        "CWE": "comment-empty-line-before",
+        "name": "Expected empty line before comment (comment-empty-line-before)",
+        "File": "main.css",
+        "Line": 186,
+        "At": "/* 视图切换性能优化 */"
+    },
+    "311": {
+        "CWE": "comment-empty-line-before",
+        "name": "Expected empty line before comment (comment-empty-line-before)",
+        "File": "main.css",
+        "Line": 223,
+        "At": "/* 输入框渲染优化 */"
+    },
+    "312": {
+        "CWE": "comment-empty-line-before",
+        "name": "Expected empty line before comment (comment-empty-line-before)",
+        "File": "main.css",
+        "Line": 282,
+        "At": "/* 选择框性能优化 */"
+    },
+    "313": {
+        "CWE": "comment-empty-line-before",
+        "name": "Expected empty line before comment (comment-empty-line-before)",
+        "File": "main.css",
+        "Line": 314,
+        "At": "/* 主按钮性能优化 */"
+    },
+    "314": {
+        "CWE": "comment-empty-line-before",
+        "name": "Expected empty line before comment (comment-empty-line-before)",
+        "File": "main.css",
+        "Line": 361,
+        "At": "/* 表格渲染优化 */"
+    },
+    "315": {
+        "CWE": "comment-empty-line-before",
+        "name": "Expected empty line before comment (comment-empty-line-before)",
+        "File": "main.css",
+        "Line": 637,
+        "At": "/* 对话框性能优化 */"
+    },
+    "316": {
+        "CWE": "comment-empty-line-before",
+        "name": "Expected empty line before comment (comment-empty-line-before)",
+        "File": "main.css",
+        "Line": 732,
+        "At": "/* 滚动性能优化 */"
+    },
+    "317": {
+        "CWE": "declaration-block-no-duplicate-properties",
+        "name": "Unexpected duplicate \"border\" (declaration-block-no-duplicate-properties)",
+        "File": "main.css",
+        "Line": 138,
+        "At": "border: none;"
+    },
+    "318": {
+        "CWE": "declaration-empty-line-before",
+        "name": "Expected empty line before declaration (declaration-empty-line-before)",
+        "File": "main.css",
+        "Line": 11,
+        "At": "font-family: \"Segoe UI\", \"Helvetica Neue\", Arial, sans-serif;"
+    },
+    "319": {
+        "CWE": "media-feature-range-notation",
+        "name": "Expected \"context\" media feature range notation (media-feature-range-notation)",
+        "File": "main.css",
+        "Line": 756,
+        "At": "@media (min-width: 720px) {"
+    },
+    "320": {
+        "CWE": "media-feature-range-notation",
+        "name": "Expected \"context\" media feature range notation (media-feature-range-notation)",
+        "File": "main.css",
+        "Line": 762,
+        "At": "@media (max-width: 720px) {"
+    },
+    "321": {
+        "CWE": "media-feature-range-notation",
+        "name": "Expected \"context\" media feature range notation (media-feature-range-notation)",
+        "File": "main.css",
+        "Line": 784,
+        "At": "@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {"
+    },
+    "322": {
+        "CWE": "no-descending-specificity",
+        "name": "Expected selector \".field-row select\" to come before selector \".field-row select:invalid\", at line 235 (no-descending-specificity)",
+        "File": "main.css",
+        "Line": 239,
+        "At": ".field-row select,"
+    },
+    "323": {
+        "CWE": "no-descending-specificity",
+        "name": "Expected selector \".field-row select\" to come before selector \".field-row select:invalid\", at line 235 (no-descending-specificity)",
+        "File": "main.css",
+        "Line": 245,
+        "At": ".field-row select,"
+    },
+    "324": {
+        "CWE": "no-descending-specificity",
+        "name": "Expected selector \".field-row select\" to come before selector \".field-row select:invalid\", at line 235 (no-descending-specificity)",
+        "File": "main.css",
+        "Line": 268,
+        "At": ".field-row select {"
+    },
+    "325": {
+        "CWE": "no-descending-specificity",
+        "name": "Expected selector \".search-result td\" to come before selector \"tbody tr.removing td\", at line 372 (no-descending-specificity)",
+        "File": "main.css",
+        "Line": 379,
+        "At": ".search-result td {"
+    },
+    "326": {
+        "CWE": "no-descending-specificity",
+        "name": "Expected selector \".search-result td:last-child\" to come before selector \".search-result tbody tr:last-child td\", at line 385 (no-descending-specificity)",
+        "File": "main.css",
+        "Line": 390,
+        "At": ".search-result td:last-child,"
+    },
+    "327": {
+        "CWE": "no-descending-specificity",
+        "name": "Expected selector \".records-board td:last-child\" to come before selector \".search-result tbody tr:last-child td\", at line 385 (no-descending-specificity)",
+        "File": "main.css",
+        "Line": 392,
+        "At": ".records-board td:last-child {"
+    },
+    "328": {
+        "CWE": "no-descending-specificity",
+        "name": "Expected selector \".sort-select option\" to come before selector \".field-row select option\", at line 239 (no-descending-specificity)",
+        "File": "main.css",
+        "Line": 487,
+        "At": ".sort-select option {"
+    },
+    "329": {
+        "CWE": "no-descending-specificity",
+        "name": "Expected selector \".records-board th\" to come before selector \".search-result th:last-child\", at line 389 (no-descending-specificity)",
+        "File": "main.css",
+        "Line": 541,
+        "At": ".records-board th,"
+    },
+    "330": {
+        "CWE": "no-descending-specificity",
+        "name": "Expected selector \".records-board td\" to come before selector \"tbody tr.removing td\", at line 372 (no-descending-specificity)",
+        "File": "main.css",
+        "Line": 542,
+        "At": ".records-board td {"
+    },
+    "331": {
+        "CWE": "no-descending-specificity",
+        "name": "Expected selector \".records-board tfoot td\" to come before selector \"tbody tr.removing td\", at line 372 (no-descending-specificity)",
+        "File": "main.css",
+        "Line": 552,
+        "At": ".records-board tfoot td,"
+    },
+    "332": {
+        "CWE": "no-descending-specificity",
+        "name": "Expected selector \".search-result tfoot td\" to come before selector \"tbody tr.removing td\", at line 372 (no-descending-specificity)",
+        "File": "main.css",
+        "Line": 553,
+        "At": ".search-result tfoot td {"
+    },
+    "333": {
+        "CWE": "no-descending-specificity",
+        "name": "Expected selector \".confirm-dialog h3\" to come before selector \".confirm-dialog[data-variant=\"danger\"] h3\", at line 668 (no-descending-specificity)",
+        "File": "main.css",
+        "Line": 676,
+        "At": ".confirm-dialog h3 {"
+    },
+    "334": {
+        "CWE": "no-descending-specificity",
+        "name": "Expected selector \".confirm-dialog p\" to come before selector \".confirm-dialog[data-variant=\"danger\"] p\", at line 672 (no-descending-specificity)",
+        "File": "main.css",
+        "Line": 681,
+        "At": ".confirm-dialog p {"
+    },
+    "335": {
+        "CWE": "no-duplicate-selectors",
+        "name": "Unexpected duplicate selector \".field-row select,\r\n.field-row select option\", first used at line 239 (no-duplicate-selectors)",
+        "File": "main.css",
+        "Line": 245,
+        "At": ".field-row select,"
+    },
+    "336": {
+        "CWE": "no-duplicate-selectors",
+        "name": "Unexpected duplicate selector \".ghost-btn\", first used at line 92 (no-duplicate-selectors)",
+        "File": "main.css",
+        "Line": 571,
+        "At": ".ghost-btn {"
+    },
+    "337": {
+        "CWE": "selector-id-pattern",
+        "name": "Expected id selector \"#searchTotalsDisplay\" to be kebab-case (selector-id-pattern)",
+        "File": "main.css",
+        "Line": 337,
+        "At": "#searchTotalsDisplay {"
+    },
+    "338": {
+        "CWE": "selector-id-pattern",
+        "name": "Expected id selector \"#recordsTotalsDisplay\" to be kebab-case (selector-id-pattern)",
+        "File": "main.css",
+        "Line": 346,
+        "At": "#recordsTotalsDisplay {"
+    },
+    "339": {
+        "CWE": "selector-id-pattern",
+        "name": "Expected id selector \"#searchSortSelect\" to be kebab-case (selector-id-pattern)",
+        "File": "main.css",
+        "Line": 505,
+        "At": "#searchSortSelect {"
+    },
+    "340": {
+        "CWE": "selector-id-pattern",
+        "name": "Expected id selector \"#logPanel\" to be kebab-case (selector-id-pattern)",
+        "File": "main.css",
+        "Line": 724,
+        "At": "#logPanel {"
+    },
+    "341": {
+        "CWE": "selector-id-pattern",
+        "name": "Expected id selector \"#logPanel\" to be kebab-case (selector-id-pattern)",
+        "File": "main.css",
+        "Line": 736,
+        "At": "#logPanel li {"
+    },
+    "342": {
+        "CWE": "selector-id-pattern",
+        "name": "Expected id selector \"#logPanel\" to be kebab-case (selector-id-pattern)",
+        "File": "main.css",
+        "Line": 744,
+        "At": "#logPanel li.error {"
+    }
+}

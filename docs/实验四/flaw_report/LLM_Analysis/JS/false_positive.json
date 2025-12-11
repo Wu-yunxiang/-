@@ -1,0 +1,10 @@
+{
+    "1": {
+        "CWE": "Info",
+        "name": "Use of console.log",
+        "File": "proxy/http_to_tcp_proxy.js",
+        "Line": 31,
+        "At": "console.log(...)",
+        "severity": "Info"
+    }
+}

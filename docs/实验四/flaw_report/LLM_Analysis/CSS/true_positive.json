@@ -1,0 +1,10 @@
+{
+    "1": {
+        "CWE": "Maintainability",
+        "name": "Overqualified Selectors",
+        "File": "resource/styles/main.css",
+        "Line": 264,
+        "At": "input[type=\"number\"]::-webkit-outer-spin-button",
+        "severity": "Low"
+    }
+}
