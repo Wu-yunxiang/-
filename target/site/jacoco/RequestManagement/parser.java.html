@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>parser.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">server</a> &gt; <a href="index.source.html" class="el_package">RequestManagement</a> &gt; <span class="el_source">parser.java</span></div><h1>parser.java</h1><pre class="source lang-java linenums">package RequestManagement;
+import java.sql.SQLException;
+import ResultManagement.*;
+
+public class parser {
+    public sqloperation sql;
+<span class="fc" id="L7">    public parser() {</span>
+<span class="fc" id="L8">        sql = new sqloperation();</span>
+<span class="fc" id="L9">    }</span>
+    
+        public ParseResult parseRequest(String request) {
+<span class="fc bfc" id="L12" title="All 4 branches covered.">        if (request == null || request.trim().isEmpty()) {</span>
+<span class="fc" id="L13">            return new ParseResult(&quot;unknown&quot;, Boolean.FALSE, &quot;空请求&quot;, null);</span>
+        }
+        
+<span class="fc" id="L16">        String[] parts = request.split(&quot;,&quot;, -1);</span>
+<span class="fc bfc" id="L17" title="All 2 branches covered.">        if (parts.length &lt; 2) {</span>
+<span class="fc" id="L18">            return new ParseResult(&quot;unknown&quot;, Boolean.FALSE, &quot;请求格式错误&quot;, null);</span>
+        }
+        
+<span class="fc" id="L21">        String username = parts[0];</span>
+<span class="fc" id="L22">        String action = parts[1];</span>
+        
+        try {
+<span class="fc bfc" id="L25" title="All 2 branches covered.">            if (action.equals(&quot;add&quot;)) {</span>
+<span class="fc" id="L26">                return handleAddRequest(username, parts);</span>
+<span class="fc bfc" id="L27" title="All 2 branches covered.">            } else if(action.equals(&quot;register&quot;)) {</span>
+<span class="fc" id="L28">                return handleRegisterRequest(username, parts);</span>
+<span class="fc bfc" id="L29" title="All 2 branches covered.">            } else if(action.equals(&quot;login&quot;)) {</span>
+<span class="fc" id="L30">                return handleLoginRequest(username, parts);</span>
+<span class="fc bfc" id="L31" title="All 2 branches covered.">            } else if(action.equals(&quot;search&quot;)) {</span>
+<span class="fc" id="L32">                return handleSearchRequest(username, parts);</span>
+<span class="fc bfc" id="L33" title="All 2 branches covered.">            } else if(action.equals(&quot;list&quot;)) {</span>
+<span class="fc" id="L34">                return handleListRequest(username);</span>
+<span class="fc bfc" id="L35" title="All 2 branches covered.">            } else if(action.equals(&quot;clear&quot;)) {</span>
+<span class="fc" id="L36">                return handleClearRequest(username);</span>
+<span class="fc bfc" id="L37" title="All 2 branches covered.">            } else if(action.equals(&quot;delete&quot;)) {</span>
+<span class="fc" id="L38">                return handleDeleteRequest(username, parts);</span>
+            } else {
+<span class="fc" id="L40">                return new ParseResult(&quot;unknown&quot;, Boolean.FALSE, &quot;未知操作: &quot; + action, null);</span>
+            }
+<span class="nc" id="L42">        } catch (SQLException e) {</span>
+<span class="nc" id="L43">            return new ParseResult(action, Boolean.FALSE, &quot;数据库错误: &quot; + e.getMessage(), null);</span>
+<span class="nc" id="L44">        } catch (Exception e) {</span>
+<span class="nc" id="L45">            return new ParseResult(action, Boolean.FALSE, &quot;处理错误: &quot; + e.getMessage(), null);</span>
+        }
+    }
+    
+    private ParseResult handleAddRequest(String username, String[] parts) throws SQLException {
+<span class="fc bfc" id="L50" title="All 2 branches covered.">        if (parts.length &lt; 4) {</span>
+<span class="fc" id="L51">            return new ParseResult(&quot;add&quot;, Boolean.FALSE, &quot;参数不足&quot;, null);</span>
+        }
+        
+<span class="fc" id="L54">        double amount = Double.parseDouble(parts[2]);</span>
+<span class="fc" id="L55">        String date = parts[3];</span>
+<span class="fc" id="L56">        String type = &quot;expense&quot;;</span>
+<span class="fc" id="L57">        String subject = &quot;&quot;;</span>
+<span class="fc" id="L58">        String note = &quot;&quot;;</span>
+        
+<span class="pc bpc" id="L60" title="1 of 2 branches missed.">        if (parts.length &gt;= 7) {</span>
+<span class="fc" id="L61">            type = parts[4];</span>
+<span class="fc" id="L62">            subject = parts[5];</span>
+<span class="fc" id="L63">            note = parts[6];</span>
+        } else {
+<span class="nc bnc" id="L65" title="All 2 branches missed.">            if (parts.length &gt;= 5) {</span>
+<span class="nc" id="L66">                subject = parts[4];</span>
+            }
+<span class="nc bnc" id="L68" title="All 2 branches missed.">            if (parts.length &gt;= 6) {</span>
+<span class="nc" id="L69">                note = parts[5];</span>
+            }
+        }
+        
+<span class="fc" id="L73">        addrequest Add = new addrequest(username, amount, type, date, subject, note);</span>
+<span class="fc" id="L74">        return new ParseResult(&quot;add&quot;, sql.solveAdd(Add), null, null);</span>
+    }
+    
+    private ParseResult handleRegisterRequest(String username, String[] parts) throws SQLException {
+<span class="pc bpc" id="L78" title="1 of 2 branches missed.">        if (parts.length &lt; 3) {</span>
+<span class="nc" id="L79">            return new ParseResult(&quot;register&quot;, Boolean.FALSE, &quot;参数不足&quot;, null);</span>
+        }
+        
+<span class="fc" id="L82">        String password = parts[2];</span>
+<span class="fc" id="L83">        registerrequest Register = new registerrequest(username, password);</span>
+<span class="fc" id="L84">        return new ParseResult(&quot;register&quot;, sql.solveRegister(Register), null, null);</span>
+    }
+    
+    private ParseResult handleLoginRequest(String username, String[] parts) throws SQLException {
+<span class="pc bpc" id="L88" title="1 of 2 branches missed.">        if (parts.length &lt; 3) {</span>
+<span class="nc" id="L89">            return new ParseResult(&quot;login&quot;, Boolean.FALSE, &quot;参数不足&quot;, null);</span>
+        }
+        
+<span class="fc" id="L92">        String password = parts[2];</span>
+        // 先判断用户名是否存在，再判断密码，确保可以向客户端返回更明确的错误信息
+<span class="fc bfc" id="L94" title="All 2 branches covered.">        if (!sql.userExists(username)) {</span>
+<span class="fc" id="L95">            return new ParseResult(&quot;login&quot;, Boolean.FALSE, &quot;用户名不存在&quot;, null);</span>
+        }
+
+<span class="fc" id="L98">        loginrequest Login = new loginrequest(username, password);</span>
+<span class="fc" id="L99">        Boolean ok = sql.solveLogin(Login);</span>
+<span class="pc bpc" id="L100" title="1 of 4 branches missed.">        if (ok != null &amp;&amp; ok) {</span>
+<span class="fc" id="L101">            return new ParseResult(&quot;login&quot;, Boolean.TRUE, null, null);</span>
+        } else {
+<span class="fc" id="L103">            return new ParseResult(&quot;login&quot;, Boolean.FALSE, &quot;密码错误&quot;, null);</span>
+        }
+    }
+    
+    private ParseResult handleSearchRequest(String username, String[] parts) throws SQLException {
+<span class="pc bpc" id="L108" title="1 of 2 branches missed.">        String startDate = parts.length &gt; 2 ? parts[2] : &quot;&quot;;</span>
+<span class="pc bpc" id="L109" title="1 of 2 branches missed.">        String endDate = parts.length &gt; 3 ? parts[3] : &quot;&quot;;</span>
+<span class="pc bpc" id="L110" title="1 of 2 branches missed.">        String typeFilter = parts.length &gt; 4 ? parts[4] : &quot;&quot;;</span>
+<span class="pc bpc" id="L111" title="1 of 2 branches missed.">        Double minAmount = parseNullableDouble(parts.length &gt; 5 ? parts[5] : &quot;&quot;);</span>
+<span class="pc bpc" id="L112" title="1 of 2 branches missed.">        Double maxAmount = parseNullableDouble(parts.length &gt; 6 ? parts[6] : &quot;&quot;);</span>
+        
+<span class="fc" id="L114">        searchrequest Search = new searchrequest(username, startDate, endDate, typeFilter, minAmount, maxAmount);</span>
+<span class="fc" id="L115">        return new ParseResult(&quot;search&quot;, Boolean.TRUE, null, sql.solveSearch(Search));</span>
+    }
+    
+    private ParseResult handleListRequest(String username) throws SQLException {
+<span class="fc" id="L119">        return new ParseResult(&quot;list&quot;, Boolean.TRUE, null, sql.solveList(username));</span>
+    }
+    
+    private ParseResult handleClearRequest(String username) throws SQLException {
+<span class="fc" id="L123">        int removed = sql.solveClear(username);</span>
+<span class="fc" id="L124">        return new ParseResult(&quot;clear&quot;, Boolean.TRUE, Integer.toString(removed), null);</span>
+    }
+    
+    private ParseResult handleDeleteRequest(String username, String[] parts) throws SQLException {
+<span class="fc bfc" id="L128" title="All 2 branches covered.">        if (parts.length &lt; 3) {</span>
+<span class="fc" id="L129">            return new ParseResult(&quot;delete&quot;, Boolean.FALSE, &quot;缺少要删除的记录ID&quot;, null);</span>
+        }
+        
+        try {
+<span class="fc" id="L133">            long entryId = Long.parseLong(parts[2]);</span>
+<span class="fc" id="L134">            deleterequest Delete = new deleterequest(username, entryId);</span>
+<span class="fc" id="L135">            Boolean success = sql.solveDelete(Delete);</span>
+<span class="pc bpc" id="L136" title="2 of 4 branches missed.">            String message = (success != null &amp;&amp; success) ? &quot;删除成功&quot; : &quot;未找到要删除的记录&quot;;</span>
+<span class="fc" id="L137">            return new ParseResult(&quot;delete&quot;, success, message, null);</span>
+<span class="fc" id="L138">        } catch (NumberFormatException ex) {</span>
+<span class="fc" id="L139">            return new ParseResult(&quot;delete&quot;, Boolean.FALSE, &quot;记录ID无效&quot;, null);</span>
+        }
+    }
+
+    private Double parseNullableDouble(String raw) {
+<span class="pc bpc" id="L144" title="1 of 4 branches missed.">        if (raw == null || raw.isEmpty()) {</span>
+<span class="fc" id="L145">            return null;</span>
+        }
+        try {
+<span class="fc" id="L148">            return Double.valueOf(raw);</span>
+<span class="nc" id="L149">        } catch (NumberFormatException ex) {</span>
+<span class="nc" id="L150">            return null;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -203,3 +203,67 @@ Caused by: org.h2.mvstore.MVStoreException: The file is locked: C:/Users/Lenovo/
 	at org.h2.mvstore.SingleFileStore.open(SingleFileStore.java:81)
 	at org.h2.mvstore.MVStore.<init>(MVStore.java:286)
 	... 22 more
+2026-01-02 15:00:45.825247+08:00 database: flush
+org.h2.message.DbException: General error: "org.h2.mvstore.MVStoreException: java.lang.AssertionError: 53248 != 49152 [2.2.224/3]" [50000-224]
+	at org.h2.message.DbException.get(DbException.java:212)
+	at org.h2.message.DbException.convert(DbException.java:407)
+	at org.h2.mvstore.db.Store.lambda$new$0(Store.java:122)
+	at org.h2.mvstore.MVStore.handleException(MVStore.java:1546)
+	at org.h2.mvstore.MVStore.panic(MVStore.java:371)
+	at org.h2.mvstore.FileStore.storeBuffer(FileStore.java:1529)
+	at org.h2.mvstore.FileStore.lambda$serializeAndStore$3(FileStore.java:1432)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientException: General error: "org.h2.mvstore.MVStoreException: java.lang.AssertionError: 53248 != 49152 [2.2.224/3]" [50000-224]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:566)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	... 12 more
+Caused by: org.h2.mvstore.MVStoreException: java.lang.AssertionError: 53248 != 49152 [2.2.224/3]
+	at org.h2.mvstore.DataUtils.newMVStoreException(DataUtils.java:996)
+	... 7 more
+Caused by: java.lang.AssertionError: 53248 != 49152
+	at org.h2.mvstore.RandomAccessStore.shrinkStoreIfPossible(RandomAccessStore.java:679)
+	at org.h2.mvstore.RandomAccessStore.writeChunk(RandomAccessStore.java:377)
+	at org.h2.mvstore.RandomAccessStore.writeChunk(RandomAccessStore.java:28)
+	at org.h2.mvstore.FileStore.storeBuffer(FileStore.java:1524)
+	... 6 more
+2026-01-02 15:00:48.916906+08:00 database: could not close the database
+org.h2.message.DbException: General error: "General error: ""org.h2.mvstore.MVStoreException: java.lang.AssertionError: 53248 != 49152 [2.2.224/3]"" [50000-224]" [50000-224]
+	at org.h2.message.DbException.get(DbException.java:212)
+	at org.h2.engine.Database.close(Database.java:1183)
+	at org.h2.engine.Database.onShutdown(Database.java:1159)
+	at org.h2.engine.OnExitDatabaseCloser.onShutdown(OnExitDatabaseCloser.java:85)
+	at org.h2.engine.OnExitDatabaseCloser.run(OnExitDatabaseCloser.java:114)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientException: General error: "General error: ""org.h2.mvstore.MVStoreException: java.lang.AssertionError: 53248 != 49152 [2.2.224/3]"" [50000-224]" [50000-224]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:566)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	... 5 more
+Caused by: org.h2.message.DbException: General error: "org.h2.mvstore.MVStoreException: java.lang.AssertionError: 53248 != 49152 [2.2.224/3]" [50000-224]
+	at org.h2.message.DbException.get(DbException.java:212)
+	at org.h2.message.DbException.convert(DbException.java:407)
+	at org.h2.mvstore.db.Store.lambda$new$0(Store.java:122)
+	at org.h2.mvstore.MVStore.handleException(MVStore.java:1546)
+	at org.h2.mvstore.MVStore.panic(MVStore.java:371)
+	at org.h2.mvstore.FileStore.storeBuffer(FileStore.java:1529)
+	at org.h2.mvstore.FileStore.lambda$serializeAndStore$3(FileStore.java:1432)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientException: General error: "org.h2.mvstore.MVStoreException: java.lang.AssertionError: 53248 != 49152 [2.2.224/3]" [50000-224]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:566)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	... 12 more
+Caused by: org.h2.mvstore.MVStoreException: java.lang.AssertionError: 53248 != 49152 [2.2.224/3]
+	at org.h2.mvstore.DataUtils.newMVStoreException(DataUtils.java:996)
+	... 7 more
+Caused by: java.lang.AssertionError: 53248 != 49152
+	at org.h2.mvstore.RandomAccessStore.shrinkStoreIfPossible(RandomAccessStore.java:679)
+	at org.h2.mvstore.RandomAccessStore.writeChunk(RandomAccessStore.java:377)
+	at org.h2.mvstore.RandomAccessStore.writeChunk(RandomAccessStore.java:28)
+	at org.h2.mvstore.FileStore.storeBuffer(FileStore.java:1524)
+	... 6 more

@@ -112,11 +112,11 @@ public class parser {
         Double maxAmount = parseNullableDouble(parts.length > 6 ? parts[6] : "");
         
         searchrequest Search = new searchrequest(username, startDate, endDate, typeFilter, minAmount, maxAmount);
-        return new ParseResult("search", null, null, sql.solveSearch(Search));
+        return new ParseResult("search", Boolean.TRUE, null, sql.solveSearch(Search));
     }
     
     private ParseResult handleListRequest(String username) throws SQLException {
-        return new ParseResult("list", null, null, sql.solveList(username));
+        return new ParseResult("list", Boolean.TRUE, null, sql.solveList(username));
     }
     
     private ParseResult handleClearRequest(String username) throws SQLException {

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Entry.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">server</a> &gt; <a href="index.source.html" class="el_package">sharedmodel</a> &gt; <span class="el_source">Entry.java</span></div><h1>Entry.java</h1><pre class="source lang-java linenums">package sharedmodel;
+
+public class Entry {
+    public Long id;
+    public String username;
+    public double amount;
+    public String type;
+    public String date;
+    public String subject;
+    public String note;
+    
+<span class="fc" id="L12">    public Entry(Long id, String username, double amount, String type, String date, String subject, String note) {</span>
+<span class="fc" id="L13">        this.id = id;</span>
+<span class="fc" id="L14">        this.username = username;</span>
+<span class="fc" id="L15">        this.amount = amount;</span>
+<span class="fc bfc" id="L16" title="All 4 branches covered.">        this.type = (type == null || type.isBlank()) ? &quot;expense&quot; : type;</span>
+<span class="fc" id="L17">        this.date = date;</span>
+<span class="fc" id="L18">        this.subject = subject;</span>
+<span class="fc" id="L19">        this.note = note;</span>
+<span class="fc" id="L20">    }</span>
+    
+    public Entry(String username, double amount, String type, String date, String subject, String note) {
+<span class="fc" id="L23">        this(null, username, amount, type, date, subject, note);</span>
+<span class="fc" id="L24">    }</span>
+    
+    public String toString() {
+        // 使用StringBuilder提高字符串拼接性能
+<span class="fc" id="L28">        return new StringBuilder()</span>
+<span class="fc bfc" id="L29" title="All 2 branches covered.">            .append(id == null ? &quot;null&quot; : id.toString()).append(',')</span>
+<span class="fc" id="L30">            .append(username).append(',')</span>
+<span class="fc" id="L31">            .append(amount).append(',')</span>
+<span class="pc bpc" id="L32" title="1 of 2 branches missed.">            .append(type == null ? &quot;&quot; : type).append(',')</span>
+<span class="fc bfc" id="L33" title="All 2 branches covered.">            .append(date == null ? &quot;&quot; : date).append(',')</span>
+<span class="fc bfc" id="L34" title="All 2 branches covered.">            .append(subject == null ? &quot;&quot; : subject).append(',')</span>
+<span class="fc bfc" id="L35" title="All 2 branches covered.">            .append(note == null ? &quot;&quot; : note)</span>
+<span class="fc" id="L36">            .toString();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

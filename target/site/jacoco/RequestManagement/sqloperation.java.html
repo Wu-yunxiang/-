@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>sqloperation.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">server</a> &gt; <a href="index.source.html" class="el_package">RequestManagement</a> &gt; <span class="el_source">sqloperation.java</span></div><h1>sqloperation.java</h1><pre class="source lang-java linenums">package RequestManagement;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import java.util.logging.Logger;
+import sharedmodel.*;
+
+public class sqloperation {
+<span class="fc" id="L13">    private static final Logger LOGGER = Logger.getLogger(sqloperation.class.getName());</span>
+<span class="fc" id="L14">    private static final Path DB_PATH = Paths.get(System.getProperty(&quot;user.dir&quot;), &quot;accounting_db&quot;).toAbsolutePath();</span>
+<span class="fc" id="L15">    public static final String JDBC_URL = &quot;jdbc:h2:file:&quot; + DB_PATH.toString().replace(&quot;\\&quot;, &quot;/&quot;) + &quot;;DB_CLOSE_DELAY=-1&quot;;</span>
+<span class="pc bpc" id="L16" title="1 of 2 branches missed.">    public static String JDBC_USER = System.getenv(&quot;DB_USER&quot;) != null ? System.getenv(&quot;DB_USER&quot;) : &quot;sa&quot;;</span>
+<span class="pc bpc" id="L17" title="1 of 2 branches missed.">    public static String JDBC_PASSWORD = System.getenv(&quot;DB_PASSWORD&quot;) != null ? System.getenv(&quot;DB_PASSWORD&quot;) : &quot;&quot;;</span>
+    
+    // 简单的连接缓存，避免频繁创建连接
+<span class="fc" id="L20">    private static final ThreadLocal&lt;Connection&gt; connectionThreadLocal = new ThreadLocal&lt;&gt;();</span>
+
+<span class="fc" id="L22">    public sqloperation() {</span>
+<span class="fc" id="L23">    }</span>
+
+    public void initialize() throws ClassNotFoundException, SQLException {
+<span class="fc" id="L26">        Class.forName(&quot;org.h2.Driver&quot;);</span>
+        // 使用临时连接来创建表
+<span class="fc" id="L28">        try (Connection initConn = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);</span>
+<span class="fc" id="L29">             Statement stmt = initConn.createStatement()) {</span>
+            
+            // 批量执行创建语句
+<span class="fc" id="L32">            String[] initSQLs = {</span>
+                &quot;&quot;&quot;
+                CREATE TABLE IF NOT EXISTS users (
+                    username VARCHAR(255) PRIMARY KEY,
+                    password VARCHAR(255) NOT NULL
+                )
+                &quot;&quot;&quot;,
+                &quot;&quot;&quot;
+                CREATE TABLE IF NOT EXISTS entries (
+                    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                    username VARCHAR(255) NOT NULL,
+                    amount DOUBLE NOT NULL,
+                    type VARCHAR(32),
+                    date VARCHAR(64),
+                    subject VARCHAR(255),
+                    note VARCHAR(1024)
+                )
+                &quot;&quot;&quot;,
+                &quot;ALTER TABLE entries ADD COLUMN IF NOT EXISTS id BIGINT AUTO_INCREMENT&quot;,
+                &quot;ALTER TABLE entries ADD COLUMN IF NOT EXISTS type VARCHAR(32)&quot;,
+                &quot;UPDATE entries SET type = 'expense' WHERE type IS NULL&quot;,
+                &quot;CREATE INDEX IF NOT EXISTS idx_entries_username ON entries(username)&quot;,
+                &quot;CREATE INDEX IF NOT EXISTS idx_entries_date ON entries(date)&quot;,
+                &quot;CREATE INDEX IF NOT EXISTS idx_entries_type ON entries(type)&quot;
+            };
+            
+<span class="fc bfc" id="L58" title="All 2 branches covered.">            for (String sql : initSQLs) {</span>
+                try {
+<span class="fc" id="L60">                    stmt.execute(sql);</span>
+<span class="nc" id="L61">                } catch (SQLException e) {</span>
+                    // 忽略重复创建索引等错误
+<span class="fc" id="L63">                }</span>
+            }
+        }
+<span class="fc" id="L66">    }</span>
+    
+    private Connection getConnection() throws SQLException {
+<span class="fc" id="L69">        Connection conn = connectionThreadLocal.get();</span>
+<span class="pc bpc" id="L70" title="3 of 4 branches missed.">        if (conn == null || conn.isClosed()) {</span>
+<span class="fc" id="L71">            conn = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);</span>
+<span class="fc" id="L72">            connectionThreadLocal.set(conn);</span>
+        }
+<span class="fc" id="L74">        return conn;</span>
+    }
+    
+    private void closeThreadConnection() {
+        try {
+<span class="fc" id="L79">            Connection conn = connectionThreadLocal.get();</span>
+<span class="pc bpc" id="L80" title="2 of 4 branches missed.">            if (conn != null &amp;&amp; !conn.isClosed()) {</span>
+<span class="fc" id="L81">                conn.close();</span>
+            }
+<span class="nc" id="L83">        } catch (SQLException e) {</span>
+            // 忽略关闭异常
+        } finally {
+<span class="fc" id="L86">            connectionThreadLocal.remove();</span>
+        }
+<span class="fc" id="L88">    }</span>
+
+    public Boolean solveAdd(addrequest Add) throws SQLException {
+<span class="fc" id="L91">        Entry entry = Add.entry;</span>
+        try {
+<span class="fc" id="L93">            Connection c = getConnection();</span>
+<span class="fc" id="L94">            try (PreparedStatement insert = c.prepareStatement(</span>
+                    &quot;INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?)&quot;)) {
+<span class="fc" id="L96">                insert.setString(1, entry.username);</span>
+<span class="fc" id="L97">                insert.setDouble(2, entry.amount);</span>
+<span class="fc" id="L98">                insert.setString(3, normalizeType(entry.type));</span>
+<span class="fc" id="L99">                insert.setString(4, entry.date);</span>
+<span class="fc" id="L100">                insert.setString(5, entry.subject);</span>
+<span class="fc" id="L101">                insert.setString(6, entry.note);</span>
+<span class="fc" id="L102">                insert.executeUpdate();</span>
+            }
+<span class="fc" id="L104">            return Boolean.TRUE;</span>
+        } finally {
+<span class="fc" id="L106">            closeThreadConnection();</span>
+        }
+    }
+
+    public Boolean solveRegister(registerrequest Register) throws SQLException {
+        try {
+<span class="fc" id="L112">            Connection c = getConnection();</span>
+<span class="fc" id="L113">            try (PreparedStatement insert = c.prepareStatement(</span>
+                    &quot;INSERT INTO users (username, password) VALUES (?, ?)&quot;)) {
+<span class="fc" id="L115">                insert.setString(1, Register.username);</span>
+<span class="fc" id="L116">                insert.setString(2, Register.password);</span>
+<span class="nc" id="L117">                insert.executeUpdate();</span>
+<span class="nc" id="L118">                return Boolean.TRUE;</span>
+<span class="fc" id="L119">            } catch (SQLException e) {</span>
+                // 用户已存在时返回false
+<span class="pc bpc" id="L121" title="1 of 2 branches missed.">                if (e.getErrorCode() == 23505) {</span>
+<span class="fc" id="L122">                    return Boolean.FALSE;</span>
+                }
+<span class="nc" id="L124">                throw e;</span>
+            }
+        } finally {
+<span class="fc" id="L127">            closeThreadConnection();</span>
+        }
+    }
+
+    public Boolean solveLogin(loginrequest Login) throws SQLException {
+        try {
+<span class="fc" id="L133">            Connection c = getConnection();</span>
+<span class="fc" id="L134">            try (PreparedStatement query = c.prepareStatement(&quot;SELECT password FROM users WHERE username = ?&quot;)) {</span>
+<span class="fc" id="L135">                query.setString(1, Login.username);</span>
+<span class="fc" id="L136">                try (ResultSet rs = query.executeQuery()) {</span>
+<span class="pc bpc" id="L137" title="1 of 2 branches missed.">                    if (rs.next()) {</span>
+<span class="fc" id="L138">                        String storedPassword = rs.getString(1);</span>
+<span class="pc bpc" id="L139" title="1 of 4 branches missed.">                        boolean ok = storedPassword != null &amp;&amp; storedPassword.equals(Login.password);</span>
+<span class="fc bfc" id="L140" title="All 2 branches covered.">                        if (ok) {</span>
+<span class="fc" id="L141">                            LOGGER.info(&quot;登录成功: 用户名='&quot; + Login.username + &quot;'&quot;);</span>
+                        } else {
+                            // 用户存在但密码不匹配
+<span class="fc" id="L144">                            LOGGER.info(&quot;登录失败: 密码错误, 用户名='&quot; + Login.username + &quot;'&quot;);</span>
+                        }
+<span class="fc" id="L146">                        return ok;</span>
+                    } else {
+                        // 用户名不存在
+<span class="nc" id="L149">                        LOGGER.info(&quot;登录失败: 用户名不存在, 用户名='&quot; + Login.username + &quot;'&quot;);</span>
+                    }
+<span class="pc bpc" id="L151" title="1 of 2 branches missed.">                }</span>
+<span class="pc bpc" id="L152" title="1 of 2 branches missed.">            }</span>
+<span class="nc" id="L153">            return Boolean.FALSE;</span>
+        } finally {
+<span class="fc" id="L155">            closeThreadConnection();</span>
+        }
+    }
+
+    /**
+     * 检查指定用户名是否存在于 users 表中。
+     */
+    public boolean userExists(String username) throws SQLException {
+        try {
+<span class="fc" id="L164">            Connection c = getConnection();</span>
+<span class="fc" id="L165">            try (PreparedStatement query = c.prepareStatement(&quot;SELECT 1 FROM users WHERE username = ?&quot;)) {</span>
+<span class="fc" id="L166">                query.setString(1, username);</span>
+<span class="fc" id="L167">                try (ResultSet rs = query.executeQuery()) {</span>
+<span class="fc" id="L168">                    return rs.next();</span>
+                }
+            }
+        } finally {
+<span class="fc" id="L172">            closeThreadConnection();</span>
+        }
+    }
+
+    public List&lt;Entry&gt; solveSearch(searchrequest Search) throws SQLException {
+<span class="fc" id="L177">        List&lt;Entry&gt; results = new ArrayList&lt;&gt;();</span>
+        try {
+<span class="fc" id="L179">            Connection c = getConnection();</span>
+            
+            // 构建动态SQL，在数据库层面进行过滤
+<span class="fc" id="L182">            StringBuilder sql = new StringBuilder(</span>
+                &quot;SELECT id, username, amount, type, date, subject, note FROM entries WHERE username = ?&quot;);
+<span class="fc" id="L184">            List&lt;Object&gt; parameters = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L185">            parameters.add(Search.username);</span>
+            
+<span class="pc bpc" id="L187" title="2 of 4 branches missed.">            if (Search.startDate != null &amp;&amp; !Search.startDate.isEmpty()) {</span>
+<span class="nc" id="L188">                sql.append(&quot; AND date &gt;= ?&quot;);</span>
+<span class="nc" id="L189">                parameters.add(Search.startDate);</span>
+            }
+<span class="pc bpc" id="L191" title="2 of 4 branches missed.">            if (Search.endDate != null &amp;&amp; !Search.endDate.isEmpty()) {</span>
+<span class="nc" id="L192">                sql.append(&quot; AND date &lt;= ?&quot;);</span>
+<span class="nc" id="L193">                parameters.add(Search.endDate);</span>
+            }
+<span class="pc bpc" id="L195" title="2 of 4 branches missed.">            if (Search.typeFilter != null &amp;&amp; !Search.typeFilter.isEmpty()) {</span>
+<span class="fc" id="L196">                sql.append(&quot; AND type = ?&quot;);</span>
+<span class="fc" id="L197">                parameters.add(normalizeType(Search.typeFilter));</span>
+            }
+<span class="pc bpc" id="L199" title="1 of 2 branches missed.">            if (Search.minAmount != null) {</span>
+<span class="nc" id="L200">                sql.append(&quot; AND amount &gt;= ?&quot;);</span>
+<span class="nc" id="L201">                parameters.add(Search.minAmount);</span>
+            }
+<span class="pc bpc" id="L203" title="1 of 2 branches missed.">            if (Search.maxAmount != null) {</span>
+<span class="nc" id="L204">                sql.append(&quot; AND amount &lt;= ?&quot;);</span>
+<span class="nc" id="L205">                parameters.add(Search.maxAmount);</span>
+            }
+            
+<span class="fc" id="L208">            sql.append(&quot; ORDER BY id&quot;);</span>
+            
+<span class="fc" id="L210">            try (PreparedStatement query = c.prepareStatement(sql.toString())) {</span>
+<span class="fc bfc" id="L211" title="All 2 branches covered.">                for (int i = 0; i &lt; parameters.size(); i++) {</span>
+<span class="fc" id="L212">                    query.setObject(i + 1, parameters.get(i));</span>
+                }
+                
+<span class="fc" id="L215">                try (ResultSet rs = query.executeQuery()) {</span>
+<span class="fc bfc" id="L216" title="All 2 branches covered.">                    while (rs.next()) {</span>
+<span class="fc" id="L217">                        results.add(mapEntry(rs));</span>
+                    }
+                }
+            }
+        } finally {
+<span class="fc" id="L222">            closeThreadConnection();</span>
+        }
+<span class="fc" id="L224">        return results;</span>
+    }
+
+    public List&lt;Entry&gt; solveList(String username) throws SQLException {
+<span class="fc" id="L228">        List&lt;Entry&gt; results = new ArrayList&lt;&gt;();</span>
+        try {
+<span class="fc" id="L230">            Connection c = getConnection();</span>
+<span class="fc" id="L231">            try (PreparedStatement query = c.prepareStatement(</span>
+                    &quot;SELECT id, username, amount, type, date, subject, note FROM entries WHERE username = ? ORDER BY id&quot;)) {
+<span class="fc" id="L233">                query.setString(1, username);</span>
+<span class="fc" id="L234">                try (ResultSet rs = query.executeQuery()) {</span>
+<span class="fc bfc" id="L235" title="All 2 branches covered.">                    while (rs.next()) {</span>
+<span class="fc" id="L236">                        results.add(mapEntry(rs));</span>
+                    }
+                }
+            }
+        } finally {
+<span class="fc" id="L241">            closeThreadConnection();</span>
+        }
+<span class="fc" id="L243">        return results;</span>
+    }
+
+    public Boolean solveDelete(deleterequest Delete) throws SQLException {
+        try {
+<span class="fc" id="L248">            Connection c = getConnection();</span>
+<span class="fc" id="L249">            try (PreparedStatement delete = c.prepareStatement(</span>
+                    &quot;DELETE FROM entries WHERE id = ? AND username = ?&quot;)) {
+<span class="fc" id="L251">                delete.setLong(1, Delete.entryId);</span>
+<span class="fc" id="L252">                delete.setString(2, Delete.username);</span>
+<span class="fc" id="L253">                int affected = delete.executeUpdate();</span>
+<span class="pc bpc" id="L254" title="1 of 2 branches missed.">                return affected &gt; 0;</span>
+            }
+        } finally {
+<span class="fc" id="L257">            closeThreadConnection();</span>
+        }
+    }
+
+    public int solveClear(String username) throws SQLException {
+        try {
+<span class="fc" id="L263">            Connection c = getConnection();</span>
+<span class="fc" id="L264">            try (PreparedStatement clear = c.prepareStatement(</span>
+                    &quot;DELETE FROM entries WHERE username = ?&quot;)) {
+<span class="fc" id="L266">                clear.setString(1, username);</span>
+<span class="fc" id="L267">                return clear.executeUpdate();</span>
+            }
+        } finally {
+<span class="fc" id="L270">            closeThreadConnection();</span>
+        }
+    }
+
+    private Entry mapEntry(ResultSet rs) throws SQLException {
+<span class="fc" id="L275">        Long id = rs.getObject(&quot;id&quot;, Long.class);</span>
+<span class="fc" id="L276">        return new Entry(</span>
+                id,
+<span class="fc" id="L278">                rs.getString(&quot;username&quot;),</span>
+<span class="fc" id="L279">                rs.getDouble(&quot;amount&quot;),</span>
+<span class="fc" id="L280">                normalizeType(rs.getString(&quot;type&quot;)),</span>
+<span class="fc" id="L281">                rs.getString(&quot;date&quot;),</span>
+<span class="fc" id="L282">                rs.getString(&quot;subject&quot;),</span>
+<span class="fc" id="L283">                rs.getString(&quot;note&quot;));</span>
+    }
+
+    private String normalizeType(String raw) {
+<span class="pc bpc" id="L287" title="2 of 4 branches missed.">        if (raw == null || raw.isBlank()) {</span>
+<span class="nc" id="L288">            return &quot;expense&quot;;</span>
+        }
+<span class="fc" id="L290">        String normalized = raw.trim().toLowerCase();</span>
+<span class="pc bpc" id="L291" title="1 of 4 branches missed.">        if (!normalized.equals(&quot;income&quot;) &amp;&amp; !normalized.equals(&quot;expense&quot;)) {</span>
+<span class="nc" id="L292">            return &quot;expense&quot;;</span>
+        }
+<span class="fc" id="L294">        return normalized;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

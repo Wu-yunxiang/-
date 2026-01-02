@@ -13,8 +13,8 @@ public class sqloperation {
     private static final Logger LOGGER = Logger.getLogger(sqloperation.class.getName());
     private static final Path DB_PATH = Paths.get(System.getProperty("user.dir"), "accounting_db").toAbsolutePath();
     public static final String JDBC_URL = "jdbc:h2:file:" + DB_PATH.toString().replace("\\", "/") + ";DB_CLOSE_DELAY=-1";
-    public static String JDBC_USER = "sa";
-    public static String JDBC_PASSWORD = "";
+    public static String JDBC_USER = System.getenv("DB_USER") != null ? System.getenv("DB_USER") : "sa";
+    public static String JDBC_PASSWORD = System.getenv("DB_PASSWORD") != null ? System.getenv("DB_PASSWORD") : "";
     
     // 简单的连接缓存，避免频繁创建连接
     private static final ThreadLocal<Connection> connectionThreadLocal = new ThreadLocal<>();

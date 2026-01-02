@@ -5,6 +5,7 @@ communication\ReceiveService.class
 acounting_system\Main.class
 RequestManagement\searchrequest.class
 RequestManagement\parser.class
+RequestManagement\deleterequest.class
 RequestManagement\sqloperation.class
 sharedmodel\Entry.class
 RequestManagement\registerOrloginrequest.class

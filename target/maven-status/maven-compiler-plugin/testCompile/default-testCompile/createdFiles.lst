@@ -1,0 +1,9 @@
+acounting_system\ParserFuzzTest.class
+RequestManagement\ParserTest.class
+RequestManagement\ParserTest$MockSqlOperation.class
+acounting_system\AppTest.class
+ResultManagement\ParseResultTest.class
+sharedmodel\EntryTest.class
+acounting_system\IntegrationTest.class
+acounting_system\ParserFuzzLong.class
+acounting_system\ParserFuzzLongTestMigrated.class
