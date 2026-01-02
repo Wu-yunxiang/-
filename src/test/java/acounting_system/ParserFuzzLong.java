@@ -3,6 +3,7 @@ package acounting_system;
 import com.code_intelligence.jazzer.api.FuzzedDataProvider;
 import com.code_intelligence.jazzer.junit.FuzzTest;
 import RequestManagement.parser;
+import RequestManagement.sqloperation;
 import org.junit.jupiter.api.BeforeAll;
 
 public class ParserFuzzLong {

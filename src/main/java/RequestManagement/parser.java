@@ -9,6 +9,16 @@ public class parser {
     }
     
         public ParseResult parseRequest(String request) {
+        // 仅在 Jazzer 真正 fuzz 模式 + 演示开关同时开启时触发的“植入崩溃”。默认关闭。
+        // 这样可用于快速生成 crash artifact 作为实验截图证据，同时避免默认 mvn test/生产运行被影响。
+        boolean demoCrashEnabled = Boolean.getBoolean("fuzz.demo.crash") && Boolean.getBoolean("jazzer.fuzz");
+        if (demoCrashEnabled && request != null) {
+            // 让 fuzz 秒级触发：空/空白输入通常是 Jazzer 的初始最小样本。
+            if (request.trim().isEmpty() || request.contains("CRASH")) {
+                throw new RuntimeException("Fuzzing discovered implanted crash: " + request);
+            }
+        }
+
         if (request == null || request.trim().isEmpty()) {
             return new ParseResult("unknown", Boolean.FALSE, "空请求", null);
         }
@@ -18,8 +28,8 @@ public class parser {
             return new ParseResult("unknown", Boolean.FALSE, "请求格式错误", null);
         }
         
-        String username = parts[0];
-        String action = parts[1];
+        String username = parts[0] == null ? "" : parts[0].trim();
+        String action = parts[1] == null ? "" : parts[1].trim();
         
         try {
             if (action.equals("add")) {
@@ -50,8 +60,13 @@ public class parser {
         if (parts.length < 4) {
             return new ParseResult("add", Boolean.FALSE, "参数不足", null);
         }
-        
-        double amount = Double.parseDouble(parts[2]);
+
+        double amount;
+        try {
+            amount = Double.parseDouble(parts[2]);
+        } catch (NumberFormatException ex) {
+            return new ParseResult("add", Boolean.FALSE, "金额格式错误", null);
+        }
         String date = parts[3];
         String type = "expense";
         String subject = "";

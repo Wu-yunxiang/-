@@ -127,6 +127,15 @@ public class ParserTest {
     }
 
     @Test
+    public void testHandleAddRequestInvalidAmount() {
+        String request = "user,add,not_a_number,2023-01-01";
+        ParseResult result = p.parseRequest(request);
+        assertEquals("add", result.action);
+        assertFalse(result.success);
+        assertEquals("金额格式错误", result.message);
+    }
+
+    @Test
     public void testHandleRegisterRequestSuccess() {
         String request = "user,register,pass";
         ParseResult result = p.parseRequest(request);
@@ -159,6 +168,14 @@ public class ParserTest {
         assertEquals("unknown", result.action);
         assertFalse(result.success);
         assertTrue(result.message.startsWith("未知操作"));
+    }
+
+    @Test
+    public void testActionTrimmed() {
+        String request = "user,  login  ,pass";
+        ParseResult result = p.parseRequest(request);
+        assertEquals("login", result.action);
+        assertTrue(result.success);
     }
 
     @Test

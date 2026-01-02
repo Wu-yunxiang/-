@@ -1,11 +1,11 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
 server,sharedmodel,Entry,2,103,1,13,0,20,1,9,0,3
 server,acounting_system,Main,31,0,2,0,10,0,4,0,3,0
-server,RequestManagement,sqloperation,70,530,24,36,17,120,23,22,0,15
+server,RequestManagement,sqloperation,22,578,16,44,5,132,15,30,0,15
 server,RequestManagement,deleterequest,0,9,0,0,0,4,0,1,0,1
 server,RequestManagement,loginrequest,0,9,0,0,0,4,0,1,0,1
 server,RequestManagement,addrequest,0,14,0,0,0,3,0,1,0,1
-server,RequestManagement,parser,63,418,16,42,12,73,14,25,0,10
+server,RequestManagement,parser,36,497,15,59,4,88,11,36,0,10
 server,RequestManagement,searchrequest,0,21,0,0,0,8,0,1,0,1
 server,RequestManagement,registerOrloginrequest,0,3,0,0,0,1,0,1,0,1
 server,RequestManagement,registerrequest,0,9,0,0,0,4,0,1,0,1

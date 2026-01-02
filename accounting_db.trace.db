@@ -267,3 +267,1544 @@ Caused by: java.lang.AssertionError: 53248 != 49152
 	at org.h2.mvstore.RandomAccessStore.writeChunk(RandomAccessStore.java:28)
 	at org.h2.mvstore.FileStore.storeBuffer(FileStore.java:1524)
 	... 6 more
+2026-01-02 19:49:22.671180+08:00 database: flush
+org.h2.message.DbException: General error: "org.h2.mvstore.MVStoreException: java.lang.AssertionError: 53248 != 49152 [2.2.224/3]" [50000-224]
+	at org.h2.message.DbException.get(DbException.java:212)
+	at org.h2.message.DbException.convert(DbException.java:407)
+	at org.h2.mvstore.db.Store.lambda$new$0(Store.java:122)
+	at org.h2.mvstore.MVStore.handleException(MVStore.java:1546)
+	at org.h2.mvstore.MVStore.panic(MVStore.java:371)
+	at org.h2.mvstore.FileStore.storeBuffer(FileStore.java:1529)
+	at org.h2.mvstore.FileStore.lambda$serializeAndStore$3(FileStore.java:1432)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientException: General error: "org.h2.mvstore.MVStoreException: java.lang.AssertionError: 53248 != 49152 [2.2.224/3]" [50000-224]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:566)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	... 12 more
+Caused by: org.h2.mvstore.MVStoreException: java.lang.AssertionError: 53248 != 49152 [2.2.224/3]
+	at org.h2.mvstore.DataUtils.newMVStoreException(DataUtils.java:996)
+	... 7 more
+Caused by: java.lang.AssertionError: 53248 != 49152
+	at org.h2.mvstore.RandomAccessStore.shrinkStoreIfPossible(RandomAccessStore.java:679)
+	at org.h2.mvstore.RandomAccessStore.writeChunk(RandomAccessStore.java:377)
+	at org.h2.mvstore.RandomAccessStore.writeChunk(RandomAccessStore.java:28)
+	at org.h2.mvstore.FileStore.storeBuffer(FileStore.java:1524)
+	... 6 more
+2026-01-02 19:49:28.868990+08:00 jdbc[4]: 
+org.h2.message.DbException: General error: "General error: ""org.h2.mvstore.MVStoreException: java.lang.AssertionError: 53248 != 49152 [2.2.224/3]"" [50000-224]" [50000-224]
+	at org.h2.message.DbException.get(DbException.java:212)
+	at org.h2.engine.Database.throwLastBackgroundException(Database.java:1817)
+	at org.h2.engine.SessionLocal.beforeCommitOrRollback(SessionLocal.java:764)
+	at org.h2.engine.SessionLocal.commit(SessionLocal.java:679)
+	at org.h2.command.Command.commitIfNonTransactional(Command.java:315)
+	at org.h2.command.Command.executeUpdate(Command.java:247)
+	at org.h2.engine.Engine.openSession(Engine.java:259)
+	at org.h2.engine.Engine.createSession(Engine.java:201)
+	at org.h2.engine.SessionRemote.connectEmbeddedOrServer(SessionRemote.java:343)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:125)
+	at org.h2.Driver.connect(Driver.java:59)
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:681)
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:229)
+	at RequestManagement.sqloperation.initialize(sqloperation.java:28)
+	at acounting_system.ParserFuzzTest.setUp(ParserFuzzTest.java:19)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:727)
+	at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:156)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptLifecycleMethod(TimeoutExtension.java:128)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptBeforeAllMethod(TimeoutExtension.java:70)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:103)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:93)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:92)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:86)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$invokeBeforeAllMethods$13(ClassBasedTestDescriptor.java:411)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.invokeBeforeAllMethods(ClassBasedTestDescriptor.java:409)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.before(ClassBasedTestDescriptor.java:215)
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.before(ClassBasedTestDescriptor.java:84)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:148)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:147)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:127)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:90)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:55)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:102)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:54)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:114)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:95)
+	at org.junit.platform.launcher.core.DefaultLauncherSession$DelegatingLauncher.execute(DefaultLauncherSession.java:91)
+	at org.junit.platform.launcher.core.SessionPerRequestLauncher.execute(SessionPerRequestLauncher.java:60)
+	at org.eclipse.jdt.internal.junit5.runner.JUnit5TestReference.run(JUnit5TestReference.java:100)
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(Unknown Source)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(Unknown Source)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(Unknown Source)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(Unknown Source)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(Unknown Source)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientException: General error: "General error: ""org.h2.mvstore.MVStoreException: java.lang.AssertionError: 53248 != 49152 [2.2.224/3]"" [50000-224]" [50000-224]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:566)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	... 75 more
+Caused by: org.h2.message.DbException: General error: "org.h2.mvstore.MVStoreException: java.lang.AssertionError: 53248 != 49152 [2.2.224/3]" [50000-224]
+	at org.h2.message.DbException.get(DbException.java:212)
+	at org.h2.message.DbException.convert(DbException.java:407)
+	at org.h2.mvstore.db.Store.lambda$new$0(Store.java:122)
+	at org.h2.mvstore.MVStore.handleException(MVStore.java:1546)
+	at org.h2.mvstore.MVStore.panic(MVStore.java:371)
+	at org.h2.mvstore.FileStore.storeBuffer(FileStore.java:1529)
+	at org.h2.mvstore.FileStore.lambda$serializeAndStore$3(FileStore.java:1432)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientException: General error: "org.h2.mvstore.MVStoreException: java.lang.AssertionError: 53248 != 49152 [2.2.224/3]" [50000-224]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:566)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	... 12 more
+Caused by: org.h2.mvstore.MVStoreException: java.lang.AssertionError: 53248 != 49152 [2.2.224/3]
+	at org.h2.mvstore.DataUtils.newMVStoreException(DataUtils.java:996)
+	... 7 more
+Caused by: java.lang.AssertionError: 53248 != 49152
+	at org.h2.mvstore.RandomAccessStore.shrinkStoreIfPossible(RandomAccessStore.java:679)
+	at org.h2.mvstore.RandomAccessStore.writeChunk(RandomAccessStore.java:377)
+	at org.h2.mvstore.RandomAccessStore.writeChunk(RandomAccessStore.java:28)
+	at org.h2.mvstore.FileStore.storeBuffer(FileStore.java:1524)
+	... 6 more
+2026-01-02 19:56:04.967035+08:00 jdbc[44]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:07.241980+08:00 database: flush
+org.h2.message.DbException: General error: "org.h2.mvstore.MVStoreException: java.lang.AssertionError: 61440 != 57344 [2.2.224/3]" [50000-224]
+	at org.h2.message.DbException.get(DbException.java:212)
+	at org.h2.message.DbException.convert(DbException.java:407)
+	at org.h2.mvstore.db.Store.lambda$new$0(Store.java:122)
+	at org.h2.mvstore.MVStore.handleException(MVStore.java:1546)
+	at org.h2.mvstore.MVStore.panic(MVStore.java:371)
+	at org.h2.mvstore.FileStore.storeBuffer(FileStore.java:1529)
+	at org.h2.mvstore.FileStore.lambda$serializeAndStore$3(FileStore.java:1432)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientException: General error: "org.h2.mvstore.MVStoreException: java.lang.AssertionError: 61440 != 57344 [2.2.224/3]" [50000-224]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:566)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	... 12 more
+Caused by: org.h2.mvstore.MVStoreException: java.lang.AssertionError: 61440 != 57344 [2.2.224/3]
+	at org.h2.mvstore.DataUtils.newMVStoreException(DataUtils.java:996)
+	... 7 more
+Caused by: java.lang.AssertionError: 61440 != 57344
+	at org.h2.mvstore.RandomAccessStore.shrinkStoreIfPossible(RandomAccessStore.java:679)
+	at org.h2.mvstore.RandomAccessStore.writeChunk(RandomAccessStore.java:377)
+	at org.h2.mvstore.RandomAccessStore.writeChunk(RandomAccessStore.java:28)
+	at org.h2.mvstore.FileStore.storeBuffer(FileStore.java:1524)
+	... 6 more
+2026-01-02 20:07:10.938324+08:00 jdbc[4]: 
+org.h2.message.DbException: General error: "General error: ""org.h2.mvstore.MVStoreException: java.lang.AssertionError: 61440 != 57344 [2.2.224/3]"" [50000-224]" [50000-224]
+	at org.h2.message.DbException.get(DbException.java:212)
+	at org.h2.engine.Database.throwLastBackgroundException(Database.java:1817)
+	at org.h2.engine.SessionLocal.beforeCommitOrRollback(SessionLocal.java:764)
+	at org.h2.engine.SessionLocal.commit(SessionLocal.java:679)
+	at org.h2.command.Command.commitIfNonTransactional(Command.java:315)
+	at org.h2.command.Command.executeUpdate(Command.java:247)
+	at org.h2.engine.Engine.openSession(Engine.java:259)
+	at org.h2.engine.Engine.createSession(Engine.java:201)
+	at org.h2.engine.SessionRemote.connectEmbeddedOrServer(SessionRemote.java:343)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:125)
+	at org.h2.Driver.connect(Driver.java:59)
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:681)
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:229)
+	at RequestManagement.sqloperation.getConnection(sqloperation.java:71)
+	at RequestManagement.sqloperation.solveClear(sqloperation.java:263)
+	at RequestManagement.parser.handleClearRequest(parser.java:138)
+	at RequestManagement.parser.parseRequest(parser.java:46)
+	at acounting_system.ParserFuzzTest.fuzzerTestOneInput(ParserFuzzTest.java:27)
+	at com.code_intelligence.jazzer.driver.FuzzTargetRunner.runOne(FuzzTargetRunner.java:230)
+	at com.code_intelligence.jazzer.runtime.FuzzTargetRunnerNatives.startLibFuzzer(Native Method)
+	at com.code_intelligence.jazzer.driver.FuzzTargetRunner.startLibFuzzer(FuzzTargetRunner.java:541)
+	at com.code_intelligence.jazzer.driver.FuzzTargetRunner.startLibFuzzer(FuzzTargetRunner.java:431)
+	at com.code_intelligence.jazzer.junit.FuzzTestExecutor.execute(FuzzTestExecutor.java:368)
+	at com.code_intelligence.jazzer.junit.FuzzTestExtensions.startFuzzing(FuzzTestExtensions.java:127)
+	at com.code_intelligence.jazzer.junit.FuzzTestExtensions.interceptTestTemplateMethod(FuzzTestExtensions.java:62)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:103)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:93)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:156)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestableMethod(TimeoutExtension.java:147)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestTemplateMethod(TimeoutExtension.java:94)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:103)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:93)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:92)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:86)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeTestMethod$7(TestMethodTestDescriptor.java:217)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeTestMethod(TestMethodTestDescriptor.java:213)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:138)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:68)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:151)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask$DefaultDynamicTestExecutor.execute(NodeTestTask.java:226)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask$DefaultDynamicTestExecutor.execute(NodeTestTask.java:204)
+	at org.junit.jupiter.engine.descriptor.TestTemplateTestDescriptor.execute(TestTemplateTestDescriptor.java:142)
+	at org.junit.jupiter.engine.descriptor.TestTemplateTestDescriptor.lambda$execute$2(TestTemplateTestDescriptor.java:110)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.Streams$StreamBuilderImpl.forEachRemaining(Streams.java:411)
+	at java.base/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762)
+	at java.base/java.util.stream.ReferencePipeline$7$1.accept(ReferencePipeline.java:276)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1625)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.base/java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:596)
+	at java.base/java.util.stream.ReferencePipeline$7$1.accept(ReferencePipeline.java:276)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1625)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.base/java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:596)
+	at org.junit.jupiter.engine.descriptor.TestTemplateTestDescriptor.execute(TestTemplateTestDescriptor.java:110)
+	at org.junit.jupiter.engine.descriptor.TestTemplateTestDescriptor.execute(TestTemplateTestDescriptor.java:44)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:151)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:147)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:127)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:90)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:55)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:102)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:54)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:114)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:86)
+	at org.junit.platform.launcher.core.DefaultLauncherSession$DelegatingLauncher.execute(DefaultLauncherSession.java:86)
+	at org.apache.maven.surefire.junitplatform.LazyLauncher.execute(LazyLauncher.java:56)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.execute(JUnitPlatformProvider.java:184)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invokeAllTests(JUnitPlatformProvider.java:148)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invoke(JUnitPlatformProvider.java:122)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:385)
+	at org.apache.maven.surefire.booter.ForkedBooter.execute(ForkedBooter.java:162)
+	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientException: General error: "General error: ""org.h2.mvstore.MVStoreException: java.lang.AssertionError: 61440 != 57344 [2.2.224/3]"" [50000-224]" [50000-224]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:566)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	... 136 more
+Caused by: org.h2.message.DbException: General error: "org.h2.mvstore.MVStoreException: java.lang.AssertionError: 61440 != 57344 [2.2.224/3]" [50000-224]
+	at org.h2.message.DbException.get(DbException.java:212)
+	at org.h2.message.DbException.convert(DbException.java:407)
+	at org.h2.mvstore.db.Store.lambda$new$0(Store.java:122)
+	at org.h2.mvstore.MVStore.handleException(MVStore.java:1546)
+	at org.h2.mvstore.MVStore.panic(MVStore.java:371)
+	at org.h2.mvstore.FileStore.storeBuffer(FileStore.java:1529)
+	at org.h2.mvstore.FileStore.lambda$serializeAndStore$3(FileStore.java:1432)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientException: General error: "org.h2.mvstore.MVStoreException: java.lang.AssertionError: 61440 != 57344 [2.2.224/3]" [50000-224]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:566)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	... 12 more
+Caused by: org.h2.mvstore.MVStoreException: java.lang.AssertionError: 61440 != 57344 [2.2.224/3]
+	at org.h2.mvstore.DataUtils.newMVStoreException(DataUtils.java:996)
+	... 7 more
+Caused by: java.lang.AssertionError: 61440 != 57344
+	at org.h2.mvstore.RandomAccessStore.shrinkStoreIfPossible(RandomAccessStore.java:679)
+	at org.h2.mvstore.RandomAccessStore.writeChunk(RandomAccessStore.java:377)
+	at org.h2.mvstore.RandomAccessStore.writeChunk(RandomAccessStore.java:28)
+	at org.h2.mvstore.FileStore.storeBuffer(FileStore.java:1524)
+	... 6 more
+2026-01-02 20:07:10.951143+08:00 jdbc[5]: 
+org.h2.message.DbException: The database has been closed [90098-224]
+	at org.h2.message.DbException.get(DbException.java:212)
+	at org.h2.engine.SessionLocal.getTransaction(SessionLocal.java:1610)
+	at org.h2.engine.SessionLocal.getStatementSavepoint(SessionLocal.java:1620)
+	at org.h2.engine.SessionLocal.setSavepoint(SessionLocal.java:858)
+	at org.h2.command.Command.executeUpdate(Command.java:248)
+	at org.h2.engine.Engine.openSession(Engine.java:259)
+	at org.h2.engine.Engine.createSession(Engine.java:201)
+	at org.h2.engine.SessionRemote.connectEmbeddedOrServer(SessionRemote.java:343)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:125)
+	at org.h2.Driver.connect(Driver.java:59)
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:681)
+	at java.sql/java.sql.DriverManager.getConnection(DriverManager.java:229)
+	at RequestManagement.sqloperation.getConnection(sqloperation.java:71)
+	at RequestManagement.sqloperation.solveList(sqloperation.java:230)
+	at RequestManagement.parser.handleListRequest(parser.java:134)
+	at RequestManagement.parser.parseRequest(parser.java:44)
+	at acounting_system.ParserFuzzTest.fuzzerTestOneInput(ParserFuzzTest.java:27)
+	at com.code_intelligence.jazzer.driver.FuzzTargetRunner.runOne(FuzzTargetRunner.java:230)
+	at com.code_intelligence.jazzer.runtime.FuzzTargetRunnerNatives.startLibFuzzer(Native Method)
+	at com.code_intelligence.jazzer.driver.FuzzTargetRunner.startLibFuzzer(FuzzTargetRunner.java:541)
+	at com.code_intelligence.jazzer.driver.FuzzTargetRunner.startLibFuzzer(FuzzTargetRunner.java:431)
+	at com.code_intelligence.jazzer.junit.FuzzTestExecutor.execute(FuzzTestExecutor.java:368)
+	at com.code_intelligence.jazzer.junit.FuzzTestExtensions.startFuzzing(FuzzTestExtensions.java:127)
+	at com.code_intelligence.jazzer.junit.FuzzTestExtensions.interceptTestTemplateMethod(FuzzTestExtensions.java:62)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:103)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:93)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:156)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestableMethod(TimeoutExtension.java:147)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestTemplateMethod(TimeoutExtension.java:94)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:103)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:93)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:92)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:86)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeTestMethod$7(TestMethodTestDescriptor.java:217)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeTestMethod(TestMethodTestDescriptor.java:213)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:138)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:68)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:151)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask$DefaultDynamicTestExecutor.execute(NodeTestTask.java:226)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask$DefaultDynamicTestExecutor.execute(NodeTestTask.java:204)
+	at org.junit.jupiter.engine.descriptor.TestTemplateTestDescriptor.execute(TestTemplateTestDescriptor.java:142)
+	at org.junit.jupiter.engine.descriptor.TestTemplateTestDescriptor.lambda$execute$2(TestTemplateTestDescriptor.java:110)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.Streams$StreamBuilderImpl.forEachRemaining(Streams.java:411)
+	at java.base/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762)
+	at java.base/java.util.stream.ReferencePipeline$7$1.accept(ReferencePipeline.java:276)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1625)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.base/java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:596)
+	at java.base/java.util.stream.ReferencePipeline$7$1.accept(ReferencePipeline.java:276)
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1625)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.base/java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:596)
+	at org.junit.jupiter.engine.descriptor.TestTemplateTestDescriptor.execute(TestTemplateTestDescriptor.java:110)
+	at org.junit.jupiter.engine.descriptor.TestTemplateTestDescriptor.execute(TestTemplateTestDescriptor.java:44)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:151)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:147)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:127)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:90)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:55)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:102)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:54)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:114)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:86)
+	at org.junit.platform.launcher.core.DefaultLauncherSession$DelegatingLauncher.execute(DefaultLauncherSession.java:86)
+	at org.apache.maven.surefire.junitplatform.LazyLauncher.execute(LazyLauncher.java:56)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.execute(JUnitPlatformProvider.java:184)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invokeAllTests(JUnitPlatformProvider.java:148)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invoke(JUnitPlatformProvider.java:122)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:385)
+	at org.apache.maven.surefire.booter.ForkedBooter.execute(ForkedBooter.java:162)
+	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientConnectionException: The database has been closed [90098-224]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:690)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	... 135 more
+Caused by: org.h2.mvstore.MVStoreException: java.lang.AssertionError: 61440 != 57344 [2.2.224/3]
+	at org.h2.mvstore.DataUtils.newMVStoreException(DataUtils.java:996)
+	at org.h2.mvstore.FileStore.storeBuffer(FileStore.java:1529)
+	at org.h2.mvstore.FileStore.lambda$serializeAndStore$3(FileStore.java:1432)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.lang.AssertionError: 61440 != 57344
+	at org.h2.mvstore.RandomAccessStore.shrinkStoreIfPossible(RandomAccessStore.java:679)
+	at org.h2.mvstore.RandomAccessStore.writeChunk(RandomAccessStore.java:377)
+	at org.h2.mvstore.RandomAccessStore.writeChunk(RandomAccessStore.java:28)
+	at org.h2.mvstore.FileStore.storeBuffer(FileStore.java:1524)
+	... 6 more
+2026-01-02 20:07:11.206630+08:00 jdbc[45]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:11.213220+08:00 jdbc[46]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:11.215331+08:00 jdbc[47]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0640\\0000\\0000\\0000\\0000\\0000\\000... (65)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:11.217378+08:00 jdbc[48]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0640\\0000\\0000\\0000\\0000\\0000\\000... (65)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:11.293119+08:00 jdbc[67]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:11.295127+08:00 jdbc[68]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:11.441519+08:00 jdbc[116]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:11.444444+08:00 jdbc[117]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:11.545719+08:00 jdbc[149]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:11.706520+08:00 jdbc[228]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:11.707529+08:00 jdbc[229]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'II?IIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:11.710033+08:00 jdbc[230]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'II?IIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (65)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:11.732663+08:00 jdbc[244]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:11.734236+08:00 jdbc[245]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:11.737438+08:00 jdbc[246]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:11.739031+08:00 jdbc[247]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:11.911589+08:00 jdbc[354]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIN\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:12.090508+08:00 jdbc[456]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:12.091509+08:00 jdbc[457]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000I\\0000\\0000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:12.149784+08:00 jdbc[502]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:12.197476+08:00 jdbc[537]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:12.198474+08:00 jdbc[538]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (68)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:12.236680+08:00 jdbc[555]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:12.237678+08:00 jdbc[556]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:12.238678+08:00 jdbc[557]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:12.290449+08:00 jdbc[595]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:12.296050+08:00 jdbc[600]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (68)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:12.297048+08:00 jdbc[601]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIII\\0003\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000... (68)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:12.319356+08:00 jdbc[619]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:12.321359+08:00 jdbc[620]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (65)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:12.322360+08:00 jdbc[621]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0001\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (65)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:12.323868+08:00 jdbc[622]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0001\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (65)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:12.344422+08:00 jdbc[633]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'III-IIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:12.350378+08:00 jdbc[634]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'III-IIIIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\00... (72)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:12.353887+08:00 jdbc[635]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'III-registerII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\00... (72)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:12.356895+08:00 jdbc[636]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'III-registerII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\00... (72)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:12.434018+08:00 jdbc[667]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:12.536321+08:00 jdbc[711]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:12.537829+08:00 jdbc[712]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (67)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:12.576180+08:00 jdbc[743]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000IIIII\\0000\\0000\\0000\\0000\\000... (71)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:12.577183+08:00 jdbc[744]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000IIIII\\0000\\0000\\0000\\0000\\000... (71)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:12.578186+08:00 jdbc[745]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000IIII\\0000\\0000\\0000\\0000\\0004... (71)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:12.580699+08:00 jdbc[747]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "'IIIIIIIIssssssssssssssssssssssssssssssssssssIIIIIIIIIIIIIIIIIICICCCC' (68)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:12.681441+08:00 jdbc[831]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (68)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:12.682444+08:00 jdbc[832]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:12.848844+08:00 jdbc[966]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (68)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:12.849855+08:00 jdbc[967]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000ete\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\... (71)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:12.850856+08:00 jdbc[968]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000ete\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\... (71)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:12.947713+08:00 jdbc[1055]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:12.949716+08:00 jdbc[1056]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:12.951622+08:00 jdbc[1058]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000*\\0000IIII\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:12.953129+08:00 jdbc[1059]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'I)IIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000*\\0000IIII\\0000\\00... (67)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:12.991553+08:00 jdbc[1097]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.051835+08:00 jdbc[1150]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIII\\0549II\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\... (65)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.053344+08:00 jdbc[1151]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIII\\0549II\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\... (65)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.068031+08:00 jdbc[1166]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIHIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.070032+08:00 jdbc[1167]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIHIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.097893+08:00 jdbc[1191]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\... (74)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.099900+08:00 jdbc[1192]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\... (74)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.100897+08:00 jdbc[1193]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\... (74)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.101894+08:00 jdbc[1194]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIHIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\... (74)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.103403+08:00 jdbc[1195]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIHIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\... (78)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.104486+08:00 jdbc[1196]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (68)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.105493+08:00 jdbc[1197]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (68)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.107497+08:00 jdbc[1198]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (68)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.199552+08:00 jdbc[1284]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0001\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (70)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.200553+08:00 jdbc[1285]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0001\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.201550+08:00 jdbc[1286]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0001\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.307565+08:00 jdbc[1363]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.309678+08:00 jdbc[1364]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.310682+08:00 jdbc[1365]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'I?IIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.311680+08:00 jdbc[1366]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'I?IIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.313187+08:00 jdbc[1367]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'I?IIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.342089+08:00 jdbc[1396]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\... (74)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.350690+08:00 jdbc[1402]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000.\\0000\\0000\\00... (67)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.565596+08:00 jdbc[1526]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIKIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.567596+08:00 jdbc[1527]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIKIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.568596+08:00 jdbc[1528]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIKIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (74)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.569595+08:00 jdbc[1529]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIKIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (74)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.570597+08:00 jdbc[1530]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIKIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (74)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.610680+08:00 jdbc[1568]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.611680+08:00 jdbc[1569]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000/\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\00... (67)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.614201+08:00 jdbc[1570]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000/\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\00... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.615527+08:00 jdbc[1571]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000/\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\00... (68)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.650469+08:00 jdbc[1609]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.673178+08:00 jdbc[1632]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.676200+08:00 jdbc[1635]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\ffff\\ffff\\ffc0\\0000\\0000\\0000\\0000\\000... (67)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.677201+08:00 jdbc[1636]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\ffff\\ffff\\ffc0\\0000\\0000\\0000\\0000\\000... (67)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.778309+08:00 jdbc[1739]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.779308+08:00 jdbc[1740]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\a00... (65)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.780815+08:00 jdbc[1741]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000O\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\a000\\00... (65)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.950457+08:00 jdbc[1934]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0002\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.950457+08:00 jdbc[1935]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0002\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.982446+08:00 jdbc[1972]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.983445+08:00 jdbc[1973]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIIIIIIIIIIIIIIIIIIIII\\0000\\0000\\0000IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIICICCC... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.984646+08:00 jdbc[1974]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIIIIIIIIIIIIIIIIIIIII\\0000\\0000\\0000IIIIIIIIIIIIIIIIIIIIIIIIII\\04f6IIICI... (65)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.987660+08:00 jdbc[1977]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (65)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.987660+08:00 jdbc[1978]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (72)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.989654+08:00 jdbc[1979]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (74)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.991169+08:00 jdbc[1980]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\00... (80)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:13.992169+08:00 jdbc[1981]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\00... (80)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:14.064433+08:00 jdbc[2059]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:14.066435+08:00 jdbc[2060]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:14.083833+08:00 jdbc[2073]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (91)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:14.199824+08:00 jdbc[2184]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\... (74)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:14.200825+08:00 jdbc[2185]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\... (74)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:14.201827+08:00 jdbc[2186]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\... (82)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:14.203333+08:00 jdbc[2187]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'Iregiste1IIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\... (82)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:14.205342+08:00 jdbc[2188]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'Iregiste1IIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\... (82)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:14.217491+08:00 jdbc[2199]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (74)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:14.219584+08:00 jdbc[2200]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\9000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (72)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:14.220911+08:00 jdbc[2201]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\9000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (73)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:14.279656+08:00 jdbc[2241]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (117)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:14.280656+08:00 jdbc[2242]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (117)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:14.281654+08:00 jdbc[2243]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (72)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:14.283300+08:00 jdbc[2244]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIIK\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (72)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:14.289825+08:00 jdbc[2249]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000````````\\0000\\... (74)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:14.360136+08:00 jdbc[2319]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (74)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:14.401884+08:00 jdbc[2363]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (89)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:14.401884+08:00 jdbc[2364]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (89)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:14.479800+08:00 jdbc[2450]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\... (74)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:14.550166+08:00 jdbc[2527]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:14.761955+08:00 jdbc[2714]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (65)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:14.810685+08:00 jdbc[2757]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (65)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:14.902798+08:00 jdbc[2794]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:14.904349+08:00 jdbc[2795]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:14.954545+08:00 jdbc[2837]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\00... (72)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:14.957073+08:00 jdbc[2838]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\00... (72)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.031563+08:00 jdbc[2909]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.096570+08:00 jdbc[2973]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IKIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.100567+08:00 jdbc[2977]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IK\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000 \\0000\\0000\\0000\\0000\\0000\\0000\\000... (78)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.127118+08:00 jdbc[3009]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000IIIIIIIIIIIIIIIIIIIIIIIII\\0000\\0000\\0000\\000... (91)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.128112+08:00 jdbc[3010]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000IIII\\0436\\05b6\\05b6\\05b6IIIIIIIIIIIII\\0000\\0... (87)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.129112+08:00 jdbc[3011]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000IIII\\0436\\05b6\\05b6\\05b6IIIIIIIIIIIII\\0000\\0... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.144788+08:00 jdbc[3031]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (65)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.144788+08:00 jdbc[3032]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\06db\\06db\\06db\\06db\\06db\\0000\\0000\\000... (70)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.146294+08:00 jdbc[3033]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\06db\\06db\\06db\\06db\\06db\\0000\\0000\\000... (78)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.146294+08:00 jdbc[3034]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\06db\\06db\\06db\\06db\\06db\\0000\\0000\\000... (82)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.147406+08:00 jdbc[3035]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\06db\\06db\\06db\\06db\\06db\\0000\\0000\\000... (82)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.168106+08:00 jdbc[3063]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (67)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.169104+08:00 jdbc[3064]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\ffff\\ffff\\ffff\\ffff\\ffff\\ffff\\ffff\\ffff\\ffff\\ffff\\ffff\\000... (78)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.170103+08:00 jdbc[3065]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\ffff\\ffff\\ffff\\ffff\\ffff\\ffff\\ffff\\ffff\\ffff\\ffff\\ffff\\000... (78)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.171103+08:00 jdbc[3066]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\ffff\\ffff\\ffff\\ffff\\ffff\\ffff\\ffff\\ffff\\ffff\\ffff\\ffff\\000... (78)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.172108+08:00 jdbc[3067]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\ffff\\ffff\\ffff\\ffff\\ffff\\ffff\\ffff\\ffff\\ffff\\ffff\\ffff\\000... (77)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.176598+08:00 jdbc[3073]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.177762+08:00 jdbc[3074]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.178760+08:00 jdbc[3075]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.199691+08:00 jdbc[3103]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "'VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVCregist... (84)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.307605+08:00 jdbc[3183]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (90)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.308604+08:00 jdbc[3184]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\... (98)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.375578+08:00 jdbc[3225]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.379582+08:00 jdbc[3228]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\... (72)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.381090+08:00 jdbc[3229]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\... (72)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.505192+08:00 jdbc[3324]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.618631+08:00 jdbc[3425]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (102)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.620638+08:00 jdbc[3426]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (103)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.623154+08:00 jdbc[3429]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIregisterIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000I... (72)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.684438+08:00 jdbc[3490]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "'CCCCC88888888888888888888888888888888888888888888888888888888888888888888888888... (80)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.685527+08:00 jdbc[3491]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'CCCCC888888888888888888888888888888\\0447\\01c788888888888888888888888888888888... (78)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.706984+08:00 jdbc[3511]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0001\\000... (74)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.708464+08:00 jdbc[3512]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0001\\000... (132)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.708464+08:00 jdbc[3513]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0001\\000... (72)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.710552+08:00 jdbc[3514]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0001\\000... (72)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.711555+08:00 jdbc[3515]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0001\\000... (76)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.744305+08:00 jdbc[3547]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000888888888888888888888888... (106)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.745813+08:00 jdbc[3548]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'III88888888888888\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000... (106)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.746823+08:00 jdbc[3549]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'III88888888888888\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000... (106)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.747824+08:00 jdbc[3550]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'III88888888888888\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000... (114)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.748822+08:00 jdbc[3551]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'III88888888888888\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000... (114)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:15.824351+08:00 jdbc[3623]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\00... (72)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:16.171614+08:00 jdbc[4049]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:16.173157+08:00 jdbc[4050]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:16.173157+08:00 jdbc[4051]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:16.174170+08:00 jdbc[4052]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:16.175172+08:00 jdbc[4053]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (65)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:16.258691+08:00 jdbc[4161]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:16.259691+08:00 jdbc[4162]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:16.276759+08:00 jdbc[4184]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIII~II\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:16.276759+08:00 jdbc[4185]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIII~II\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (68)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:16.278964+08:00 jdbc[4186]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIII~II\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (68)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:16.280963+08:00 jdbc[4188]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:16.281965+08:00 jdbc[4189]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:16.283472+08:00 jdbc[4190]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (83)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:16.284482+08:00 jdbc[4191]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (84)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:16.369116+08:00 jdbc[4266]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (93)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:16.372117+08:00 jdbc[4267]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\ffff\\ffff\\ffff\\fff... (72)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:16.373625+08:00 jdbc[4268]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\ffff\\ffff\\... (80)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:16.374634+08:00 jdbc[4269]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\ffff\\ffff\\... (80)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:16.375644+08:00 jdbc[4270]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\ffff\\ffff\\... (94)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:16.561725+08:00 jdbc[4400]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:16.614110+08:00 jdbc[4453]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:16.615110+08:00 jdbc[4454]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:16.616112+08:00 jdbc[4455]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:16.617110+08:00 jdbc[4456]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:16.618015+08:00 jdbc[4457]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:16.920120+08:00 jdbc[4791]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:16.921121+08:00 jdbc[4792]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'AIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:16.988072+08:00 jdbc[4862]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIII)I\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\00... (67)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:16.989067+08:00 jdbc[4863]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIII)I\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\00... (67)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:16.990154+08:00 jdbc[4864]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIII)I\\0000\\0000\\0000\\0000\\0000\\0000\\0000-\\0000\\0000\\0000\\0000\\0000\\0000\\0... (68)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:17.052154+08:00 jdbc[4932]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:17.332764+08:00 jdbc[5187]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:17.341375+08:00 jdbc[5194]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:17.462465+08:00 jdbc[5319]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:17.463462+08:00 jdbc[5320]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIII\\0000III\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:17.463971+08:00 jdbc[5321]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIII\\0000III\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (75)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:17.464987+08:00 jdbc[5322]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIII\\0000III\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (75)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:17.466069+08:00 jdbc[5323]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (65)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:17.467071+08:00 jdbc[5324]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0003\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (65)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:17.468070+08:00 jdbc[5325]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIIIregister\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\... (65)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:17.469073+08:00 jdbc[5326]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIIIergister\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\... (65)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:17.470069+08:00 jdbc[5327]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIIIergister\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\... (65)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:17.519571+08:00 jdbc[5369]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "'===============================================================================... (80)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:17.520578+08:00 jdbc[5370]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "'===============================================================================... (80)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:17.521663+08:00 jdbc[5371]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "'=======D=======================================================================... (80)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:17.524177+08:00 jdbc[5372]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "'=======D=======================================================================... (80)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:17.525176+08:00 jdbc[5373]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "'=======D=======================================================================... (80)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:17.561896+08:00 jdbc[5406]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (98)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:17.616939+08:00 jdbc[5452]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (74)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:17.622018+08:00 jdbc[5456]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\... (68)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:17.667195+08:00 jdbc[5502]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000register\\0000\\0000\\0000\\0000\\0000\\... (74)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:17.668703+08:00 jdbc[5503]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000register\\0000\\0000\\0000\\0000\\0000\\... (109)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:17.669710+08:00 jdbc[5504]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000register\\0000\\0000\\0000\\0000\\0000\\... (109)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:17.670711+08:00 jdbc[5505]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000register\\0000\\0000\\0000\\0000\\0000\\... (109)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:17.671711+08:00 jdbc[5506]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000register\\0000\\0000\\0000\\0000\\0000\\... (172)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:17.680319+08:00 jdbc[5516]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:17.682318+08:00 jdbc[5517]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:17.683318+08:00 jdbc[5518]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\00... (72)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:17.683826+08:00 jdbc[5519]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\00... (77)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:17.683826+08:00 jdbc[5520]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterregisterIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000... (85)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:17.853475+08:00 jdbc[5721]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:17.853475+08:00 jdbc[5722]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\ffff\\ffff\\ffc0\\0000\\0000\\0000\\0000\\0000\\0000\\000... (68)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:17.925013+08:00 jdbc[5806]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:17.926025+08:00 jdbc[5807]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\... (74)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:17.926025+08:00 jdbc[5808]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\... (73)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:18.135340+08:00 jdbc[6059]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:18.136631+08:00 jdbc[6060]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0001\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:18.137183+08:00 jdbc[6061]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0001\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (67)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:18.137689+08:00 jdbc[6062]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0001\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:18.138696+08:00 jdbc[6063]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0001\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (65)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:18.272188+08:00 jdbc[6242]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "'CC&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&CCCC' (67)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:18.310564+08:00 jdbc[6285]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "'qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq' (68)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:18.311795+08:00 jdbc[6286]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "'qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq' (68)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:18.462358+08:00 jdbc[6433]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (65)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:18.463874+08:00 jdbc[6434]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (67)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:18.465118+08:00 jdbc[6435]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (68)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:18.467345+08:00 jdbc[6436]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:18.467345+08:00 jdbc[6437]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:18.500740+08:00 jdbc[6474]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:18.725717+08:00 jdbc[6633]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:18.726718+08:00 jdbc[6634]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIII(II\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:18.728713+08:00 jdbc[6635]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIII(II\\0000\\0000\\0000\\0000?\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\00... (67)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:18.729713+08:00 jdbc[6636]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIII(II\\0000\\0000\\0000\\0000?\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000... (75)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:18.729713+08:00 jdbc[6637]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIII(II\\0000\\0000\\0000\\0000?\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000... (74)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:18.747506+08:00 jdbc[6660]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\... (74)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:18.748504+08:00 jdbc[6661]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\... (75)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:18.749508+08:00 jdbc[6662]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\... (75)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:18.749508+08:00 jdbc[6663]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\... (83)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:18.750799+08:00 jdbc[6664]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\... (83)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:18.787895+08:00 jdbc[6708]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:18.788896+08:00 jdbc[6709]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\00... (72)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:18.974349+08:00 jdbc[6969]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:18.975362+08:00 jdbc[6970]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:18.977661+08:00 jdbc[6971]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:19.180958+08:00 jdbc[7182]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:19.214840+08:00 jdbc[7216]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (69)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:19.221850+08:00 jdbc[7220]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIIUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUI\\0000\\0000\\... (75)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:19.223448+08:00 jdbc[7221]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIIUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUI\\0000\\0000\\... (75)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:19.280254+08:00 jdbc[7278]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'zIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:19.465841+08:00 jdbc[7475]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:19.524802+08:00 jdbc[7556]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\00... (72)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:19.525810+08:00 jdbc[7557]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\00... (72)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:19.554277+08:00 jdbc[7596]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:19.618139+08:00 jdbc[7681]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (115)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:19.619140+08:00 jdbc[7682]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (115)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:19.620140+08:00 jdbc[7683]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:19.620140+08:00 jdbc[7684]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (67)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:19.621138+08:00 jdbc[7685]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0001\\0005\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (67)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:19.677663+08:00 jdbc[7745]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\6db6\\6db6\\6db6\\6db... (82)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:20.059983+08:00 jdbc[8023]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000;\\0000\\00... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:20.060984+08:00 jdbc[8024]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000;\\0000\\00... (67)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:20.062188+08:00 jdbc[8025]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000;\\0000\\00... (67)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:20.062188+08:00 jdbc[8026]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0008\\0000\\0000\\0000\\0000;\\0000\\00... (67)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:20.063693+08:00 jdbc[8027]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0008\\0000\\0000\\0000\\0000;\\0000?\\0... (68)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:20.088438+08:00 jdbc[8061]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\00... (150)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:20.089438+08:00 jdbc[8062]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\00... (150)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:20.091438+08:00 jdbc[8063]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\00... (128)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:20.100136+08:00 jdbc[8074]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIYII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:20.101137+08:00 jdbc[8075]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIYII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:20.101137+08:00 jdbc[8076]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIYII\\0000\\0000\\0000v\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\00... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:20.102137+08:00 jdbc[8077]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIYII\\0000\\0000\\0000v\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\00... (67)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:20.104656+08:00 jdbc[8078]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIYII\\0000\\0000\\0000v\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0... (73)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:20.452044+08:00 jdbc[8423]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:20.453555+08:00 jdbc[8424]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'II:IIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\00... (67)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:20.454570+08:00 jdbc[8426]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'III\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (69)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:20.715954+08:00 jdbc[8745]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:20.715954+08:00 jdbc[8746]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:20.717475+08:00 jdbc[8747]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (74)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:20.718490+08:00 jdbc[8748]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\00... (80)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:20.718490+08:00 jdbc[8749]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\00... (80)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:20.748086+08:00 jdbc[8792]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:20.824426+08:00 jdbc[8905]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:20.825935+08:00 jdbc[8906]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:20.826945+08:00 jdbc[8907]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (141)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:20.831946+08:00 jdbc[8913]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:20.831946+08:00 jdbc[8914]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000expense\\0000\\0000\\0000\\0000\\0000\\0... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:20.833529+08:00 jdbc[8915]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000expense\\0000\\0000\\0000\\0000\\0000\\0... (67)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:20.834544+08:00 jdbc[8916]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000expense\\0000\\0000\\0000\\000... (75)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:20.844068+08:00 jdbc[8929]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (175)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:20.844890+08:00 jdbc[8930]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (175)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:20.845994+08:00 jdbc[8931]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIiII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (175)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:20.845994+08:00 jdbc[8932]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIiII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\00... (181)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:20.846996+08:00 jdbc[8933]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIiII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\00... (182)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:20.970118+08:00 jdbc[9071]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'III\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (178)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:20.971118+08:00 jdbc[9072]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'III\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (177)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:20.972118+08:00 jdbc[9073]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'III\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (294)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:20.973117+08:00 jdbc[9074]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'III\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (302)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:21.020095+08:00 jdbc[9126]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:21.021095+08:00 jdbc[9127]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (65)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:21.021095+08:00 jdbc[9128]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (65)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:21.022096+08:00 jdbc[9129]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000B\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\00... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:21.023095+08:00 jdbc[9130]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000B\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\00... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:21.173196+08:00 jdbc[9333]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000+\\0000\\0000\\0000\\0000\\00... (67)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:21.174301+08:00 jdbc[9334]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000+\\0000\\0000\\0000\\0000\\00... (67)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:21.174301+08:00 jdbc[9335]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000+\\0000\\0000\\0000\\0000\\00... (75)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:21.237391+08:00 jdbc[9413]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:21.238392+08:00 jdbc[9414]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (65)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:21.239390+08:00 jdbc[9415]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (65)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:21.240391+08:00 jdbc[9416]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\... (73)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:21.245472+08:00 jdbc[9421]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0004\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:21.309840+08:00 jdbc[9483]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (99)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:21.341372+08:00 jdbc[9512]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (67)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:21.421819+08:00 jdbc[9548]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:21.421819+08:00 jdbc[9549]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\00... (72)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:21.423327+08:00 jdbc[9550]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIII\\0000\\0000\\0000\\0000:\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0... (73)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:21.425865+08:00 jdbc[9551]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IregisterIIIII\\0000\\0000\\0000\\0000:\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0... (75)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:21.430757+08:00 jdbc[9558]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (103)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:21.433385+08:00 jdbc[9559]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (103)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:21.433894+08:00 jdbc[9560]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (103)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:21.434903+08:00 jdbc[9561]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (111)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:21.435912+08:00 jdbc[9562]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0514\\0514\\0514\\0514\\0514\\0514\\0514\\0514\\0514\\0514\\0514\\0514\\0514\\051... (165)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:21.730149+08:00 jdbc[9926]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:21.731813+08:00 jdbc[9927]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (65)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:21.731813+08:00 jdbc[9928]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\000... (65)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:21.755262+08:00 jdbc[9951]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'1\\000ereitsegrwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww... (102)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:21.756251+08:00 jdbc[9952]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'1\\000ereitsegrwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww8wwwwwwwwwwwwwwwwwwwwwwwww... (102)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:21.825482+08:00 jdbc[10001]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0007\\000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:21.826514+08:00 jdbc[10002]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000sr\\0000\\0000\\0007\\0000\\0000\\0... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:21.826514+08:00 jdbc[10003]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIIIII\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000sr\\0000\\0000\\0007\\0000\\0000\\0... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:21.871920+08:00 jdbc[10040]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIregister\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]
+2026-01-02 20:07:21.873428+08:00 jdbc[10041]: exception
+org.h2.jdbc.JdbcSQLDataException: Value too long for column "DATE CHARACTER VARYING(64)": "U&'IIIIregister\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000... (66)"; SQL statement:
+INSERT INTO entries (username, amount, type, date, subject, note) VALUES (?, ?, ?, ?, ?, ?) [22001-224]

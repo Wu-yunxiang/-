@@ -114,8 +114,8 @@ public class sqloperation {
                     &quot;INSERT INTO users (username, password) VALUES (?, ?)&quot;)) {
 <span class="fc" id="L115">                insert.setString(1, Register.username);</span>
 <span class="fc" id="L116">                insert.setString(2, Register.password);</span>
-<span class="nc" id="L117">                insert.executeUpdate();</span>
-<span class="nc" id="L118">                return Boolean.TRUE;</span>
+<span class="fc" id="L117">                insert.executeUpdate();</span>
+<span class="fc" id="L118">                return Boolean.TRUE;</span>
 <span class="fc" id="L119">            } catch (SQLException e) {</span>
                 // 用户已存在时返回false
 <span class="pc bpc" id="L121" title="1 of 2 branches missed.">                if (e.getErrorCode() == 23505) {</span>
@@ -184,25 +184,25 @@ public class sqloperation {
 <span class="fc" id="L184">            List&lt;Object&gt; parameters = new ArrayList&lt;&gt;();</span>
 <span class="fc" id="L185">            parameters.add(Search.username);</span>
             
-<span class="pc bpc" id="L187" title="2 of 4 branches missed.">            if (Search.startDate != null &amp;&amp; !Search.startDate.isEmpty()) {</span>
-<span class="nc" id="L188">                sql.append(&quot; AND date &gt;= ?&quot;);</span>
-<span class="nc" id="L189">                parameters.add(Search.startDate);</span>
+<span class="pc bpc" id="L187" title="1 of 4 branches missed.">            if (Search.startDate != null &amp;&amp; !Search.startDate.isEmpty()) {</span>
+<span class="fc" id="L188">                sql.append(&quot; AND date &gt;= ?&quot;);</span>
+<span class="fc" id="L189">                parameters.add(Search.startDate);</span>
             }
-<span class="pc bpc" id="L191" title="2 of 4 branches missed.">            if (Search.endDate != null &amp;&amp; !Search.endDate.isEmpty()) {</span>
-<span class="nc" id="L192">                sql.append(&quot; AND date &lt;= ?&quot;);</span>
-<span class="nc" id="L193">                parameters.add(Search.endDate);</span>
+<span class="pc bpc" id="L191" title="1 of 4 branches missed.">            if (Search.endDate != null &amp;&amp; !Search.endDate.isEmpty()) {</span>
+<span class="fc" id="L192">                sql.append(&quot; AND date &lt;= ?&quot;);</span>
+<span class="fc" id="L193">                parameters.add(Search.endDate);</span>
             }
-<span class="pc bpc" id="L195" title="2 of 4 branches missed.">            if (Search.typeFilter != null &amp;&amp; !Search.typeFilter.isEmpty()) {</span>
+<span class="pc bpc" id="L195" title="1 of 4 branches missed.">            if (Search.typeFilter != null &amp;&amp; !Search.typeFilter.isEmpty()) {</span>
 <span class="fc" id="L196">                sql.append(&quot; AND type = ?&quot;);</span>
 <span class="fc" id="L197">                parameters.add(normalizeType(Search.typeFilter));</span>
             }
-<span class="pc bpc" id="L199" title="1 of 2 branches missed.">            if (Search.minAmount != null) {</span>
-<span class="nc" id="L200">                sql.append(&quot; AND amount &gt;= ?&quot;);</span>
-<span class="nc" id="L201">                parameters.add(Search.minAmount);</span>
+<span class="fc bfc" id="L199" title="All 2 branches covered.">            if (Search.minAmount != null) {</span>
+<span class="fc" id="L200">                sql.append(&quot; AND amount &gt;= ?&quot;);</span>
+<span class="fc" id="L201">                parameters.add(Search.minAmount);</span>
             }
-<span class="pc bpc" id="L203" title="1 of 2 branches missed.">            if (Search.maxAmount != null) {</span>
-<span class="nc" id="L204">                sql.append(&quot; AND amount &lt;= ?&quot;);</span>
-<span class="nc" id="L205">                parameters.add(Search.maxAmount);</span>
+<span class="fc bfc" id="L203" title="All 2 branches covered.">            if (Search.maxAmount != null) {</span>
+<span class="fc" id="L204">                sql.append(&quot; AND amount &lt;= ?&quot;);</span>
+<span class="fc" id="L205">                parameters.add(Search.maxAmount);</span>
             }
             
 <span class="fc" id="L208">            sql.append(&quot; ORDER BY id&quot;);</span>
@@ -251,7 +251,7 @@ public class sqloperation {
 <span class="fc" id="L251">                delete.setLong(1, Delete.entryId);</span>
 <span class="fc" id="L252">                delete.setString(2, Delete.username);</span>
 <span class="fc" id="L253">                int affected = delete.executeUpdate();</span>
-<span class="pc bpc" id="L254" title="1 of 2 branches missed.">                return affected &gt; 0;</span>
+<span class="fc bfc" id="L254" title="All 2 branches covered.">                return affected &gt; 0;</span>
             }
         } finally {
 <span class="fc" id="L257">            closeThreadConnection();</span>
@@ -284,12 +284,12 @@ public class sqloperation {
     }
 
     private String normalizeType(String raw) {
-<span class="pc bpc" id="L287" title="2 of 4 branches missed.">        if (raw == null || raw.isBlank()) {</span>
-<span class="nc" id="L288">            return &quot;expense&quot;;</span>
+<span class="pc bpc" id="L287" title="1 of 4 branches missed.">        if (raw == null || raw.isBlank()) {</span>
+<span class="fc" id="L288">            return &quot;expense&quot;;</span>
         }
 <span class="fc" id="L290">        String normalized = raw.trim().toLowerCase();</span>
-<span class="pc bpc" id="L291" title="1 of 4 branches missed.">        if (!normalized.equals(&quot;income&quot;) &amp;&amp; !normalized.equals(&quot;expense&quot;)) {</span>
-<span class="nc" id="L292">            return &quot;expense&quot;;</span>
+<span class="fc bfc" id="L291" title="All 4 branches covered.">        if (!normalized.equals(&quot;income&quot;) &amp;&amp; !normalized.equals(&quot;expense&quot;)) {</span>
+<span class="fc" id="L292">            return &quot;expense&quot;;</span>
         }
 <span class="fc" id="L294">        return normalized;</span>
     }
